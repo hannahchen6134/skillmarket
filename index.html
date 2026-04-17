@@ -1424,195 +1424,312 @@
       transform: translateY(0) scale(1);
     }
 
-    /* The actual card to be captured as image */
+    /* ═══════════════════════════════════
+     *  Story Card —— 古典羊皮紙版 v2
+     *  The actual card to be captured as image
+     * ═══════════════════════════════════ */
     .story-card {
+      --sc-bg-1:         #F7EAD0;
+      --sc-bg-2:         #ECD8AE;
+      --sc-bg-3:         #D9BC87;
+      --sc-ink-deep:     #1E1208;
+      --sc-ink:          #2F1F0E;
+      --sc-ink-mid:      #5A3F25;
+      --sc-ink-soft:     #8A6B48;
+      --sc-gold:         #8F6A2E;
+      --sc-gold-bright:  #B8904A;
+      --sc-burgundy:     #7A2E22;
+      --sc-border-soft:  rgba(143,106,46,0.22);
+      --sc-border-mid:   rgba(143,106,46,0.45);
+      --sc-border-strong:rgba(80,50,20,0.55);
+
       position: relative;
       width: 100%;
       aspect-ratio: 9 / 16;
-      border-radius: 20px;
+      border-radius: 14px;
       overflow: hidden;
       background:
-        radial-gradient(ellipse 70% 40% at 80% 8%, rgba(232,181,77,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 35% at 15% 90%, rgba(180,130,60,0.12) 0%, transparent 50%),
-        linear-gradient(170deg, #2a1e10 0%, #1a1208 35%, #14100a 70%, #1a1408 100%);
+        radial-gradient(ellipse 80% 40% at 80% 5%, rgba(255,220,150,0.55) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 35% at 15% 92%, rgba(200,150,70,0.35) 0%, transparent 50%),
+        radial-gradient(ellipse 30% 18% at 20% 38%, rgba(139,90,40,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 25% 15% at 75% 52%, rgba(139,90,40,0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 15% 10% at 40% 78%, rgba(139,90,40,0.04) 0%, transparent 70%),
+        linear-gradient(165deg, var(--sc-bg-1) 0%, var(--sc-bg-2) 50%, var(--sc-bg-3) 100%);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: clamp(28px, 6vw, 40px) clamp(24px, 5vw, 36px);
-      border: 1px solid rgba(196,147,63,0.25);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      padding: 28px 28px 24px;
+      border: 1px solid var(--sc-border-strong);
+      box-shadow:
+        0 24px 60px rgba(40, 25, 10, 0.5),
+        inset 0 1px 0 rgba(255, 240, 210, 0.7),
+        inset 0 0 0 4px var(--sc-bg-1),
+        inset 0 0 0 5px var(--sc-border-mid);
       flex-shrink: 0;
     }
 
-    .story-card-top {
-      flex-shrink: 0;
+    /* 四角金色直角線 */
+    .story-card::before,
+    .story-card::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .story-card::before {
+      top: 14px;
+      left: 14px;
+      border-top: 1.5px solid var(--sc-gold);
+      border-left: 1.5px solid var(--sc-gold);
+    }
+    .story-card::after {
+      bottom: 14px;
+      right: 14px;
+      border-bottom: 1.5px solid var(--sc-gold);
+      border-right: 1.5px solid var(--sc-gold);
     }
 
+    /* ── 頂部品牌條 ── */
     .story-card-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .story-card-brand-line {
+      flex: 1;
+      max-width: 50px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--sc-gold), transparent);
+    }
+
+    .story-card-brand-text {
       font-family: 'Cinzel', serif;
       font-size: 0.62rem;
-      letter-spacing: 0.2em;
-      color: var(--gold);
-      margin-bottom: 6px;
-      opacity: 0.8;
+      letter-spacing: 0.32em;
+      color: var(--sc-gold);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* ── 分類（酒紅印章） ── */
+    .story-card-badge-wrap {
+      text-align: center;
+      margin-bottom: 10px;
     }
 
     .story-card-badge {
       display: inline-block;
-      padding: 5px 14px;
-      background: rgba(196,147,63,0.12);
-      border: 1px solid rgba(196,147,63,0.28);
-      border-radius: 20px;
+      padding: 5px 18px;
+      padding-right: 8px;
+      background: rgba(122,46,34,0.06);
+      border: 1px solid rgba(122,46,34,0.5);
+      border-radius: 2px;
+      font-family: 'Noto Serif TC', serif;
       font-size: 0.72rem;
-      color: var(--gold-bright);
-      font-weight: 600;
-      font-family: 'Noto Sans TC', sans-serif;
-      letter-spacing: 0.04em;
-      margin-bottom: 20px;
+      letter-spacing: 0.3em;
+      color: var(--sc-burgundy);
+      font-weight: 500;
     }
 
+    /* ── 標題 ── */
     .story-card-title {
-      font-size: clamp(1.5rem, 5vw, 1.9rem);
-      color: #fff;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.6rem;
       font-weight: 700;
-      line-height: 1.35;
+      color: var(--sc-ink-deep);
+      line-height: 1.4;
+      letter-spacing: 0.03em;
       margin-bottom: 10px;
+      text-align: center;
       word-break: keep-all;
       text-wrap: balance;
     }
 
+    /* ── 提供者 ── */
     .story-card-provider {
-      font-size: 0.85rem;
-      color: var(--gold-bright);
-      font-weight: 600;
-      margin-bottom: 6px;
+      text-align: center;
+      font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
+      font-size: 1.02rem;
+      color: var(--sc-ink-mid);
+      margin-bottom: 2px;
     }
 
-    .story-card-provider span {
-      color: var(--text-mid);
-      font-weight: 400;
+    .story-card-provider-label {
+      font-style: italic;
+      color: var(--sc-ink-soft);
+      margin-right: 6px;
+    }
+
+    .story-card-provider-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.98rem;
+      color: var(--sc-ink-deep);
+      font-weight: 600;
+      letter-spacing: 0.06em;
     }
 
     .story-social-link,
     .story-social-text {
-      font-size: 0.78rem;
-      color: var(--text-mid);
-      font-weight: 400;
-      margin-left: 6px;
-      letter-spacing: 0.02em;
-    }
-
-    .story-social-link {
+      display: block;
+      text-align: center;
+      font-family: 'EB Garamond', 'Noto Serif TC', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--sc-gold);
+      margin-bottom: 16px;
       text-decoration: none;
-      border-bottom: 1px solid rgba(196,147,63,0.35);
-      padding-bottom: 1px;
-      transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+      letter-spacing: 0.04em;
     }
 
-    .story-social-link:hover {
-      color: var(--gold-bright);
-      border-bottom-color: var(--gold-bright);
+    /* ── 金色細線分隔 ── */
+    .story-card-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--sc-border-mid) 20%, var(--sc-border-mid) 80%, transparent);
+      margin: 0 20px 14px;
+    }
+
+    /* ── Meta 清單（古書目錄風） ── */
+    .story-card-meta-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 14px;
+      padding: 0 4px;
     }
 
     .story-card-meta-row {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: auto minmax(18px, 1fr) minmax(0, auto);
+      gap: 10px;
+      align-items: baseline;
+      font-family: 'Noto Serif TC', serif;
     }
 
-    .story-card-meta-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      color: var(--text-mid);
-      font-family: 'Noto Sans TC', sans-serif;
+    .story-card-meta-label {
+      color: var(--sc-ink-soft);
+      letter-spacing: 0.5em;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding-right: 4px;
+      white-space: nowrap;
     }
 
-    .story-card-meta-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--gold);
-      opacity: 0.6;
+    .story-card-meta-dots {
+      border-bottom: 1px dotted rgba(143,106,46,0.4);
+      height: 9px;
+      align-self: flex-end;
+      margin-bottom: 4px;
+    }
+
+    .story-card-meta-value {
+      color: var(--sc-ink);
+      font-size: 0.82rem;
+      font-weight: 500;
+      max-width: 100%;
+      text-align: right;
+      line-height: 1.6;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     .story-card-mode-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      font-size: 0.72rem;
-      font-weight: 600;
+      display: inline-block;
+      padding: 1px 10px;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
       font-family: 'Noto Sans TC', sans-serif;
     }
 
     .story-card-mode-tag.online {
-      background: rgba(123,180,206,0.14);
-      border: 1px solid rgba(123,180,206,0.35);
-      color: #a8cfe4;
+      background: rgba(61,110,148,0.12);
+      color: #3d6e94;
+      border: 1px solid rgba(61,110,148,0.4);
     }
 
     .story-card-mode-tag.irl {
-      background: rgba(196,147,63,0.14);
-      border: 1px solid rgba(196,147,63,0.35);
-      color: var(--gold-bright);
+      background: rgba(184,144,74,0.15);
+      color: var(--sc-gold);
+      border: 1px solid rgba(184,144,74,0.45);
     }
 
-    /* Middle: description area with scroll */
+    /* ── 介紹文（給最多空間、可捲動） ── */
     .story-card-body {
-      flex: 1;
+      flex-grow: 1;
       overflow-y: auto;
-      margin: 16px 0;
-      padding-right: 4px;
+      min-height: 0;
+      padding: 16px 2px 14px;
+      border-top: 1px solid var(--sc-border-soft);
+      border-bottom: 1px solid var(--sc-border-soft);
+      margin-bottom: 14px;
       scrollbar-width: thin;
-      scrollbar-color: rgba(196,147,63,0.25) transparent;
+      scrollbar-color: rgba(143,106,46,0.35) transparent;
     }
 
     .story-card-body::-webkit-scrollbar { width: 3px; }
     .story-card-body::-webkit-scrollbar-track { background: transparent; }
-    .story-card-body::-webkit-scrollbar-thumb { background: rgba(196,147,63,0.3); border-radius: 3px; }
+    .story-card-body::-webkit-scrollbar-thumb { background: rgba(143,106,46,0.35); border-radius: 3px; }
 
     .story-card-desc {
-      font-size: 0.88rem;
-      color: var(--text-mid);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem;
+      color: var(--sc-ink-mid);
       line-height: 2;
+      letter-spacing: 0.04em;
       white-space: pre-line;
     }
 
-    /* Decorative line */
-    .story-card-divider {
-      width: 40px;
-      height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      margin: 16px 0;
+    /* 首字放大 drop cap（古典書籍感） */
+    .story-card-desc::first-letter {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--sc-gold);
+      float: left;
+      line-height: 1;
+      margin-right: 6px;
+      margin-top: 3px;
     }
 
-    .story-card-bottom {
-      flex-shrink: 0;
+    /* ── 底部 ── */
+    .story-card-footer {
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
     }
 
-    .story-card-points {
-      font-family: 'Cinzel', serif;
-      font-size: 1rem;
-      color: var(--gold-bright);
+    .story-card-value {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.88rem;
       font-weight: 600;
-      letter-spacing: 0.06em;
-      text-shadow: 0 0 12px rgba(232,181,77,0.3);
+      color: var(--sc-burgundy);
+      letter-spacing: 0.3em;
+      padding-left: 4px;
     }
 
     .story-card-footer-brand {
+      text-align: right;
       font-family: 'Cinzel', serif;
       font-size: 0.56rem;
-      letter-spacing: 0.14em;
-      color: var(--text-muted);
-      opacity: 0.65;
-      text-align: right;
-      line-height: 1.5;
+      letter-spacing: 0.22em;
+      color: var(--sc-ink-soft);
+      line-height: 1.8;
+    }
+
+    .story-card-footer-brand-zh {
+      display: block;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 500;
+      color: var(--sc-ink-mid);
+      letter-spacing: 0.18em;
+      font-size: 0.66rem;
+      margin-top: 1px;
     }
 
     /* Action bar below card */
@@ -1703,6 +1820,81 @@
     .story-toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── 長按存圖 Modal（for LINE/FB/IG 內嵌瀏覽器） ── */
+    .longpress-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8,5,3,0.95);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      overflow-y: auto;
+    }
+
+    .longpress-overlay.open {
+      display: flex;
+    }
+
+    .longpress-wrapper {
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      animation: longpressFadeIn 0.35s var(--ease);
+    }
+
+    @keyframes longpressFadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .longpress-hint {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.92rem;
+      color: var(--gold-bright);
+      margin-bottom: 18px;
+      line-height: 1.8;
+      letter-spacing: 0.04em;
+    }
+
+    .longpress-hint strong {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .longpress-image {
+      width: 100%;
+      border-radius: 14px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.6);
+      user-select: auto;
+      -webkit-user-select: auto;
+      -webkit-touch-callout: default;
+      pointer-events: auto;
+    }
+
+    .longpress-close {
+      margin-top: 20px;
+      padding: 12px 32px;
+      background: rgba(58,42,20,0.85);
+      border: 1px solid rgba(196,147,63,0.45);
+      border-radius: 14px;
+      color: var(--gold-bright);
+      font-size: 0.85rem;
+      font-family: 'Noto Sans TC', sans-serif;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      transition: all 0.3s var(--ease);
+    }
+
+    .longpress-close:hover,
+    .longpress-close:active {
+      background: rgba(80,58,28,0.9);
+      border-color: var(--gold-bright);
     }
 
     /* Make cards clickable */
@@ -2478,21 +2670,43 @@
   <div class="story-wrapper">
     <button class="story-close" id="storyClose" aria-label="關閉">&times;</button>
     <div class="story-card" id="storyCard">
-      <div class="story-card-top">
-        <div class="story-card-brand">STARRY DAWN CIRCLE</div>
-        <div class="story-card-badge" id="storyBadge"></div>
-        <div class="story-card-title" id="storyTitle"></div>
-        <div class="story-card-provider" id="storyProvider"></div>
-        <div class="story-card-meta-row" id="storyMeta"></div>
+      <!-- 頂部品牌條 -->
+      <div class="story-card-brand">
+        <div class="story-card-brand-line"></div>
+        <div class="story-card-brand-text">STARRY DAWN CIRCLE</div>
+        <div class="story-card-brand-line"></div>
       </div>
-      <div class="story-card-divider"></div>
+
+      <!-- 分類印章 -->
+      <div class="story-card-badge-wrap">
+        <span class="story-card-badge" id="storyBadge"></span>
+      </div>
+
+      <!-- 標題 -->
+      <h2 class="story-card-title" id="storyTitle"></h2>
+
+      <!-- 提供者（含社群連結） -->
+      <div class="story-card-provider" id="storyProvider"></div>
+      <div id="storySocialWrap"></div>
+
+      <!-- 金線分隔 -->
+      <div class="story-card-line"></div>
+
+      <!-- Meta 清單 -->
+      <div class="story-card-meta-list" id="storyMeta"></div>
+
+      <!-- 介紹文（可捲動） -->
       <div class="story-card-body">
-        <div class="story-card-desc" id="storyDesc"></div>
+        <p class="story-card-desc" id="storyDesc"></p>
       </div>
-      <div class="story-card-divider"></div>
-      <div class="story-card-bottom">
-        <div class="story-card-points">500 價值</div>
-        <div class="story-card-footer-brand">初星群<br>技能交換公會</div>
+
+      <!-- 底部 -->
+      <div class="story-card-footer">
+        <div class="story-card-value">價值流動中</div>
+        <div class="story-card-footer-brand">
+          STARRY DAWN CIRCLE
+          <span class="story-card-footer-brand-zh">初星群 · 技能交換公會</span>
+        </div>
       </div>
     </div>
     <div class="story-actions">
@@ -2509,6 +2723,15 @@
 </div>
 
 <div class="story-toast" id="storyToast">圖片已下載！可以分享到限動囉</div>
+
+<!-- 長按存圖 Modal（for LINE / FB / IG 內嵌瀏覽器） -->
+<div class="longpress-overlay" id="longpressOverlay">
+  <div class="longpress-wrapper">
+    <p class="longpress-hint"><strong>👇 長按下方圖片</strong><br>選「儲存到照片」存進相簿</p>
+    <img class="longpress-image" id="longpressImage" alt="技能卡片" />
+    <button class="longpress-close" id="longpressClose">關閉</button>
+  </div>
+</div>
 
 <!-- ── Footer ── -->
 <footer>
@@ -3006,46 +3229,55 @@
   function openStory(skill) {
     currentStorySkill = skill;
 
-    // Populate card (all escaped already in skill data)
+    // 分類 badge
     document.getElementById('storyBadge').textContent = skill.categoryLabel;
+
+    // 標題
     document.getElementById('storyTitle').textContent = skill.title;
 
+    // 提供者（置中，by + 名字）
     const providerEl = document.getElementById('storyProvider');
     if (skill.provider) {
-      let providerHTML = '<span>by </span>' + esc(skill.provider);
-      if (skill.social) {
-        const social = parseSocialLink(skill.social);
-        if (social && social.url) {
-          providerHTML += ' <a href="' + esc(social.url) + '" target="_blank" rel="noopener noreferrer" class="story-social-link">' + esc(social.label) + '</a>';
-        } else if (social) {
-          providerHTML += ' <span class="story-social-text">' + esc(social.label) + '</span>';
-        }
-      }
-      providerEl.innerHTML = providerHTML;
+      providerEl.innerHTML = '<span class="story-card-provider-label">by</span>'
+        + '<span class="story-card-provider-name">' + esc(skill.provider) + '</span>';
       providerEl.style.display = '';
     } else {
       providerEl.style.display = 'none';
     }
 
-    // Meta row
+    // 社群連結（獨立一行）
+    const socialWrap = document.getElementById('storySocialWrap');
+    socialWrap.innerHTML = '';
+    if (skill.social) {
+      const social = parseSocialLink(skill.social);
+      if (social && social.url) {
+        socialWrap.innerHTML = '<a href="' + esc(social.url) + '" target="_blank" rel="noopener noreferrer" class="story-social-link">' + esc(social.label) + '</a>';
+      } else if (social) {
+        socialWrap.innerHTML = '<span class="story-social-text">' + esc(social.label) + '</span>';
+      }
+    }
+
+    // Meta 清單（Label ─ 點點 ─ Value 古書目錄風）
     const metaEl = document.getElementById('storyMeta');
     let metaHTML = '';
-    if (skill.duration) {
-      metaHTML += '<div class="story-card-meta-item"><div class="story-card-meta-dot"></div>' + esc(skill.duration) + '</div>';
-    }
-    if (skill.capacity) {
-      metaHTML += '<div class="story-card-meta-item"><div class="story-card-meta-dot"></div>' + esc(skill.capacity) + '</div>';
-    }
-    if (skill.availability) {
-      metaHTML += '<div class="story-card-meta-item"><div class="story-card-meta-dot"></div>' + esc(skill.availability) + '</div>';
-    }
+    const rowTpl = (label, valueHTML) =>
+      '<div class="story-card-meta-row">'
+      + '<span class="story-card-meta-label">' + label + '</span>'
+      + '<span class="story-card-meta-dots"></span>'
+      + '<span class="story-card-meta-value">' + valueHTML + '</span>'
+      + '</div>';
+
+    if (skill.duration) metaHTML += rowTpl('時長', esc(skill.duration));
+    if (skill.capacity) metaHTML += rowTpl('名額', esc(skill.capacity));
+    if (skill.availability) metaHTML += rowTpl('時間', esc(skill.availability));
     if (skill.mode) {
       const isOnline = skill.mode === '線上' || skill.mode === '線上／線下';
-      metaHTML += '<span class="story-card-mode-tag ' + (isOnline ? 'online' : 'irl') + '">' + esc(skill.mode) + '</span>';
+      const modeClass = isOnline ? 'online' : 'irl';
+      metaHTML += rowTpl('形式', '<span class="story-card-mode-tag ' + modeClass + '">' + esc(skill.mode) + '</span>');
     }
     metaEl.innerHTML = metaHTML;
 
-    // Description（詳細 modal 顯示完整內容，不截斷）
+    // 介紹（完整內容，可捲動）
     document.getElementById('storyDesc').textContent = skill.desc || '這位村民還沒有寫詳細介紹，但他的技能一定很棒！';
 
     storyOverlay.classList.add('open');
@@ -3122,6 +3354,54 @@
     return /Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(navigator.userAgent);
   }
 
+  /* ── 偵測是否為 App 內嵌瀏覽器（LINE / FB / IG / Messenger / WeChat） ── */
+  /* 這些瀏覽器不支援 <a download>，Web Share 也常常失敗，必須走長按存圖 */
+  function isInAppBrowser() {
+    const ua = navigator.userAgent || '';
+    return /Line\//i.test(ua)
+        || /FBAN|FBAV/i.test(ua)         // Facebook / Messenger
+        || /Instagram/i.test(ua)
+        || /MicroMessenger/i.test(ua)    // WeChat
+        || /Twitter|TwitterApp/i.test(ua);
+  }
+
+  /* ── 長按存圖 Modal ── */
+  const longpressOverlay = document.getElementById('longpressOverlay');
+  const longpressImage = document.getElementById('longpressImage');
+  const longpressClose = document.getElementById('longpressClose');
+  let currentLongpressUrl = null;
+
+  function openLongpressModal(blob) {
+    if (currentLongpressUrl) URL.revokeObjectURL(currentLongpressUrl);
+    currentLongpressUrl = URL.createObjectURL(blob);
+    longpressImage.src = currentLongpressUrl;
+    longpressOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLongpressModal() {
+    longpressOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    if (currentLongpressUrl) {
+      // 延遲 revoke，讓 img 還能顯示到收合動畫結束
+      const urlToRevoke = currentLongpressUrl;
+      currentLongpressUrl = null;
+      setTimeout(() => URL.revokeObjectURL(urlToRevoke), 1500);
+    }
+  }
+
+  if (longpressClose) longpressClose.addEventListener('click', closeLongpressModal);
+  if (longpressOverlay) {
+    longpressOverlay.addEventListener('click', (e) => {
+      if (e.target === longpressOverlay) closeLongpressModal();
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && longpressOverlay && longpressOverlay.classList.contains('open')) {
+      closeLongpressModal();
+    }
+  });
+
   storyDownload.addEventListener('click', async () => {
     storyDownload.disabled = true;
     storyDownload.querySelector('svg').style.opacity = '0.3';
@@ -3158,7 +3438,15 @@
       const safeName = (currentStorySkill ? currentStorySkill.title : 'skill').replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g, '_').slice(0, 30);
       const filename = '\u6280\u80fd\u4ea4\u63db_' + safeName + '.png';
 
-      // 🎯 手機：Web Share API（iOS/Android 原生分享選單）
+      // 📱 LINE / FB / IG 等 App 內嵌瀏覽器：不支援下載，改用長按存圖
+      if (isMobile() && isInAppBrowser()) {
+        openLongpressModal(blob);
+        storyDownload.disabled = false;
+        storyDownload.querySelector('svg').style.opacity = '';
+        return;
+      }
+
+      // 🎯 一般手機瀏覽器：Web Share API（系統分享選單）
       if (isMobile() && navigator.canShare && navigator.share) {
         try {
           const file = new File([blob], filename, { type: 'image/png' });
@@ -3178,11 +3466,24 @@
             storyDownload.querySelector('svg').style.opacity = '';
             return;
           }
-          console.warn('Share API failed, fallback to download:', shareErr);
+          console.warn('Share API failed, fallback to long-press:', shareErr);
+          // Share 失敗（不是使用者取消）→ 改用長按存圖
+          openLongpressModal(blob);
+          storyDownload.disabled = false;
+          storyDownload.querySelector('svg').style.opacity = '';
+          return;
         }
       }
 
-      // 💻 電腦（或不支援 Share API）：傳統下載
+      // 📱 手機不支援 Share API：改用長按存圖
+      if (isMobile()) {
+        openLongpressModal(blob);
+        storyDownload.disabled = false;
+        storyDownload.querySelector('svg').style.opacity = '';
+        return;
+      }
+
+      // 💻 電腦：傳統下載
       const blobUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.download = filename;
