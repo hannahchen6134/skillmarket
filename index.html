@@ -40,7 +40,10 @@
     html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
-      background: var(--bg-deep);
+      background:
+        linear-gradient(180deg, rgba(10,6,3,0.82) 0%, rgba(20,14,8,0.62) 50%, rgba(10,6,3,0.88) 100%),
+        url('starry-hall.jpg') center/cover no-repeat fixed;
+      background-color: var(--bg-deep);
       color: var(--text);
       font-family: 'Noto Serif TC', serif;
       font-weight: 400;
@@ -373,11 +376,39 @@
 
     .hero-cta-group {
       display: flex;
+      flex-direction: column;
       gap: 14px;
+      align-items: center;
       justify-content: center;
       flex-wrap: wrap;
       opacity: 0;
       animation: heroFade 1.2s var(--ease) 1.8s forwards;
+    }
+
+    .hero-cta-note {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: #f5e6c4;
+      line-height: 1.85;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.85), 0 0 20px rgba(0,0,0,0.6);
+      margin-top: 8px;
+      max-width: 440px;
+      width: 100%;
+      padding: 0 16px;
+      text-align: center;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    @media (max-width: 480px) {
+      .hero-cta-note {
+        font-size: 0.86rem;
+        letter-spacing: 0.04em;
+        max-width: 320px;
+      }
     }
 
     @keyframes heroFade {
@@ -515,6 +546,28 @@
         0 6px 24px rgba(138,90,42,0.45),
         0 0 36px rgba(176,120,56,0.25),
         inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .btn-hero-join {
+      background: rgba(30, 22, 12, 0.55);
+      color: #f0d9a6;
+      border: 1px solid rgba(232, 181, 77, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow:
+        0 4px 16px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .btn-hero-join:hover {
+      transform: translateY(-2px);
+      background: rgba(50, 36, 18, 0.7);
+      border-color: rgba(232, 181, 77, 0.85);
+      color: #fff2d4;
+      box-shadow:
+        0 6px 24px rgba(0,0,0,0.35),
+        0 0 28px rgba(232,181,77,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.12);
     }
 
     @keyframes btnShimmer {
@@ -787,7 +840,7 @@
     }
 
     .skill-filter-btn {
-      padding: 9px 18px;
+      padding: 10px 26px;
       background: rgba(58,42,20,0.55);
       border: 1px solid rgba(196,147,63,0.38);
       border-radius: 24px;
@@ -795,7 +848,7 @@
       color: var(--text-mid);
       font-weight: 600;
       font-family: 'Noto Sans TC', sans-serif;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.14em;
       cursor: pointer;
       transition: all 0.35s var(--ease);
       white-space: nowrap;
@@ -1391,9 +1444,9 @@
       position: fixed;
       inset: 0;
       z-index: 400;
-      background: rgba(6,4,2,0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background:
+        linear-gradient(180deg, rgba(6,4,2,0.82) 0%, rgba(12,8,4,0.66) 50%, rgba(6,4,2,0.88) 100%),
+        url('starry-hall.jpg') center/cover no-repeat;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1414,10 +1467,15 @@
       width: 100%;
       max-width: 375px;
       max-height: calc(100svh - 40px);
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      padding-top: 52px;
       transform: translateY(20px) scale(0.96);
       transition: transform 0.45s var(--ease);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(143,106,46,0.4) transparent;
     }
 
     .story-overlay.open .story-wrapper {
@@ -1444,8 +1502,8 @@
       --sc-border-strong:rgba(80,50,20,0.55);
 
       position: relative;
-      width: 100%;
-      aspect-ratio: 9 / 16;
+      width: min(100%, 360px);
+      margin: 0 auto;
       border-radius: 14px;
       overflow: hidden;
       background:
@@ -1457,7 +1515,7 @@
         linear-gradient(165deg, var(--sc-bg-1) 0%, var(--sc-bg-2) 50%, var(--sc-bg-3) 100%);
       display: flex;
       flex-direction: column;
-      padding: 28px 28px 24px;
+      padding: 22px 24px 18px;
       border: 1px solid var(--sc-border-strong);
       box-shadow:
         0 24px 60px rgba(40, 25, 10, 0.5),
@@ -1495,8 +1553,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 6px;
     }
 
     .story-card-brand-line {
@@ -1508,7 +1566,7 @@
 
     .story-card-brand-text {
       font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
+      font-size: 0.55rem;
       letter-spacing: 0.32em;
       color: var(--sc-gold);
       font-weight: 500;
@@ -1518,19 +1576,19 @@
     /* ── 分類（酒紅印章） ── */
     .story-card-badge-wrap {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .story-card-badge {
       display: inline-block;
-      padding: 5px 18px;
-      padding-right: 8px;
+      padding: 3px 14px;
+      padding-right: 6px;
       background: rgba(122,46,34,0.06);
       border: 1px solid rgba(122,46,34,0.5);
       border-radius: 2px;
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.3em;
+      font-size: 0.64rem;
+      letter-spacing: 0.28em;
       color: var(--sc-burgundy);
       font-weight: 500;
     }
@@ -1538,12 +1596,12 @@
     /* ── 標題 ── */
     .story-card-title {
       font-family: 'Noto Serif TC', serif;
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--sc-ink-deep);
-      line-height: 1.4;
-      letter-spacing: 0.03em;
-      margin-bottom: 10px;
+      line-height: 1.3;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
       text-align: center;
       word-break: keep-all;
       text-wrap: balance;
@@ -1553,20 +1611,20 @@
     .story-card-provider {
       text-align: center;
       font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
-      font-size: 1.02rem;
+      font-size: 0.92rem;
       color: var(--sc-ink-mid);
-      margin-bottom: 2px;
+      margin-bottom: 0;
     }
 
     .story-card-provider-label {
       font-style: italic;
       color: var(--sc-ink-soft);
-      margin-right: 6px;
+      margin-right: 5px;
     }
 
     .story-card-provider-name {
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.98rem;
+      font-size: 0.88rem;
       color: var(--sc-ink-deep);
       font-weight: 600;
       letter-spacing: 0.06em;
@@ -1578,9 +1636,9 @@
       text-align: center;
       font-family: 'EB Garamond', 'Noto Serif TC', serif;
       font-style: italic;
-      font-size: 0.82rem;
+      font-size: 0.7rem;
       color: var(--sc-gold);
-      margin-bottom: 16px;
+      margin-bottom: 6px;
       text-decoration: none;
       letter-spacing: 0.04em;
     }
@@ -1589,16 +1647,17 @@
     .story-card-line {
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--sc-border-mid) 20%, var(--sc-border-mid) 80%, transparent);
-      margin: 0 20px 14px;
+      margin: 0 20px 8px;
     }
 
     /* ── Meta 清單（古書目錄風） ── */
     .story-card-meta-list {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      margin-bottom: 14px;
+      gap: 3px;
+      margin-bottom: 6px;
       padding: 0 4px;
+      flex-shrink: 0;
     }
 
     .story-card-meta-row {
@@ -1612,7 +1671,7 @@
     .story-card-meta-label {
       color: var(--sc-ink-soft);
       letter-spacing: 0.5em;
-      font-size: 0.7rem;
+      font-size: 0.62rem;
       font-weight: 500;
       padding-right: 4px;
       white-space: nowrap;
@@ -1627,7 +1686,7 @@
 
     .story-card-meta-value {
       color: var(--sc-ink);
-      font-size: 0.82rem;
+      font-size: 0.74rem;
       font-weight: 500;
       max-width: 100%;
       text-align: right;
@@ -1638,9 +1697,9 @@
 
     .story-card-mode-tag {
       display: inline-block;
-      padding: 1px 10px;
+      padding: 1px 9px;
       border-radius: 2px;
-      font-size: 0.7rem;
+      font-size: 0.64rem;
       letter-spacing: 0.15em;
       font-family: 'Noto Sans TC', sans-serif;
     }
@@ -1659,15 +1718,10 @@
 
     /* ── 介紹文（給最多空間、可捲動） ── */
     .story-card-body {
-      flex-grow: 1;
-      overflow-y: auto;
-      min-height: 0;
-      padding: 16px 2px 14px;
+      padding: 16px 6px;
       border-top: 1px solid var(--sc-border-soft);
       border-bottom: 1px solid var(--sc-border-soft);
-      margin-bottom: 14px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(143,106,46,0.35) transparent;
+      margin-bottom: 10px;
     }
 
     .story-card-body::-webkit-scrollbar { width: 3px; }
@@ -1676,24 +1730,14 @@
 
     .story-card-desc {
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.9rem;
-      color: var(--sc-ink-mid);
-      line-height: 2;
+      font-size: 0.88rem;
+      color: var(--sc-ink);
+      line-height: 1.8;
       letter-spacing: 0.04em;
       white-space: pre-line;
+      text-align: center;
     }
 
-    /* 首字放大 drop cap（古典書籍感） */
-    .story-card-desc::first-letter {
-      font-family: 'Noto Serif TC', serif;
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--sc-gold);
-      float: left;
-      line-height: 1;
-      margin-right: 6px;
-      margin-top: 3px;
-    }
 
     /* ── 底部 ── */
     .story-card-footer {
@@ -1706,11 +1750,12 @@
 
     .story-card-value {
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.88rem;
-      font-weight: 600;
+      font-size: 0.62rem;
+      font-weight: 500;
       color: var(--sc-burgundy);
-      letter-spacing: 0.3em;
-      padding-left: 4px;
+      letter-spacing: 0.12em;
+      padding-left: 2px;
+      white-space: nowrap;
     }
 
     .story-card-footer-brand {
@@ -1775,7 +1820,7 @@
 
     .story-close {
       position: absolute;
-      top: -48px;
+      top: 4px;
       right: 0;
       background: rgba(58,42,20,0.6);
       border: 1px solid rgba(196,147,63,0.3);
@@ -1907,7 +1952,7 @@
       .story-card { padding: 24px 20px; border-radius: 16px; }
       .story-actions { gap: 10px; }
       .story-action-btn { padding: 10px 16px; font-size: 0.75rem; }
-      .story-close { top: -44px; width: 36px; height: 36px; }
+      .story-close { top: 4px; width: 36px; height: 36px; }
     }
 
     /* ── Footer ── */
@@ -2316,9 +2361,10 @@
       <span class="hero-line hero-line-2">技能交換公會</span>
       <span class="hero-line hero-line-3">500 價值流動計劃</span>
     </h1>
-    <p class="hero-desc">相互學習、共同成長，<br>每個人都是老師、也是學生。</p>
     <div class="hero-cta-group">
-      <a class="btn-hero btn-hero-share" href="https://docs.google.com/forms/d/1xxxxxxxxx" target="_blank">我也想要分享技能</a>
+      <a class="btn-hero btn-hero-share" href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank">我也想要分享技能</a>
+      <a class="btn-hero btn-hero-join" href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank">加入技能交換公會</a>
+      <p class="hero-cta-note">若沒有技能要互換，<wbr>也可以用咖啡、餐點等等來交換技能</p>
     </div>
   </div>
 
@@ -2352,7 +2398,7 @@
     <div class="skill-filters reveal">
       <button class="skill-filter-btn active" data-filter="all">全部</button>
       <button class="skill-filter-btn" data-filter="design">設計與創意</button>
-      <button class="skill-filter-btn" data-filter="wellness">身心靈</button>
+      <button class="skill-filter-btn" data-filter="wellness">心靈成長</button>
       <button class="skill-filter-btn" data-filter="language">語言文化</button>
       <button class="skill-filter-btn" data-filter="career">職涯發展</button>
       <button class="skill-filter-btn" data-filter="creative">文創技能</button>
@@ -2375,12 +2421,12 @@
           <span class="example-mode example-mode-online">線上</span>
         </div>
         <p class="example-desc">幫你檢視網站設計、討論品牌視覺方向、給予改進建議。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="example-card reveal reveal-delay-2" data-category="wellness">
         <span class="example-demo-badge">範例</span>
-        <span class="example-badge">身心靈</span>
+        <span class="example-badge">心靈成長</span>
         <div class="example-title">瑜伽或靜心課程</div>
         <div class="example-provider">by <strong>小月</strong></div>
         <div class="example-meta">
@@ -2389,7 +2435,7 @@
           <span class="example-mode example-mode-irl">實體</span>
         </div>
         <p class="example-desc">引導一堂流動瑜伽、陰瑜伽或靜心冥想課。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="example-card reveal reveal-delay-3" data-category="language">
@@ -2403,7 +2449,7 @@
           <span class="example-mode example-mode-online">線上</span>
         </div>
         <p class="example-desc">用生活化的方式教語言、文化知識。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="example-card reveal reveal-delay-4" data-category="career">
@@ -2417,7 +2463,7 @@
           <span class="example-mode example-mode-online">線上</span>
         </div>
         <p class="example-desc">幫你準備面試、優化自我介紹、分享面試經驗。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="example-card reveal reveal-delay-5" data-category="creative">
@@ -2431,7 +2477,7 @@
           <span class="example-mode example-mode-irl">實體</span>
         </div>
         <p class="example-desc">教你手機或相機拍照技巧、光線運用、Lightroom修圖。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="example-card reveal reveal-delay-6" data-category="growth">
@@ -2445,7 +2491,7 @@
           <span class="example-mode example-mode-online">線上</span>
         </div>
         <p class="example-desc">深度對談、傾聽陪伴、幫助整理思緒。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="example-card reveal reveal-delay-6" data-category="lifestyle">
@@ -2459,7 +2505,7 @@
           <span class="example-mode example-mode-irl">實體</span>
         </div>
         <p class="example-desc">從磨豆、水溫、濾杯選擇到沖煮手法，在家也能泡出好咖啡。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="example-card reveal reveal-delay-6" data-category="other">
@@ -2473,7 +2519,7 @@
           <span class="example-mode example-mode-online">線上</span>
         </div>
         <p class="example-desc">教你用簡單方法整理衣櫃、書桌、廚房，讓空間跟心情一起變清爽。</p>
-        <span class="example-points">500元價值</span>
+        <span class="example-points">價值流動中</span>
       </div>
 
       <div class="skills-empty" id="skillsEmpty">
@@ -2518,7 +2564,7 @@
         <div class="flow-number">2</div>
         <div class="flow-content">
           <h4>配對、預約時間</h4>
-          <p>有人對你的技能感興趣？直接在群組聯繫，約定時間和方式（線上/線下）。</p>
+          <p>有人對你的技能感興趣？可以直接在社群媒體聯繫對方，或在社群裡 tag 對方聯繫，約定時間和方式（線上/線下）。</p>
         </div>
       </div>
 
@@ -2534,7 +2580,7 @@
         <div class="flow-number">4</div>
         <div class="flow-content">
           <h4>雙方確認完成</h4>
-          <p>交換結束後，彼此確認點數轉移完成。這一次的相互陪伴，圓滿。</p>
+          <p>交換結束後，雙方填寫【技能交換回饋單】，填寫後青青村長會記錄彼此的交換次數。</p>
         </div>
       </div>
     </div>
@@ -2658,7 +2704,7 @@
       </div>
       <p>填寫表單報名你想分享的技能，<br>或者加入初星群一起學習。</p>
       <div class="cta-buttons">
-        <a href="https://docs.google.com/forms/d/1xxxxxxxxx" target="_blank" class="btn-primary">報名技能交換</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" class="btn-primary">報名技能交換</a>
         <a href="https://line.me/ti/g2/PwykU3Dg-k8k6Lnwj-swf5nsSwm4to0a6HFQLg?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" class="btn-secondary">加入初星群</a>
       </div>
     </div>
@@ -2767,7 +2813,7 @@
    *  I: 介紹           （完整 100-150 字，卡片會自動截前 50 字當摘要）
    *
    *  分類必須填以下其中之一：
-   *  設計與創意 / 身心靈 / 語言文化 / 職涯發展 /
+   *  設計與創意 / 心靈成長 / 語言文化 / 職涯發展 /
    *  文創技能 / 個人成長 / 生活風格 / 運動健身 / 其他
    *
    *  ───────────────────────────────────────────────
@@ -2798,7 +2844,7 @@
   /* ── 類別 → data-category 的對照表 ── */
   const CATEGORY_MAP = {
     '設計與創意': 'design',
-    '身心靈': 'wellness',
+    '心靈成長': 'wellness',
     '語言文化': 'language',
     '職涯發展': 'career',
     '文創技能': 'creative',
@@ -3025,7 +3071,7 @@
       + (mode ? '<span class="example-mode ' + modeClass + '">' + modeLabel + '</span>' : '')
       + '</div>'
       + (shortDesc ? '<p class="example-desc">' + shortDesc + '</p>' : '')
-      + '<span class="example-points">500\u5143\u50f9\u503c</span>'
+      + '<span class="example-points">\u50f9\u503c\u6d41\u52d5\u4e2d</span>'
       + '</div>';
   }
 
@@ -3411,13 +3457,10 @@
 
       const el = storyCard;
       const origStyle = el.getAttribute('style') || '';
-      el.style.width = '540px';
-      el.style.height = '960px';
+      el.style.width = '360px';
       el.style.maxHeight = 'none';
       el.style.borderRadius = '20px';
-
-      const bodyEl = el.querySelector('.story-card-body');
-      if (bodyEl) { bodyEl.style.overflow = 'hidden'; }
+      void el.offsetHeight;
 
       const canvas = await html2canvas(el, {
         scale: 2,
@@ -3428,7 +3471,6 @@
       });
 
       el.setAttribute('style', origStyle);
-      if (bodyEl) { bodyEl.style.overflow = ''; }
 
       // Convert to blob（手機大檔案更穩）
       const blob = await new Promise((resolve, reject) => {
