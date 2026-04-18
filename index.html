@@ -771,7 +771,7 @@
       gap: 20px;
       align-items: flex-start;
       padding: 28px;
-      background: var(--card-bg);
+      background: linear-gradient(160deg, rgba(58,36,18,0.78), rgba(36,22,10,0.72));
       border-left: 2px solid var(--gold);
       border-radius: var(--radius-sm);
       backdrop-filter: blur(8px);
@@ -780,8 +780,8 @@
     }
 
     .flow-step:hover {
-      background: rgba(30,22,45,0.6);
-      box-shadow: 0 8px 28px rgba(196,147,63,0.08);
+      background: linear-gradient(160deg, rgba(74,48,24,0.85), rgba(48,30,14,0.8));
+      box-shadow: 0 8px 28px rgba(196,147,63,0.18);
       transform: translateX(4px);
     }
 
@@ -832,15 +832,31 @@
     }
 
     .skill-filters {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
       margin-bottom: 44px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 640px) {
+      .skill-filters {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .skill-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     .skill-filter-btn {
-      padding: 10px 26px;
+      width: 100%;
+      padding: 11px 10px;
       background: rgba(58,42,20,0.55);
       border: 1px solid rgba(196,147,63,0.38);
       border-radius: 24px;
@@ -852,6 +868,7 @@
       cursor: pointer;
       transition: all 0.35s var(--ease);
       white-space: nowrap;
+      text-align: center;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
@@ -1735,7 +1752,7 @@
       line-height: 1.8;
       letter-spacing: 0.04em;
       white-space: pre-line;
-      text-align: center;
+      text-align: left;
     }
 
 
@@ -3456,21 +3473,13 @@
       await loadHtml2Canvas();
 
       const el = storyCard;
-      const origStyle = el.getAttribute('style') || '';
-      el.style.width = '360px';
-      el.style.maxHeight = 'none';
-      el.style.borderRadius = '20px';
-      void el.offsetHeight;
 
       const canvas = await html2canvas(el, {
         scale: 2,
         backgroundColor: null,
         useCORS: true,
-        logging: false,
-        borderRadius: 20
+        logging: false
       });
-
-      el.setAttribute('style', origStyle);
 
       // Convert to blob（手機大檔案更穩）
       const blob = await new Promise((resolve, reject) => {
