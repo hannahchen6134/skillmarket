@@ -302,31 +302,27 @@
     }
 
     /* 活動 eyebrow：小字金色，主標上方 */
-    /* 500 價值流動計畫：淺金 eyebrow + 霧化底 */
+    /* 500 價值流動計畫：字體描邊 + 深色光暈（無背景） */
     .hero-campaign {
       display: inline-block;
       font-family: 'Cinzel', 'Noto Serif TC', serif;
       font-size: clamp(0.72rem, 2.2vw, 0.84rem);
       letter-spacing: 0.38em;
-      color: #e8c47a;
-      font-weight: 600;
+      color: #f5d98a;
+      font-weight: 700;
       margin-bottom: 16px;
-      padding: 8px 32px 8px calc(32px + 0.38em);
-      /* B: 局部霧化底（radial 漸層邊緣全透明、無方框感） */
-      background: radial-gradient(
-        ellipse at center,
-        rgba(8,5,3,0.7) 0%,
-        rgba(8,5,3,0.45) 55%,
-        rgba(8,5,3,0.12) 85%,
-        transparent 100%
-      );
-      /* A: 更重的黑色光暈 */
+      padding-left: 0.38em;
+      /* 字體細邊（浮雕感）*/
+      -webkit-text-stroke: 0.4px rgba(0,0,0,0.85);
+      /* 多層深色光暈 */
       text-shadow:
-        0 0 2px rgba(0,0,0,1),
-        0 0 6px rgba(0,0,0,1),
-        0 0 14px rgba(0,0,0,0.95),
-        0 0 26px rgba(0,0,0,0.8),
-        0 2px 8px rgba(0,0,0,1);
+        0 0 1px rgba(0,0,0,1),
+        0 0 3px rgba(0,0,0,1),
+        0 0 6px rgba(0,0,0,0.95),
+        0 0 12px rgba(0,0,0,0.85),
+        0 0 22px rgba(0,0,0,0.6),
+        0 2px 4px rgba(0,0,0,1),
+        0 3px 8px rgba(0,0,0,0.8);
       opacity: 0;
       animation: heroFade 1s var(--ease) 0.2s forwards;
     }
@@ -401,32 +397,29 @@
         btnShimmer 5s ease-in-out 2.65s infinite;
     }
 
-    /* 底部 note：柔霧底（看不見邊）+ 字體有深色光暈 */
+    /* 底部 note：字體描邊 + 深色光暈（無背景） */
     .hero-cta-note {
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.84rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: #f0e0c0;
+      font-size: 0.86rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #f5e8c8;
       line-height: 1.95;
+      /* 字體細邊（浮雕感）*/
+      -webkit-text-stroke: 0.35px rgba(0,0,0,0.7);
+      /* 多層深色光暈 */
       text-shadow:
-        0 0 2px rgba(0,0,0,1),
-        0 0 6px rgba(0,0,0,1),
-        0 0 14px rgba(0,0,0,0.9),
-        0 0 24px rgba(0,0,0,0.65),
-        0 2px 6px rgba(0,0,0,1);
-      /* 柔霧：極淡 + 邊緣早早透明，完全看不出形狀 */
-      background: radial-gradient(
-        ellipse 90% 120% at center,
-        rgba(8,5,3,0.28) 0%,
-        rgba(8,5,3,0.18) 30%,
-        rgba(8,5,3,0.08) 60%,
-        transparent 85%
-      );
-      margin-top: 16px;
-      max-width: 440px;
+        0 0 1px rgba(0,0,0,1),
+        0 0 3px rgba(0,0,0,1),
+        0 0 6px rgba(0,0,0,0.98),
+        0 0 12px rgba(0,0,0,0.88),
+        0 0 22px rgba(0,0,0,0.6),
+        0 2px 5px rgba(0,0,0,1),
+        0 3px 8px rgba(0,0,0,0.75);
+      margin-top: 20px;
+      max-width: 420px;
       width: 100%;
-      padding: 22px 32px;
+      padding: 0 16px;
       text-align: center;
       word-break: keep-all;
       overflow-wrap: break-word;
@@ -2457,9 +2450,12 @@
 
     .footer-columns {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 36px;
       margin-bottom: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .footer-col h5 {
@@ -2500,11 +2496,12 @@
     }
 
     @media (max-width: 720px) {
+      /* 手機 3 欄 → 單欄置中，排版更穩 */
       .footer-columns {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 28px;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        max-width: 420px;
       }
-      /* 手機 2 欄：置中讓排版更平衡 */
       .footer-col {
         text-align: center;
       }
@@ -2516,7 +2513,6 @@
 
     @media (max-width: 420px) {
       .site-footer { padding: 44px 20px 24px; }
-      .footer-columns { grid-template-columns: 1fr; gap: 24px; }
       .footer-brand { font-size: 1rem; }
     }
 
@@ -3595,11 +3591,6 @@
         <a href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">加入 LINE 公會群</a>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener">我也想要分享技能</a>
         <a href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">私訊初星群官方 LINE</a>
-      </div>
-      <div class="footer-col">
-        <h5>相關連結</h5>
-        <a href="https://hannahchen6134.github.io/about-qingqing/" target="_blank" rel="noopener">認識青青</a>
-        <a href="https://hannahchen6134.github.io/initial-star-spectrum/" target="_blank" rel="noopener">初心色譜</a>
       </div>
     </div>
 
