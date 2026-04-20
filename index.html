@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CLAUDE_UNIQUE_MARKER_20260420_1805_d66dd999 -->
+
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
@@ -398,15 +398,10 @@
       opacity: 0;
       animation:
         heroFade 1s var(--ease) 1.65s forwards,
-        btnShimmer 4s ease-in-out 2.65s infinite;
+        btnShimmer 5s ease-in-out 2.65s infinite;
     }
 
-    .hero-cta-group .btn-hero-text {
-      opacity: 0;
-      animation: heroFade 1s var(--ease) 1.9s forwards;
-    }
-
-    /* 底部 note：字加大加亮、霧化底吃掉背景干擾 */
+    /* 底部 note：柔霧底（看不見邊）+ 字體有深色光暈 */
     .hero-cta-note {
       font-family: 'Noto Serif TC', serif;
       font-size: 0.84rem;
@@ -414,31 +409,30 @@
       letter-spacing: 0.08em;
       color: #f0e0c0;
       line-height: 1.95;
-      /* A: 加重陰影 */
       text-shadow:
         0 0 2px rgba(0,0,0,1),
         0 0 6px rgba(0,0,0,1),
         0 0 14px rgba(0,0,0,0.9),
         0 0 24px rgba(0,0,0,0.65),
         0 2px 6px rgba(0,0,0,1);
-      /* B: 局部霧化底 */
+      /* 柔霧：極淡 + 邊緣早早透明，完全看不出形狀 */
       background: radial-gradient(
-        ellipse at center,
-        rgba(8,5,3,0.6) 0%,
-        rgba(8,5,3,0.42) 55%,
-        rgba(8,5,3,0.15) 85%,
-        transparent 100%
+        ellipse 90% 120% at center,
+        rgba(8,5,3,0.28) 0%,
+        rgba(8,5,3,0.18) 30%,
+        rgba(8,5,3,0.08) 60%,
+        transparent 85%
       );
-      margin-top: 14px;
+      margin-top: 16px;
       max-width: 440px;
       width: 100%;
-      padding: 18px 28px;
+      padding: 22px 32px;
       text-align: center;
       word-break: keep-all;
       overflow-wrap: break-word;
       line-break: strict;
       opacity: 0;
-      animation: heroFade 1s var(--ease) 2.15s forwards;
+      animation: heroFade 1s var(--ease) 1.95s forwards;
     }
 
     @media (max-width: 480px) {
@@ -609,27 +603,33 @@
         inset 0 1px 0 rgba(255,255,255,0.25);
     }
 
-    /* 主 CTA：加入技能交換公會（金色漸層填色） */
+    /* 主 CTA：加入技能交換公會（古銅琥珀漸層，有歲月感） */
     .btn-hero-primary {
-      padding: 15px 40px;
+      padding: 15px 42px;
       font-size: 0.9rem;
-      background: linear-gradient(135deg, #c4933f, #e8b54d, #c4933f);
+      background: linear-gradient(135deg, #8a5f1f 0%, #b8874a 50%, #a0742b 100%);
       background-size: 200% 200%;
-      color: #fff;
+      color: #fff2d4;
+      border: 1px solid rgba(232,181,77,0.35);
       box-shadow:
-        0 6px 20px rgba(196,147,63,0.4),
-        0 0 30px rgba(196,147,63,0.18),
-        inset 0 1px 0 rgba(255,255,255,0.25);
-      animation: btnShimmer 4s ease-in-out infinite;
-      letter-spacing: 0.1em;
+        0 6px 18px rgba(0,0,0,0.38),
+        inset 0 1px 0 rgba(255,230,180,0.18),
+        inset 0 -1px 0 rgba(0,0,0,0.2);
+      animation: btnShimmer 5s ease-in-out infinite;
+      letter-spacing: 0.12em;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.55);
     }
 
     .btn-hero-primary:hover {
       transform: translateY(-2px);
+      background: linear-gradient(135deg, #a0742b 0%, #caa366 50%, #b8874a 100%);
+      border-color: rgba(232,181,77,0.7);
+      color: #fff;
       box-shadow:
-        0 8px 28px rgba(196,147,63,0.5),
-        0 0 40px rgba(196,147,63,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.3);
+        0 8px 24px rgba(0,0,0,0.45),
+        0 0 22px rgba(184,135,74,0.28),
+        inset 0 1px 0 rgba(255,230,180,0.28),
+        inset 0 -1px 0 rgba(0,0,0,0.15);
     }
 
     /* 次要 CTA：文字連結樣式，不搶戲 */
@@ -3085,8 +3085,7 @@
       <span class="hero-tagline-line">分享越多、得到更多</span>
     </p>
     <div class="hero-cta-group">
-      <a class="btn-hero btn-hero-primary" href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener noreferrer">加入技能交換公會</a>
-      <a class="btn-hero-text" href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">我也想要分享技能 <span class="btn-hero-text-arrow">→</span></a>
+      <a class="btn-hero btn-hero-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">我也想要分享技能</a>
       <p class="hero-cta-note">還沒有適合的技能想互換？<wbr>可以請對方喝咖啡、<wbr>吃一頓飯作為交換</p>
     </div>
   </div>
