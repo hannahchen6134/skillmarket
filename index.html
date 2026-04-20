@@ -260,7 +260,13 @@
       color: var(--gold);
       margin-bottom: 20px;
       font-weight: 500;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+      /* 多層黑色光暈 */
+      text-shadow:
+        0 0 2px rgba(0,0,0,1),
+        0 0 6px rgba(0,0,0,0.95),
+        0 0 14px rgba(0,0,0,0.8),
+        0 0 24px rgba(0,0,0,0.6),
+        0 2px 6px rgba(0,0,0,0.9);
       opacity: 0;
       animation: heroFade 1.2s var(--ease) 0.3s forwards;
     }
@@ -288,9 +294,13 @@
       letter-spacing: 0.18em;
       color: #fff;
       margin-bottom: 6px;
+      /* 多層黑色光暈 */
       text-shadow:
+        0 0 2px rgba(0,0,0,1),
+        0 0 6px rgba(0,0,0,0.95),
+        0 0 14px rgba(0,0,0,0.85),
         0 2px 18px rgba(0,0,0,0.8),
-        0 0 40px rgba(0,0,0,0.4);
+        0 0 40px rgba(0,0,0,0.5);
       animation: heroLineUp 1s var(--ease) 0.4s forwards;
     }
 
@@ -417,7 +427,14 @@
       letter-spacing: 0.08em;
       color: #f5e6c4;
       line-height: 1.85;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.85), 0 0 20px rgba(0,0,0,0.6);
+      /* 多層黑色光暈：無框但字體清晰可讀 */
+      text-shadow:
+        0 0 2px rgba(0,0,0,1),
+        0 0 4px rgba(0,0,0,0.95),
+        0 0 10px rgba(0,0,0,0.85),
+        0 0 20px rgba(0,0,0,0.75),
+        0 0 32px rgba(0,0,0,0.6),
+        0 2px 6px rgba(0,0,0,0.95);
       margin-top: 8px;
       max-width: 440px;
       width: 100%;
@@ -444,7 +461,14 @@
       color: #f0e2c0;
       line-height: 2;
       text-align: center;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.7);
+      /* 多層黑色光暈：無框但字體清晰可讀 */
+      text-shadow:
+        0 0 2px rgba(0,0,0,1),
+        0 0 4px rgba(0,0,0,0.95),
+        0 0 10px rgba(0,0,0,0.85),
+        0 0 20px rgba(0,0,0,0.75),
+        0 0 32px rgba(0,0,0,0.6),
+        0 2px 8px rgba(0,0,0,0.95);
       max-width: 480px;
       margin: 18px auto 28px;
       word-break: keep-all;
@@ -2324,15 +2348,35 @@
       opacity: 0.85;
     }
 
-    @media (max-width: 420px) {
+    /* 手機版（含偏中寬的螢幕）—— 按鈕縮小、允許換行 */
+    @media (max-width: 560px) {
       .story-actions {
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
+        padding: 0 8px;
       }
       .story-action-btn {
-        padding: 8px 14px;
-        font-size: 0.72rem;
-        gap: 6px;
+        padding: 7px 12px;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        gap: 5px;
+        min-height: 32px;
+      }
+      .story-action-btn svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    /* 超小螢幕（<400px）：再縮一點 */
+    @media (max-width: 400px) {
+      .story-actions {
+        gap: 5px;
+      }
+      .story-action-btn {
+        padding: 6px 10px;
+        font-size: 0.64rem;
+        letter-spacing: 0.05em;
       }
     }
 
@@ -3615,7 +3659,7 @@
   <div class="footer-inner">
     <div class="footer-brand-block">
       <p class="footer-brand">初星群技能交換公會</p>
-      <p class="footer-tagline">500 價值流動計劃 · 在這裡，我們互相陪伴，也互相成長。</p>
+      <p class="footer-tagline">在這裡，我們互相陪伴，也互相成長。</p>
     </div>
 
     <div class="footer-columns">
@@ -3645,7 +3689,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>© 2026 初星群 Starry Dawn Circle · 由青青村長用心經營</p>
+      <p>© 2026 初星群 Starry Dawn Circle</p>
     </div>
   </div>
 </footer>
