@@ -36,6 +36,12 @@
       --gold-pale:    #f0d890;
       --gold-dim:     rgba(196,147,63,0.12);
       --gold-glow:    rgba(196,147,63,0.25);
+      /* 暖銅色系：用於「我想換」標示，與金色區別但同屬暖色家族 */
+      --copper:       #b85e3a;
+      --copper-bright:#d67a4f;
+      --copper-pale:  #e8a082;
+      --copper-dim:   rgba(184,94,58,0.14);
+      --copper-glow:  rgba(184,94,58,0.28);
       --crystal-blue: #7b9fce;
       --crystal-purple: #9b7bd4;
       --crystal-pink: #d4618c;
@@ -1276,6 +1282,31 @@
       letter-spacing: 0.01em;
       word-break: keep-all;
       text-wrap: balance;
+      display: inline-block;
+      /* 由左到右揭露 mask：黑色段 → 漸透明，sweep 進場 */
+      -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 55%, transparent 100%);
+              mask-image: linear-gradient(90deg, #000 0%, #000 55%, transparent 100%);
+      -webkit-mask-size: 220% 100%;
+              mask-size: 220% 100%;
+      -webkit-mask-repeat: no-repeat;
+              mask-repeat: no-repeat;
+      -webkit-mask-position: 100% 0;
+              mask-position: 100% 0;
+      animation: titleSweepLeftRight 1.3s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+
+    @keyframes titleSweepLeftRight {
+      from { -webkit-mask-position: 100% 0;   mask-position: 100% 0; }
+      to   { -webkit-mask-position: 0% 0;     mask-position: 0% 0; }
+    }
+
+    /* 使用者關閉動態時尊重設定 */
+    @media (prefers-reduced-motion: reduce) {
+      .example-title {
+        -webkit-mask-image: none;
+                mask-image: none;
+        animation: none;
+      }
     }
 
     .example-meta {
@@ -1319,6 +1350,52 @@
       letter-spacing: 0.08em;
       font-family: 'Cinzel', 'Noto Sans TC', sans-serif;
       white-space: nowrap;
+    }
+
+    /* ── 卡片「我想換」標示（暖銅色，與金色的「我提供」區隔） ── */
+    .example-wants {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      margin-bottom: 2px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, rgba(184,94,58,0.14), rgba(184,94,58,0.05));
+      border: 1px solid rgba(184,94,58,0.28);
+      border-left: 3px solid var(--copper);
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: var(--copper-pale);
+      line-height: 1.55;
+      font-family: 'Noto Serif TC', serif;
+    }
+
+    .example-wants-label {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--copper-bright);
+      font-family: 'Cinzel', 'Noto Sans TC', sans-serif;
+      white-space: nowrap;
+    }
+
+    .example-wants-label::before {
+      content: '';
+      width: 12px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--copper-bright));
+      display: inline-block;
+    }
+
+    .example-wants-text {
+      color: var(--text-mid);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      word-break: break-word;
     }
 
     .example-tap-hint {
@@ -1978,13 +2055,15 @@
       margin: 0 auto;
       border-radius: 14px;
       overflow: hidden;
+      /* 紙感：SVG 纖維顆粒 + 中央暖色變化（邊緣乾淨，不會出現奇怪色塊）+ 原 parchment 漸層 */
       background:
-        radial-gradient(ellipse 80% 40% at 80% 5%, rgba(255,220,150,0.55) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 35% at 15% 92%, rgba(200,150,70,0.35) 0%, transparent 50%),
-        radial-gradient(ellipse 30% 18% at 20% 38%, rgba(139,90,40,0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 25% 15% at 75% 52%, rgba(139,90,40,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 15% 10% at 40% 78%, rgba(139,90,40,0.04) 0%, transparent 70%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.12 0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse 45% 30% at 50% 35%, rgba(255,235,195,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 32% at 45% 65%, rgba(215,175,110,0.16) 0%, transparent 75%),
+        radial-gradient(ellipse 70% 50% at 50% 50%, rgba(247,230,195,0.12) 0%, transparent 70%),
         linear-gradient(165deg, var(--sc-bg-1) 0%, var(--sc-bg-2) 50%, var(--sc-bg-3) 100%);
+      background-size: 260px 260px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      background-blend-mode: multiply, normal, normal, normal, normal;
       display: flex;
       flex-direction: column;
       padding: 22px 24px 18px;
@@ -2213,25 +2292,330 @@
       border: 1px solid rgba(184,144,74,0.45);
     }
 
-    /* ── 介紹文（給最多空間；最長 150 字也不溢出） ── */
-    .story-card-body {
-      padding: 14px 4px;
-      border-top: 1px solid var(--sc-border-soft);
-      border-bottom: 1px solid var(--sc-border-soft);
-      margin-bottom: 10px;
-      flex-shrink: 0;
+    /* ══════════════════════════════════════════════════════════
+     *  書籤分頁：關於我 / 服務介紹 / 我想換（啞光古典 + 金光暈）
+     * ══════════════════════════════════════════════════════════ */
+    .story-tabs-wrap {
+      margin-top: 8px;
+      margin-bottom: 14px;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    .story-card-desc {
+    .story-tabs-header {
+      display: flex;
+      gap: 4px;
+      padding: 0 2px;
+      align-items: flex-end;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 共用：書籤通用結構 */
+    .story-tab {
+      flex: 1;
+      padding: 12px 8px 11px;
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      font-family: 'Cinzel', 'Noto Serif TC', serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.24em;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition:
+        background 0.45s cubic-bezier(0.25,0.8,0.25,1),
+        box-shadow 0.5s cubic-bezier(0.25,0.8,0.25,1),
+        transform 0.4s cubic-bezier(0.25,0.8,0.25,1),
+        color 0.45s ease;
+      position: relative;
+      margin-bottom: -1px;
+      white-space: nowrap;
+      text-shadow: 0 1px 1.5px rgba(0,0,0,0.12);
+    }
+
+    /* 啞光紙粉顆粒（共用） */
+    .story-tab::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='mn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.2' numOctaves='1' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23mn)' opacity='0.55'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+      opacity: 0.4;
+    }
+
+    /* ─── 關於我 — 啞光象牙粉 ─── */
+    .story-tab[data-tab="bio"] {
+      background: linear-gradient(180deg, #D5BC94 0%, #C3A87D 100%);
+      border: 1px solid rgba(130,95,50,0.22);
+      border-bottom: none;
+      color: #3D2610;
+      box-shadow: inset 0 0 0 1px rgba(255,245,215,0.08);
+    }
+    .story-tab[data-tab="bio"].active {
+      background: linear-gradient(180deg, #D8BF98 0%, #C2A67C 100%);
+      border: 1px solid rgba(120,85,42,0.32);
+      border-bottom: none;
+      color: #2B1807;
+      font-weight: 800;
+      transform: translateY(-3px);
+      z-index: 3;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,245,215,0.12),
+        0 -2px 10px rgba(143,106,46,0.18);
+    }
+
+    /* ─── 服務介紹 — 啞光古銅 ─── */
+    .story-tab[data-tab="desc"] {
+      background: linear-gradient(180deg, #8E7648 0%, #6F5A34 100%);
+      border: 1px solid rgba(80,55,22,0.3);
+      border-bottom: none;
+      color: #F0DAAB;
+      box-shadow: inset 0 0 0 1px rgba(255,225,170,0.05);
+    }
+    .story-tab[data-tab="desc"].active {
+      background: linear-gradient(180deg, #94794B 0%, #745E36 100%);
+      border: 1px solid rgba(70,48,18,0.4);
+      border-bottom: none;
+      color: #F8E5BA;
+      font-weight: 800;
+      transform: translateY(-3px);
+      z-index: 3;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,225,170,0.08),
+        0 -2px 10px rgba(120,98,55,0.25);
+      text-shadow: 0 1px 1.5px rgba(0,0,0,0.18);
+    }
+
+    /* ─── 我想換 — 啞光陳磚紅 ─── */
+    .story-tab[data-tab="wants"] {
+      background: linear-gradient(180deg, #8A5740 0%, #67402A 100%);
+      border: 1px solid rgba(70,30,14,0.3);
+      border-bottom: none;
+      color: #EDCCB3;
+      box-shadow: inset 0 0 0 1px rgba(255,210,175,0.04);
+    }
+    .story-tab[data-tab="wants"].active {
+      background: linear-gradient(180deg, #935E43 0%, #6E4329 100%);
+      border: 1px solid rgba(60,22,10,0.38);
+      border-bottom: none;
+      color: #F5D3B9;
+      font-weight: 800;
+      transform: translateY(-3px);
+      z-index: 3;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,210,175,0.06),
+        0 -2px 10px rgba(130,80,55,0.25);
+      text-shadow: 0 1px 1.5px rgba(0,0,0,0.18);
+    }
+
+    /* Hover：三色共用優雅金色光暈 */
+    .story-tab:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,245,215,0.1),
+        0 0 0 1px rgba(224,180,104,0.35),
+        0 0 10px rgba(212,168,96,0.45),
+        0 0 22px rgba(196,147,63,0.38),
+        0 0 42px rgba(184,144,74,0.22),
+        0 5px 20px rgba(143,106,46,0.22);
+    }
+    .story-tab.active:hover {
+      box-shadow:
+        inset 0 0 0 1px rgba(255,245,215,0.12),
+        0 0 0 1px rgba(232,188,112,0.42),
+        0 0 12px rgba(220,176,100,0.5),
+        0 0 26px rgba(200,152,68,0.42),
+        0 0 48px rgba(184,144,74,0.25),
+        0 5px 22px rgba(143,106,46,0.28),
+        0 -2px 10px rgba(143,106,46,0.2);
+    }
+
+    /* Active 頂端飾線 */
+    .story-tab.active::before {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 0.5px;
+      background: linear-gradient(90deg, transparent, rgba(255,245,215,0.45), transparent);
+      z-index: 2;
+    }
+
+    /* Focus 修正（移除瀏覽器黑色 outline） */
+    .story-tab:focus { outline: none; }
+    .story-tab:focus:not(:focus-visible) { outline: none; }
+    .story-tab:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 2px rgba(255,235,180,0.5),
+        0 -3px 14px rgba(110,80,45,0.22),
+        inset 0 1px 0 rgba(255,250,235,0.65);
+    }
+
+    /* 空值分頁：完全隱藏 */
+    .story-tab.hidden { display: none; }
+
+    /* 分頁內容區 */
+    .story-tabs-content {
+      padding: 18px 6px 10px;
+      border-top: 1.5px solid rgba(110,75,30,0.55);
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='1' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0 0.15 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n2)' opacity='0.35'/%3E%3C/svg%3E") 0 0 / 200px 200px,
+        transparent;
+      margin-bottom: 10px;
+      flex: 1;
+      min-height: 120px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* 個別分頁面板 */
+    .story-tab-panel { display: none; }
+    .story-tab-panel.active {
+      display: block;
+      animation: tabFadeIn 0.45s cubic-bezier(0.25,0.8,0.25,1);
+    }
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 共用文字樣式（三個面板共用） */
+    .story-card-desc,
+    .story-card-bio-text,
+    .story-card-wants-text {
       font-family: 'Noto Serif TC', serif;
       font-size: 0.84rem;
       color: var(--sc-ink);
-      line-height: 1.75;
+      line-height: 1.85;
       letter-spacing: 0.02em;
       white-space: pre-line;
       text-align: left;
       word-break: break-word;
       overflow-wrap: anywhere;
+    }
+    .story-card-bio-text { color: var(--sc-ink-mid); }
+
+    /* 「我想換」下方的補充小字（「以上為參考方向，其他也歡迎一起聊聊」） */
+    .story-card-wants-note {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(143,106,46,0.22);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.74rem;
+      font-style: italic;
+      color: var(--sc-ink-soft);
+      letter-spacing: 0.04em;
+      line-height: 1.65;
+      opacity: 0.82;
+    }
+    .story-card-wants-note::before {
+      content: '— ';
+      font-style: normal;
+      color: rgba(143,106,46,0.5);
+    }
+
+    /* 手機版：字級壓緊，確保 150 字可一次截完 */
+    @media (max-width: 420px) {
+      .story-tab {
+        font-size: 0.66rem;
+        letter-spacing: 0.14em;
+        padding: 9px 4px;
+      }
+      .story-card-desc, .story-card-bio-text, .story-card-wants-text {
+        font-size: 0.80rem;
+        line-height: 1.7;
+      }
+      .story-tabs-content { padding: 14px 4px 6px; min-height: 130px; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+     *  手機 / 觸控裝置效能優化（保留美感，拿掉吃 GPU 的重特效）
+     *  判斷條件：小螢幕 OR 無 hover 能力的觸控裝置
+     * ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+      /* ── 書籤：去掉 SVG 顆粒 overlay（手機看不太出來、但每幀都要合成） ── */
+      .story-tab::after { display: none; }
+
+      /* ── 觸控裝置沒有 hover，禁用高成本的 hover 金光暈 ── */
+      .story-tab:hover {
+        transform: none;
+      }
+      .story-tab:hover,
+      .story-tab.active:hover {
+        box-shadow: inherit;
+      }
+      /* 但保留 active 狀態的微陰影讓「選中」仍清楚 */
+      .story-tab.active {
+        box-shadow:
+          inset 0 0 0 1px rgba(255,245,215,0.1),
+          0 -2px 8px rgba(143,106,46,0.2) !important;
+      }
+
+      /* ── 去掉 text-shadow 雙向壓印，改用單純顏色對比 ── */
+      .story-tab {
+        text-shadow: none;
+      }
+
+      /* ── 標題左→右 mask-image 動畫對手機較吃，改用簡單 fade ── */
+      .skills-grid .example-card .example-title {
+        -webkit-mask-image: none;
+                mask-image: none;
+        animation: cardTitleSimpleFade 0.6s ease-out both;
+      }
+      @keyframes cardTitleSimpleFade {
+        from { opacity: 0; transform: translateY(4px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── Modal 外投影簡化（filter: drop-shadow 在手機較耗） ── */
+      .story-wrapper {
+        filter: none;
+      }
+      .story-card {
+        box-shadow:
+          0 12px 28px rgba(40, 25, 10, 0.48),
+          inset 0 1px 0 rgba(255, 240, 210, 0.7),
+          inset 0 0 0 4px var(--sc-bg-1),
+          inset 0 0 0 5px var(--sc-border-mid) !important;
+      }
+
+      /* ── 紙紋 SVG 降解析度 + 降透明度（維持質感但省記憶體） ── */
+      .story-tabs-content {
+        background:
+          linear-gradient(180deg, rgba(247,234,208,0.25), transparent 55%) !important;
+      }
+    }
+
+    /* ═══════ 舊裝置 / 低效能裝置：進一步降階 ═══════ */
+    @media (max-width: 420px) {
+      /* 最小螢幕完全拿掉 story-card 的 SVG noise（直接用純漸層） */
+      .story-card {
+        background:
+          radial-gradient(ellipse 50% 35% at 50% 50%, rgba(247,230,195,0.25) 0%, transparent 70%),
+          linear-gradient(165deg, var(--sc-bg-1) 0%, var(--sc-bg-2) 50%, var(--sc-bg-3) 100%) !important;
+        background-size: 100% 100%, 100% 100% !important;
+        background-blend-mode: normal, normal !important;
+      }
+    }
+
+    /* 尊重使用者「減少動態效果」設定 */
+    @media (prefers-reduced-motion: reduce) {
+      .story-tab, .story-tab-panel, .example-card, .example-title {
+        animation: none !important;
+        transition: opacity 0.2s ease !important;
+      }
+      .example-title {
+        -webkit-mask-image: none !important;
+                mask-image: none !important;
+      }
     }
 
 
@@ -2868,9 +3252,18 @@
       .faq-item,
       .cta-card,
       .btn-hero,
-      .about-link {
+      .about-link,
+      .example-card,
+      .skills-search,
+      .skill-filter-btn {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
+      }
+
+      /* 手機卡片動畫減量：縮短 stagger + 去掉過度的 transform */
+      .skills-grid .example-card {
+        animation-duration: 0.45s !important;
+        will-change: auto !important;
       }
     }
 
@@ -3375,7 +3768,6 @@
     <div class="section-header reveal">
       <div class="section-eyebrow">FAQ</div>
       <h2 class="section-title">常見疑問</h2>
-      <div class="simple-divider"></div>
     </div>
 
     <div class="faq-list reveal">
@@ -3402,6 +3794,10 @@
       <details class="faq-item">
         <summary>線上線下都可以嗎？</summary>
         <p>都可以。你上架時會指定「線上 / 實體」，雙方確認後再約定細節（視訊軟體、見面地點等）。</p>
+      </details>
+      <details class="faq-item">
+        <summary>有人想跟我換，但我不想，可以拒絕嗎？</summary>
+        <p>當然可以。技能交換是雙方都願意才成立的，沒有必須接受每一個邀約的義務。只要禮貌地說明不方便（例如「這段時間比較忙」「跟我想學的方向不太一樣」），對方大多能理解。尊重自己的感受最重要——你在這裡是自由的。</p>
       </details>
       <details class="faq-item">
         <summary>交換品質怎麼保證？</summary>
@@ -3569,9 +3965,25 @@
       <!-- Meta 清單 -->
       <div class="story-card-meta-list" id="storyMeta"></div>
 
-      <!-- 介紹文（可捲動） -->
-      <div class="story-card-body">
-        <p class="story-card-desc" id="storyDesc"></p>
+      <!-- 書籤分頁：關於我 / 服務介紹 / 我想換 -->
+      <div class="story-tabs-wrap" id="storyTabsWrap">
+        <div class="story-tabs-header" role="tablist" id="storyTabsHeader">
+          <button class="story-tab" data-tab="bio" id="storyTabBio" type="button" role="tab" aria-selected="false">關於我</button>
+          <button class="story-tab active" data-tab="desc" id="storyTabDesc" type="button" role="tab" aria-selected="true">服務介紹</button>
+          <button class="story-tab" data-tab="wants" id="storyTabWants" type="button" role="tab" aria-selected="false">我想換</button>
+        </div>
+        <div class="story-tabs-content">
+          <div class="story-tab-panel" data-panel="bio" id="storyPanelBio" role="tabpanel">
+            <p class="story-card-bio-text" id="storyBio"></p>
+          </div>
+          <div class="story-tab-panel active" data-panel="desc" id="storyPanelDesc" role="tabpanel">
+            <p class="story-card-desc" id="storyDesc"></p>
+          </div>
+          <div class="story-tab-panel" data-panel="wants" id="storyPanelWants" role="tabpanel">
+            <p class="story-card-wants-text" id="storyWants"></p>
+            <p class="story-card-wants-note">以上為參考方向，其他也歡迎一起聊聊</p>
+          </div>
+        </div>
       </div>
 
       <!-- 底部 -->
@@ -3821,8 +4233,10 @@
           duration:     get(4),              // E: 時長
           mode:         mode,
           capacity:     get(6),              // G: 人數上限
-          availability: get(7),              // H: 方便時間 ⭐ 新增
-          desc:         get(8),              // I: 介紹
+          availability: get(7),              // H: 方便時間
+          desc:         get(8),              // I: 服務介紹
+          bio:          get(9),              // J: 自我介紹 ⭐ 新增
+          wants:        get(10),             // K: 想交換的 ⭐ 新增
           isExample:    false
         };
       });
@@ -3844,6 +4258,8 @@
         mode:         card.querySelector('.example-mode') ? (card.querySelector('.example-mode-online') ? '線上' : '實體') : '',
         availability: '',
         desc:         card.querySelector('.example-desc')?.textContent || '',
+        bio:          '',
+        wants:        '',
         isExample:    true
       });
 
@@ -3994,6 +4410,16 @@
       + '<span>直接聯繫我</span>'
       + '</a>';
 
+    // 「想換」標示：暖銅色，只有填寫時才顯示（空值 = 不佔版面）
+    const wantsText = (skill.wants || '').trim();
+    const shortWants = esc(truncateDesc(wantsText, 60));
+    const wantsBlock = shortWants
+      ? '<div class="example-wants">'
+        + '<span class="example-wants-label">想換</span>'
+        + '<span class="example-wants-text">' + shortWants + '</span>'
+        + '</div>'
+      : '';
+
     return '<div class="example-card" data-category="' + catKey + '">'
       + demoBadge
       + '<span class="example-badge">' + badge + '</span>'
@@ -4005,6 +4431,7 @@
       + (mode ? '<span class="example-mode ' + modeClass + '">' + modeLabel + '</span>' : '')
       + '</div>'
       + (shortDesc ? '<p class="example-desc">' + shortDesc + '</p>' : '')
+      + wantsBlock
       + '<span class="example-points">\u53ef\u9810\u7d04\u6280\u80fd\u4ea4\u63db</span>'
       + contactBtn
       + '<span class="example-tap-hint">\u9ede\u64ca\u5361\u7247\u770b\u6280\u80fd\u8a73\u60c5</span>'
@@ -4021,12 +4448,18 @@
     // Build HTML fragment
     const fragment = document.createDocumentFragment();
     const temp = document.createElement('div');
-    toShow.forEach(skill => {
+    toShow.forEach((skill, idx) => {
       temp.innerHTML = buildCardHTML(skill);
       const card = temp.firstChild;
       // ⚠️ 重要：把 skill 物件直接綁在卡片 DOM 上，避免靠索引查找造成對應錯人
       card._skill = skill;
-      card.style.animation = 'cardFadeIn 0.5s var(--ease) both';
+      // Stagger 進場：每張卡片錯開 80ms 漸顯，標題再多延遲 200ms 後由左到右揭露
+      const stepMs = idx * 80;
+      card.style.animation = 'cardFadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) ' + stepMs + 'ms both';
+      const titleEl = card.querySelector('.example-title');
+      if (titleEl) {
+        titleEl.style.animationDelay = (stepMs + 200) + 'ms';
+      }
       fragment.appendChild(card);
     });
 
@@ -4096,6 +4529,15 @@
     });
   }
 
+  /* ── Fisher-Yates 洗牌：每次載入打亂 allSkills 順序，讓每位報名者有公平的首頁曝光 ── */
+  function shuffleSkills(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
   /* ── Init: Load Data ── */
   (async function initSkills() {
     if (GUILD_CONFIG.SHEET_ID) {
@@ -4124,6 +4566,9 @@
       // 移除原始 DOM 卡片，改用動態渲染
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
     }
+
+    // 🎲 每次載入隨機洗牌，讓不同使用者/不同時間看到不同的「首頁曝光組合」
+    shuffleSkills(allSkills);
 
     applyFilterAndSearch();
   })();
@@ -4302,12 +4747,64 @@
     }
     metaEl.innerHTML = metaHTML;
 
-    // 介紹（完整內容，可捲動）
-    document.getElementById('storyDesc').textContent = skill.desc || '這位村民還沒有寫詳細介紹，但他的技能一定很棒！';
+    // 三個分頁內容
+    const descText = (skill.desc || '').trim();
+    const bioText  = (skill.bio  || '').trim();
+    const wantsText= (skill.wants|| '').trim();
+
+    // 服務介紹（永遠顯示，沒寫給預設文案）
+    document.getElementById('storyDesc').textContent = descText || '這位村民還沒有寫詳細介紹，但他的技能一定很棒！';
+    // 關於我 / 我想換：只塞文字，後面再決定分頁要不要隱藏
+    document.getElementById('storyBio').textContent   = bioText;
+    document.getElementById('storyWants').textContent = wantsText;
+
+    // 書籤分頁：空值隱藏該分頁
+    const tabBio   = document.getElementById('storyTabBio');
+    const tabDesc  = document.getElementById('storyTabDesc');
+    const tabWants = document.getElementById('storyTabWants');
+    const panelBio   = document.getElementById('storyPanelBio');
+    const panelDesc  = document.getElementById('storyPanelDesc');
+    const panelWants = document.getElementById('storyPanelWants');
+
+    // 依內容決定各分頁是否顯示
+    tabBio.classList.toggle('hidden', !bioText);
+    tabWants.classList.toggle('hidden', !wantsText);
+    // 服務介紹預設都會有文字（空的話帶預設文案），所以不隱藏
+
+    // 每次打開 modal 都重設到預設分頁「服務介紹」
+    [tabBio, tabDesc, tabWants].forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    [panelBio, panelDesc, panelWants].forEach(p => p.classList.remove('active'));
+    tabDesc.classList.add('active');
+    tabDesc.setAttribute('aria-selected', 'true');
+    panelDesc.classList.add('active');
 
     storyOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+
+  /* 書籤分頁點擊切換 */
+  document.querySelectorAll('.story-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      // 不處理被隱藏的分頁
+      if (tab.classList.contains('hidden')) return;
+      const tabName = tab.dataset.tab;
+
+      // 切換所有分頁的 active 狀態
+      document.querySelectorAll('.story-tab').forEach(t => {
+        const isActive = (t === tab);
+        t.classList.toggle('active', isActive);
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      // 切換面板顯示
+      document.querySelectorAll('.story-tab-panel').forEach(p => {
+        p.classList.toggle('active', p.dataset.panel === tabName);
+      });
+    });
+  });
 
   function closeStory() {
     storyOverlay.classList.remove('open');
