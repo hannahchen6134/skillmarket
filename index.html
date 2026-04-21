@@ -1353,6 +1353,7 @@
     }
 
     /* ── 卡片「我想換」標示（暖銅色，與金色的「我提供」區隔） ── */
+    /* 「想換」墨綠配色（優雅邀請感，取代原暖銅） */
     .example-wants {
       display: flex;
       align-items: center;
@@ -1360,12 +1361,12 @@
       margin-top: 14px;
       margin-bottom: 2px;
       padding: 10px 14px;
-      background: linear-gradient(135deg, rgba(184,94,58,0.14), rgba(184,94,58,0.05));
-      border: 1px solid rgba(184,94,58,0.28);
-      border-left: 3px solid var(--copper);
+      background: linear-gradient(135deg, rgba(74,101,72,0.18), rgba(74,101,72,0.06));
+      border: 1px solid rgba(74,101,72,0.30);
+      border-left: 3px solid #4A6548;
       border-radius: 4px;
       font-size: 0.82rem;
-      color: var(--copper-pale);
+      color: #B8CFB0;
       line-height: 1.55;
       font-family: 'Noto Serif TC', serif;
     }
@@ -1378,7 +1379,7 @@
       font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.12em;
-      color: var(--copper-bright);
+      color: #A8C39A;
       font-family: 'Cinzel', 'Noto Sans TC', sans-serif;
       white-space: nowrap;
     }
@@ -1387,7 +1388,7 @@
       content: '';
       width: 12px;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--copper-bright));
+      background: linear-gradient(90deg, transparent, #A8C39A);
       display: inline-block;
     }
 
@@ -2391,26 +2392,26 @@
       text-shadow: 0 1px 1.5px rgba(0,0,0,0.18);
     }
 
-    /* ─── 我想換 — 啞光陳磚紅 ─── */
+    /* ─── 我想換 — 啞光墨綠（elegant ink green） ─── */
     .story-tab[data-tab="wants"] {
-      background: linear-gradient(180deg, #8A5740 0%, #67402A 100%);
-      border: 1px solid rgba(70,30,14,0.3);
+      background: linear-gradient(180deg, #566D4E 0%, #3F4F38 100%);
+      border: 1px solid rgba(40,55,30,0.3);
       border-bottom: none;
-      color: #EDCCB3;
-      box-shadow: inset 0 0 0 1px rgba(255,210,175,0.04);
+      color: #DCE8D4;
+      box-shadow: inset 0 0 0 1px rgba(220,232,212,0.05);
     }
     .story-tab[data-tab="wants"].active {
-      background: linear-gradient(180deg, #935E43 0%, #6E4329 100%);
-      border: 1px solid rgba(60,22,10,0.38);
+      background: linear-gradient(180deg, #5D7655 0%, #445840 100%);
+      border: 1px solid rgba(30,45,22,0.38);
       border-bottom: none;
-      color: #F5D3B9;
+      color: #E8F2DE;
       font-weight: 800;
       transform: translateY(-3px);
       z-index: 3;
       box-shadow:
-        inset 0 0 0 1px rgba(255,210,175,0.06),
-        0 -2px 10px rgba(130,80,55,0.25);
-      text-shadow: 0 1px 1.5px rgba(0,0,0,0.18);
+        inset 0 0 0 1px rgba(220,232,212,0.07),
+        0 -2px 10px rgba(60,85,50,0.28);
+      text-shadow: 0 1px 1.5px rgba(0,0,0,0.2);
     }
 
     /* Hover：三色共用優雅金色光暈 */
