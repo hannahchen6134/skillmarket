@@ -20,6 +20,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+  <!-- Preload：讓 hero 背景圖在頁面最早就開始下載，避免動畫進場時圖還沒好 -->
+  <link rel="preload" as="image" href="https://hannahchen6134.github.io/skillmarket/village.jpg" fetchpriority="high" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -53,7 +56,7 @@
     body {
       background:
         linear-gradient(180deg, rgba(10,6,3,0.82) 0%, rgba(20,14,8,0.62) 50%, rgba(10,6,3,0.88) 100%),
-        url('starry-hall.jpg') center/cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/starry-hall.jpg') center/cover no-repeat fixed;
       background-color: var(--bg-deep);
       color: var(--text);
       font-family: 'Noto Serif TC', serif;
@@ -78,6 +81,18 @@
       justify-content: space-between;
       align-items: center;
       transition: background 0.4s var(--ease);
+      /* GPU 合成層：讓 nav 獨立渲染，不拖累 hero 動畫 */
+      transform: translateZ(0);
+      will-change: background;
+    }
+
+    /* 手機：大幅降低 backdrop blur 強度，避免首頁進場動畫卡頓 */
+    @media (max-width: 768px) {
+      nav {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        background: rgba(26,18,8,0.82);
+      }
     }
 
     nav.scrolled {
@@ -221,8 +236,10 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: url('village.jpg') center 15% / cover no-repeat;
+      background: url('https://hannahchen6134.github.io/skillmarket/village.jpg') center 15% / cover no-repeat;
       z-index: 0;
+      /* 獨立 GPU 合成層，避免進場動畫 repaint 整個 hero */
+      transform: translateZ(0);
     }
 
     .hero-bg::after {
@@ -286,6 +303,8 @@
         0 0 14px rgba(0,0,0,0.85),
         0 2px 18px rgba(0,0,0,0.8),
         0 0 40px rgba(0,0,0,0.5);
+      opacity: 0;
+      will-change: opacity, transform;
       animation: heroLineUp 1s var(--ease) 0.4s forwards;
     }
 
@@ -299,6 +318,8 @@
         0 3px 16px rgba(0,0,0,0.85),
         0 0 50px rgba(0,0,0,0.4),
         0 0 80px rgba(232,181,77,0.12);
+      opacity: 0;
+      will-change: opacity, transform;
       animation: heroTitlePop 1.2s var(--ease) 0.7s forwards;
     }
 
@@ -319,6 +340,7 @@
         0 0 22px rgba(0,0,0,0.55),
         0 2px 6px rgba(0,0,0,0.9);
       opacity: 0;
+      will-change: opacity, transform;
       animation: heroFade 1s var(--ease) 0.2s forwards;
     }
 
@@ -328,6 +350,20 @@
         heroTitlePop 1.2s var(--ease) 0.7s forwards,
         heroGlow 5s ease-in-out 2.5s infinite,
         heroTitleBreath 6s ease-in-out 3s infinite;
+    }
+
+    /* 手機效能：text-shadow 動畫很吃 GPU，把無限迴圈的裝飾動畫關掉 */
+    @media (max-width: 768px) {
+      .hero-line-2 {
+        animation: heroTitlePop 1.2s var(--ease) 0.7s forwards;
+      }
+    }
+
+    /* 使用者開啟「減少動態效果」設定時，一律只保留進場 */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-line-2 {
+        animation: heroTitlePop 1.2s var(--ease) 0.7s forwards;
+      }
     }
 
     @keyframes heroTitleBreath {
@@ -372,6 +408,7 @@
       margin-right: auto;
       text-shadow: 0 1px 8px rgba(0,0,0,0.6), 0 0 20px rgba(0,0,0,0.3);
       opacity: 0;
+      will-change: opacity, transform;
       animation: heroFade 1.2s var(--ease) 1.5s forwards;
     }
 
@@ -387,6 +424,7 @@
 
     .hero-cta-group .btn-hero-primary {
       opacity: 0;
+      will-change: opacity, transform;
       animation:
         heroFade 1s var(--ease) 1.65s forwards,
         btnShimmer 5s ease-in-out 2.65s infinite;
@@ -443,6 +481,7 @@
     .hero-tagline-line {
       display: block;
       opacity: 0;
+      will-change: opacity, transform;
       text-shadow:
         0 0 2px rgba(0,0,0,1),
         0 0 4px rgba(0,0,0,0.95),
@@ -803,7 +842,7 @@
           rgba(26,18,8,0.88) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .why-grid {
@@ -878,7 +917,7 @@
           rgba(26,18,8,0.88) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .flow-container {
@@ -981,7 +1020,7 @@
           rgba(26,18,8,0.88) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .skill-filters {
@@ -1262,16 +1301,24 @@
     }
 
     .example-points {
-      display: inline-block;
-      padding: 5px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin-top: 16px;
+      margin-right: 8px;
+      padding: 9px 18px;
+      min-height: 36px;
+      line-height: 1.3;
       background: linear-gradient(135deg, rgba(196,147,63,0.15), rgba(196,147,63,0.05));
       border: 1px solid rgba(196,147,63,0.25);
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 0.78rem;
       color: var(--gold-bright);
       font-weight: 600;
       letter-spacing: 0.08em;
       font-family: 'Cinzel', 'Noto Sans TC', sans-serif;
+      white-space: nowrap;
     }
 
     .example-tap-hint {
@@ -1314,6 +1361,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      vertical-align: middle;
       gap: 7px;
       margin-top: 16px;
       padding: 9px 18px;
@@ -1331,7 +1379,6 @@
       line-height: 1.3;
       cursor: pointer;
       white-space: nowrap;
-      align-self: flex-start;
       box-shadow:
         inset 0 1px 0 rgba(212,168,96,0.14),
         0 2px 8px rgba(0,0,0,0.3);
@@ -1477,7 +1524,7 @@
           rgba(26,18,8,0.78) 80%,
           rgba(26,18,8,0.92) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
       padding: 100px 20px;
       position: relative;
     }
@@ -1560,7 +1607,7 @@
           rgba(36,24,12,0.78) 80%,
           rgba(26,18,8,0.92) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
       padding: 100px 20px;
       position: relative;
     }
@@ -1654,7 +1701,7 @@
           rgba(26,18,8,0.92) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .cta-card {
@@ -1869,7 +1916,7 @@
       z-index: 400;
       background:
         linear-gradient(180deg, rgba(6,4,2,0.96) 0%, rgba(12,8,4,0.92) 50%, rgba(6,4,2,0.98) 100%),
-        url('starry-hall.jpg') center/cover no-repeat;
+        url('https://hannahchen6134.github.io/skillmarket/starry-hall.jpg') center/cover no-repeat;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       display: flex;
@@ -3936,14 +3983,16 @@
     const modeLabel = esc(skill.mode);
     const demoBadge = skill.isExample ? '<span class="example-demo-badge">範例</span>' : '';
 
-    // 卡片上的「直接聯繫我」按鈕：只要客人填了網址就顯示，連到第一個解析結果
+    // 卡片上的「直接聯繫我」按鈕：永遠顯示。
+    // 若客人填了網址 → 連到第一個解析結果；沒填 → fallback 到初星群官方 LINE
     const cardSocials = parseSocialLinks(skill.social);
-    const contactBtn = (cardSocials.length && cardSocials[0].url)
-      ? '<a class="example-contact-btn" href="' + esc(cardSocials[0].url) + '" target="_blank" rel="noopener noreferrer" aria-label="直接聯繫我">'
-        + '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
-        + '<span>直接聯繫我</span>'
-        + '</a>'
-      : '';
+    const contactUrl = (cardSocials.length && cardSocials[0].url)
+      ? cardSocials[0].url
+      : 'https://line.me/R/ti/p/@455ojikt';
+    const contactBtn = '<a class="example-contact-btn" href="' + esc(contactUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="直接聯繫我">'
+      + '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
+      + '<span>直接聯繫我</span>'
+      + '</a>';
 
     return '<div class="example-card" data-category="' + catKey + '">'
       + demoBadge
@@ -3975,6 +4024,8 @@
     toShow.forEach(skill => {
       temp.innerHTML = buildCardHTML(skill);
       const card = temp.firstChild;
+      // ⚠️ 重要：把 skill 物件直接綁在卡片 DOM 上，避免靠索引查找造成對應錯人
+      card._skill = skill;
       card.style.animation = 'cardFadeIn 0.5s var(--ease) both';
       fragment.appendChild(card);
     });
@@ -4221,16 +4272,14 @@
     if (socialWrap) socialWrap.innerHTML = '';
     const parsedSocials = parseSocialLinks(skill.social);
 
-    // 「直接聯繫我」按鈕：帶入客人第一個社群連結
+    // 「直接聯繫我」按鈕：永遠顯示。
+    // 有填社群連結 → 帶入第一個；沒填 → fallback 到初星群官方 LINE
     const contactMeBtn = document.getElementById('storyContactMe');
     if (contactMeBtn) {
-      if (parsedSocials.length && parsedSocials[0].url) {
-        contactMeBtn.href = parsedSocials[0].url;
-        contactMeBtn.style.display = '';
-      } else {
-        contactMeBtn.removeAttribute('href');
-        contactMeBtn.style.display = 'none';
-      }
+      contactMeBtn.href = (parsedSocials.length && parsedSocials[0].url)
+        ? parsedSocials[0].url
+        : 'https://line.me/R/ti/p/@455ojikt';
+      contactMeBtn.style.display = '';
     }
 
     // Meta 清單（Label ─ 點點 ─ Value 古書目錄風）
@@ -4287,14 +4336,10 @@
       const card = e.target.closest('.example-card');
       if (!card) return;
 
-      // Find the matching skill data
-      const cards = Array.from(skillsGrid.querySelectorAll('.example-card'));
-      const idx = cards.indexOf(card);
-
-      // filteredSkills is ordered by currently visible cards
-      const visibleSkills = filteredSkills.slice(0, displayedCount);
-      if (idx >= 0 && idx < visibleSkills.length) {
-        openStory(visibleSkills[idx]);
+      // ✅ 直接從卡片 DOM 上取出對應的 skill 物件（renderCards 時已綁定）
+      // 這樣不會因為篩選/重新渲染時的索引錯位而對應到別人的資料
+      if (card._skill) {
+        openStory(card._skill);
       }
     });
   }
