@@ -5,17 +5,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>技能交換公會 / 500價值流動計劃｜初星群 Starry Dawn Circle</title>
-  <meta name="description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。初星群 500 價值流動計劃——相互學習、共同成長。" />
+  <!-- Open Graph（Facebook、Instagram、LINE、Messenger 抓預覽用）-->
   <meta property="og:title" content="技能交換公會｜初星群 500 價值流動計劃" />
-  <meta property="og:description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。" />
+  <meta property="og:description" content="以技能換技能，分享越多、得到更多——初星群 500 價值流動計劃。來看看有哪些技能可以交換。" />
   <meta property="og:image" content="https://hannahchen6134.github.io/skillmarket/starry-hall.jpg" />
+  <meta property="og:image:secure_url" content="https://hannahchen6134.github.io/skillmarket/starry-hall.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="初星群 · 技能交換公會 — 用你會的換你想學的" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:url" content="https://hannahchen6134.github.io/skillmarket/" />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="初星群 Starry Dawn Circle" />
   <meta property="og:locale" content="zh_TW" />
+
+  <!-- Twitter / X Cards -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="技能交換公會｜初星群" />
-  <meta name="twitter:description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。" />
+  <meta name="twitter:description" content="以技能換技能，分享越多、得到更多——初星群 500 價值流動計劃。" />
   <meta name="twitter:image" content="https://hannahchen6134.github.io/skillmarket/starry-hall.jpg" />
+  <meta name="twitter:image:alt" content="初星群 · 技能交換公會" />
+
+  <!-- 一般 meta -->
+  <meta name="description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。初星群 500 價值流動計劃——相互學習、共同成長。" />
+  <meta name="theme-color" content="#B8904A" />
+  <meta name="apple-mobile-web-app-title" content="初星群" />
+  <meta name="application-name" content="初星群" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -4871,7 +4886,7 @@
     toShow.forEach((skill, idx) => {
       temp.innerHTML = buildCardHTML(skill);
       const card = temp.firstChild;
-      // ⚠️ 重要：把 skill 物件直接綁在卡片 DOM 上，避免靠索引查找造成對應錯人
+      // 重要：把 skill 物件直接綁在卡片 DOM 上，避免靠索引查找造成對應錯人
       card._skill = skill;
       // Stagger 進場：每張卡片錯開 80ms 漸顯，標題再多延遲 200ms 後由左到右揭露
       const stepMs = idx * 80;
@@ -4987,7 +5002,7 @@
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
     }
 
-    // 🎲 每次載入隨機洗牌，讓不同使用者/不同時間看到不同的「首頁曝光組合」
+    // 每次載入隨機洗牌，讓不同使用者/不同時間看到不同的「首頁曝光組合」
     shuffleSkills(allSkills);
 
     applyFilterAndSearch();
@@ -5256,26 +5271,35 @@
   }
   async function doShare(payload) {
     // payload: { url, title, text }
+    // 行動裝置偵測：IG 限動分享需透過原生 Share Sheet
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
     try {
       if (navigator.share) {
+        // 行動裝置：系統分享選單（會有 Instagram / IG 限動、LINE、訊息 等選項）
+        // 桌機 Chrome/Edge 也支援，但選項較少
         await navigator.share(payload);
         return;
       }
       if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(payload.url);
-        showShareToast('✨ 連結已複製，可以分享給朋友了');
+        // 桌機 fallback：複製 URL + 文字，用戶可自己貼到 IG 限動的「連結貼圖」
+        const shareBlock = `${payload.text}\n${payload.url}`;
+        await navigator.clipboard.writeText(shareBlock);
+        showShareToast(isMobile
+          ? '連結已複製，在 IG 限動貼「連結貼圖」貼上即可'
+          : '連結+文案已複製，可貼到 IG 限動、LINE、FB...');
         return;
       }
-      // 舊瀏覽器 fallback
-      const input = document.createElement('input');
-      input.value = payload.url;
+      // 極舊瀏覽器：execCommand
+      const input = document.createElement('textarea');
+      input.value = `${payload.text}\n${payload.url}`;
       document.body.appendChild(input);
       input.select();
-      try { document.execCommand('copy'); showShareToast('✨ 連結已複製'); } catch(e) { prompt('複製這個連結：', payload.url); }
+      try { document.execCommand('copy'); showShareToast('連結已複製'); }
+      catch(e) { prompt('複製這個連結：', payload.url); }
       document.body.removeChild(input);
     } catch (err) {
       if (err.name !== 'AbortError') {
-        // 使用者取消不顯示錯誤；其他錯誤才警告
         showShareToast('分享失敗，請手動複製網址');
       }
     }
@@ -5284,8 +5308,8 @@
   // 首頁分享：分享公會本站
   document.getElementById('homeShareBtn')?.addEventListener('click', () => {
     doShare({
-      title: '初星群 ✨ 技能交換公會',
-      text: '用你會的換你想學的——初星群 500 價值流動計劃，來看看有哪些技能可以交換 🌿',
+      title: '初星群｜技能交換公會',
+      text: '以技能換技能，分享越多、得到更多——初星群 500 價值流動計劃\n來看看有哪些技能可以交換',
       url: 'https://hannahchen6134.github.io/skillmarket/'
     });
   });
@@ -5294,10 +5318,12 @@
   document.getElementById('storyShare')?.addEventListener('click', () => {
     const title = (currentStorySkill?.title || '').trim();
     const provider = (currentStorySkill?.provider || '').trim();
-    const serviceLine = title ? `【${title}】${provider ? 'by ' + provider : ''}` : '一個有趣的技能';
+    const serviceLine = title
+      ? `【${title}】${provider ? ' · by ' + provider : ''}`
+      : '一個有趣的技能';
     doShare({
-      title: '初星群 ✨ ' + (title || '技能交換公會'),
-      text: `我在初星群發現 ${serviceLine}——你也可以去看看還有哪些技能可以交換 🌿`,
+      title: '初星群｜' + (title || '技能交換公會'),
+      text: `我在初星群看到 ${serviceLine}\n以技能換技能，分享越多、得到更多——來看看還有哪些技能可以交換`,
       url: 'https://hannahchen6134.github.io/skillmarket/'
     });
   });
@@ -5312,7 +5338,7 @@
       const card = e.target.closest('.example-card');
       if (!card) return;
 
-      // ✅ 直接從卡片 DOM 上取出對應的 skill 物件（renderCards 時已綁定）
+      // 直接從卡片 DOM 上取出對應的 skill 物件（renderCards 時已綁定）
       // 這樣不會因為篩選/重新渲染時的索引錯位而對應到別人的資料
       if (card._skill) {
         openStory(card._skill);
