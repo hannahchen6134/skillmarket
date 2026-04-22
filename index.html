@@ -699,8 +699,57 @@
     /* ── Section Common ── */
     .section {
       position: relative;
-      padding: clamp(80px, 12vw, 140px) 0;
+      /* 更呼吸的上下留白：桌機最多 160px，手機也有 88px */
+      padding: clamp(88px, 14vw, 160px) 0;
       overflow: hidden;
+    }
+
+    /* ═══ 右側金色滾動進度條 ═══ */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 0;
+      z-index: 250;
+      background: linear-gradient(180deg,
+        rgba(232,181,77,0.85) 0%,
+        rgba(196,147,63,0.95) 50%,
+        rgba(143,106,46,0.85) 100%);
+      box-shadow:
+        0 0 8px rgba(232,181,77,0.4),
+        0 0 16px rgba(196,147,63,0.2);
+      transition: height 0.08s ease-out;
+      pointer-events: none;
+      border-radius: 0 0 0 2px;
+    }
+
+    /* 捲動條容器底（幾乎透明的軌道） */
+    .scroll-progress::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 100vh;
+      background: rgba(196,147,63,0.06);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* 手機版更細，不搶戲 */
+    @media (max-width: 768px) {
+      .scroll-progress {
+        width: 1.5px;
+      }
+      .scroll-progress::before {
+        width: 1.5px;
+      }
+    }
+
+    /* 使用者關閉動態時不顯示 */
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-progress { display: none; }
     }
 
     .container {
@@ -713,7 +762,8 @@
 
     .section-header {
       text-align: center;
-      margin-bottom: 56px;
+      /* 標題與內容之間也拉開，更從容的閱讀節奏 */
+      margin-bottom: clamp(56px, 7vw, 80px);
     }
 
     .section-eyebrow {
@@ -1603,7 +1653,7 @@
           rgba(26,18,8,0.92) 100%
         ),
         url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
-      padding: 100px 20px;
+      padding: clamp(96px, 13vw, 140px) 20px;
       position: relative;
     }
 
@@ -1686,7 +1736,7 @@
           rgba(26,18,8,0.92) 100%
         ),
         url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
-      padding: 100px 20px;
+      padding: clamp(96px, 13vw, 140px) 20px;
       position: relative;
     }
 
@@ -2766,6 +2816,100 @@
       opacity: 0.85;
     }
 
+    /* ═══ 新版主次分明按鈕 ═══ */
+
+    /* 主按鈕：直接預約交換（透明夜色底 + 金光暈，像燈籠透光）*/
+    .story-action-btn.story-action-btn-hero {
+      flex: 1.4 1 auto;
+      padding: 13px 22px;
+      /* 底色：半透明深夜暖咖啡，帶極淺的金色中心漸層（像燈暖透出來）*/
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 40%, rgba(232,181,77,0.16) 0%, transparent 65%),
+        linear-gradient(135deg, rgba(50,32,14,0.55) 0%, rgba(35,22,10,0.62) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      /* 細金邊 + 外光暈 */
+      border: 1px solid rgba(212,168,96,0.48);
+      color: rgba(240,205,130,0.95);
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      min-height: 44px;
+      text-shadow: 0 0 12px rgba(232,181,77,0.35);
+      box-shadow:
+        /* 內頂高光（像金屬反光但很淡）*/
+        inset 0 1px 0 rgba(255,240,200,0.2),
+        /* 內底微影 */
+        inset 0 -1px 0 rgba(30,20,8,0.3),
+        /* 外圈柔金光暈（近）*/
+        0 0 12px rgba(232,181,77,0.25),
+        /* 外圈柔金光暈（遠，像燭光散射）*/
+        0 0 28px rgba(196,147,63,0.18),
+        /* 底下墊陰影讓按鈕浮起來 */
+        0 3px 14px rgba(0,0,0,0.35);
+    }
+    .story-action-btn.story-action-btn-hero:hover {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 40%, rgba(232,181,77,0.28) 0%, transparent 65%),
+        linear-gradient(135deg, rgba(60,40,18,0.62) 0%, rgba(42,28,14,0.68) 100%);
+      color: rgba(250,220,150,1);
+      border-color: rgba(232,181,77,0.7);
+      text-shadow: 0 0 16px rgba(232,181,77,0.55);
+      box-shadow:
+        inset 0 1px 0 rgba(255,245,215,0.28),
+        inset 0 -1px 0 rgba(30,20,8,0.3),
+        /* hover 時光暈加強 */
+        0 0 18px rgba(232,181,77,0.42),
+        0 0 42px rgba(196,147,63,0.32),
+        0 0 60px rgba(184,144,74,0.18),
+        0 4px 18px rgba(0,0,0,0.4);
+      transform: translateY(-1px);
+    }
+    .story-action-btn.story-action-btn-hero svg {
+      opacity: 0.9;
+      width: 16px; height: 16px;
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 4px rgba(232,181,77,0.4));
+    }
+
+    /* 次按鈕：去 LINE 群討論（淡色描邊，不搶焦點）*/
+    .story-action-btn.story-action-btn-ghost {
+      flex: 1 1 auto;
+      padding: 12px 16px;
+      background: transparent;
+      border: 1px solid rgba(184,144,74,0.35);
+      color: rgba(212,168,96,0.78);
+      font-weight: 400;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      min-height: 44px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: none;
+    }
+    .story-action-btn.story-action-btn-ghost:hover {
+      background: rgba(60,42,20,0.42);
+      border-color: rgba(212,168,96,0.55);
+      color: #e8c47a;
+      box-shadow: 0 2px 10px rgba(60,42,20,0.4);
+    }
+    .story-action-btn.story-action-btn-ghost svg {
+      opacity: 0.72;
+    }
+
+    /* 手機版按鈕：垂直堆疊，主按鈕在上 */
+    @media (max-width: 480px) {
+      .story-actions {
+        flex-direction: column;
+      }
+      .story-action-btn.story-action-btn-hero,
+      .story-action-btn.story-action-btn-ghost {
+        width: 100%;
+        flex: none;
+        justify-content: center;
+      }
+    }
+
     /* 手機版（含偏中寬的螢幕）—— 按鈕縮小、允許換行 */
     @media (max-width: 560px) {
       .story-actions {
@@ -3461,6 +3605,9 @@
 </head>
 <body>
 
+<!-- 金色滾動進度條（右側極細、優雅） -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
 <!-- Floating Orbs -->
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
@@ -3713,8 +3860,8 @@
       <div class="flow-step reveal reveal-delay-1">
         <div class="flow-number">1</div>
         <div class="flow-content">
-          <h4>填寫你想分享的技能</h4>
-          <p>可以是設計諮詢、語言教學、瑜伽課、塔羅解讀……任何你想教的。填表時簡單說明時間、適合誰、預期學到什麼。</p>
+          <h4>填寫你想分享也想換的技能</h4>
+          <p>可以是設計諮詢、語言教學、瑜伽課、塔羅解讀……任何你想教或想學的。填表時簡單說明時間、適合誰、預期學到什麼，也寫下你想換到什麼。</p>
           <p class="flow-hint">填表後青青會在 48 小時內審核，確認後你的技能會出現在這個頁面。</p>
         </div>
       </div>
@@ -3998,18 +4145,16 @@
     </div>
     <p class="story-share-hint">歡迎截圖分享</p>
     <div class="story-actions">
-      <a class="story-action-btn story-action-btn-primary" id="storyContact" href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        去 LINE 群分享
+      <!-- 主按鈕：直接聯繫他（滿版金光暈，連到提供者的社群 / LINE） -->
+      <a class="story-action-btn story-action-btn-hero" id="storyContactMe" href="#" target="_blank" rel="noopener noreferrer">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        直接聯繫他
       </a>
-      <a class="story-action-btn story-action-btn-contact" id="storyContactMe" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        直接聯繫我
+      <!-- 次按鈕：去 LINE 群聯繫他 -->
+      <a class="story-action-btn story-action-btn-ghost" id="storyContact" href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        去 LINE 群聯繫他
       </a>
-      <button class="story-action-btn" id="storyCloseBtn">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        關閉
-      </button>
     </div>
   </div>
 </div>
@@ -4157,9 +4302,23 @@
     a.addEventListener('click', closeDrawer);
   });
 
+  /* 右側金色滾動進度條 */
+  const scrollProgress = document.getElementById('scrollProgress');
+  function updateScrollProgress() {
+    const doc = document.documentElement;
+    const total = doc.scrollHeight - doc.clientHeight;
+    const progress = total > 0 ? (doc.scrollTop / total) * 100 : 0;
+    if (scrollProgress) scrollProgress.style.height = progress + 'vh';
+  }
+
   window.addEventListener('scroll', () => {
     mainNav.classList.toggle('scrolled', window.scrollY > 60);
+    updateScrollProgress();
   }, { passive: true });
+
+  /* 初始化 + resize 時重算（視窗變化會影響文件高度） */
+  updateScrollProgress();
+  window.addEventListener('resize', updateScrollProgress, { passive: true });
 
   /* ── Modals ── */
   const valuesModal = document.getElementById('valuesModal');
@@ -4406,9 +4565,9 @@
     const contactUrl = (cardSocials.length && cardSocials[0].url)
       ? cardSocials[0].url
       : 'https://line.me/R/ti/p/@455ojikt';
-    const contactBtn = '<a class="example-contact-btn" href="' + esc(contactUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="直接聯繫我">'
+    const contactBtn = '<a class="example-contact-btn" href="' + esc(contactUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="直接聯繫他">'
       + '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
-      + '<span>直接聯繫我</span>'
+      + '<span>直接聯繫他</span>'
       + '</a>';
 
     // 「想換」標示：暖銅色，只有填寫時才顯示（空值 = 不佔版面）
@@ -4428,7 +4587,7 @@
       + (provider ? '<div class="example-provider">by <strong>' + provider + '</strong></div>' : '')
       + '<div class="example-meta">'
       + (duration ? '<span>' + duration + '</span>' : '')
-      + (capacity ? '<span>' + capacity + '</span>' : '')
+      /* capacity 人數限額暫時不顯示（由 Hannah 決定下架） */
       + (mode ? '<span class="example-mode ' + modeClass + '">' + modeLabel + '</span>' : '')
       + '</div>'
       + (shortDesc ? '<p class="example-desc">' + shortDesc + '</p>' : '')
@@ -4690,7 +4849,7 @@
   const storyOverlay = document.getElementById('storyOverlay');
   const storyCard    = document.getElementById('storyCard');
   const storyClose   = document.getElementById('storyClose');
-  const storyCloseBtn= document.getElementById('storyCloseBtn');
+  const storyCloseBtn= document.getElementById('storyCloseBtn'); // 已移除，保留為 null 安全存取
 
   let currentStorySkill = null;
 
@@ -4739,7 +4898,8 @@
       + '</div>';
 
     if (skill.duration) metaHTML += rowTpl('時長', esc(skill.duration));
-    if (skill.capacity) metaHTML += rowTpl('名額', esc(skill.capacity));
+    /* 名額（人數限額）暫時下架，不顯示在 Modal — 由 Hannah 決定 */
+    /* if (skill.capacity) metaHTML += rowTpl('名額', esc(skill.capacity)); */
     if (skill.availability) metaHTML += rowTpl('時間', esc(skill.availability));
     if (skill.mode) {
       const isOnline = skill.mode === '線上' || skill.mode === '線上／線下';
@@ -4814,7 +4974,7 @@
   }
 
   storyClose.addEventListener('click', closeStory);
-  storyCloseBtn.addEventListener('click', closeStory);
+  storyCloseBtn?.addEventListener('click', closeStory);
   storyOverlay.addEventListener('click', (e) => {
     if (e.target === storyOverlay) closeStory();
   });
