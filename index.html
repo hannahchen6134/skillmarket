@@ -175,6 +175,7 @@
       max-width: 85vw;
       height: 100vh;
       height: 100svh;
+      height: 100svh;
       background: linear-gradient(180deg, #2a1e10 0%, #1a1208 100%);
       z-index: 195;
       padding: 100px 36px 48px;
@@ -732,6 +733,7 @@
       right: 0;
       width: 2px;
       height: 100vh;
+      height: 100svh;
       background: rgba(196,147,63,0.06);
       z-index: -1;
       pointer-events: none;
@@ -750,6 +752,163 @@
     /* 使用者關閉動態時不顯示 */
     @media (prefers-reduced-motion: reduce) {
       .scroll-progress { display: none; }
+    }
+
+    /* ═══════════════════════════════════════════
+     *  首頁分享按鈕（右下角浮動圓鈕，展開有文字）
+     * ═══════════════════════════════════════════ */
+    .home-share-btn {
+      position: fixed;
+      bottom: 26px;
+      right: 22px;
+      z-index: 180;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 16px 0 14px;
+      border-radius: 999px;
+      /* 夜色玻璃底 + 中心金光 + 柔邊光暈 */
+      background:
+        radial-gradient(ellipse 100% 80% at 50% 50%, rgba(232,181,77,0.18) 0%, transparent 70%),
+        rgba(32,22,12,0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212,168,96,0.42);
+      color: rgba(240,205,130,0.95);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow:
+        0 0 12px rgba(232,181,77,0.22),
+        0 0 28px rgba(196,147,63,0.14),
+        0 4px 14px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,240,200,0.2);
+      text-shadow: 0 0 8px rgba(232,181,77,0.3);
+    }
+    .home-share-btn svg {
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 4px rgba(232,181,77,0.4));
+    }
+    .home-share-btn .home-share-label {
+      display: inline-block;
+    }
+    .home-share-btn:hover {
+      color: rgba(250,220,150,1);
+      border-color: rgba(232,181,77,0.72);
+      box-shadow:
+        0 0 16px rgba(232,181,77,0.4),
+        0 0 40px rgba(196,147,63,0.28),
+        0 6px 18px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,245,215,0.28);
+      transform: translateY(-1px);
+    }
+    .home-share-btn:focus { outline: none; }
+    .home-share-btn:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 2px rgba(255,235,180,0.55),
+        0 0 14px rgba(232,181,77,0.3),
+        0 4px 14px rgba(0,0,0,0.35);
+    }
+
+    /* 手機：收成純圓形 icon，文字隱藏（節省空間）*/
+    @media (max-width: 560px) {
+      .home-share-btn {
+        padding: 0;
+        width: 44px;
+        justify-content: center;
+        bottom: 22px;
+        right: 14px;
+      }
+      .home-share-btn .home-share-label { display: none; }
+    }
+
+    /* ═══ Modal 右上角分享 icon（跟 × 關閉並排在 wrapper 頂部） ═══ */
+    .story-share {
+      position: absolute;
+      top: 4px;
+      right: 50px;
+      z-index: 12;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(32,22,12,0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(212,168,96,0.42);
+      color: rgba(240,205,130,0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.35s var(--ease);
+      box-shadow:
+        0 0 10px rgba(232,181,77,0.2),
+        inset 0 1px 0 rgba(255,240,200,0.18);
+    }
+    .story-share svg {
+      width: 15px; height: 15px;
+      filter: drop-shadow(0 0 3px rgba(232,181,77,0.35));
+    }
+    .story-share:hover {
+      color: rgba(250,220,150,1);
+      border-color: rgba(232,181,77,0.72);
+      box-shadow:
+        0 0 14px rgba(232,181,77,0.42),
+        0 0 28px rgba(196,147,63,0.22),
+        inset 0 1px 0 rgba(255,245,215,0.28);
+      transform: scale(1.05);
+    }
+    .story-share:focus { outline: none; }
+    .story-share:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255,235,180,0.55);
+    }
+
+    /* 手機版 Modal 分享 icon 位置微調（對齊小一號的 close）*/
+    @media (max-width: 420px) {
+      .story-share {
+        top: 4px;
+        right: 46px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    /* ═══ 複製成功 toast（浮現在底部中央的優雅提示）═══ */
+    .share-toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      z-index: 300;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: rgba(32,22,12,0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(212,168,96,0.55);
+      color: rgba(250,225,170,1);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      box-shadow:
+        0 0 18px rgba(232,181,77,0.32),
+        0 0 40px rgba(196,147,63,0.2),
+        0 8px 28px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,240,200,0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      white-space: nowrap;
+    }
+    .share-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     .container {
@@ -2210,6 +2369,44 @@
       text-wrap: balance;
     }
 
+    /* Modal 打開時：標題淡入 + 字距從散開收緊，像浮雕被刻出來 */
+    .story-overlay.open .story-card-title {
+      animation: storyTitleEmerge 1.1s cubic-bezier(0.25, 0.8, 0.25, 1) 0.15s both;
+    }
+
+    @keyframes storyTitleEmerge {
+      0% {
+        opacity: 0;
+        letter-spacing: 0.5em;
+        transform: translateY(4px);
+        filter: blur(3px);
+      }
+      60% {
+        opacity: 0.9;
+        letter-spacing: 0.08em;
+        filter: blur(0.5px);
+      }
+      100% {
+        opacity: 1;
+        letter-spacing: 0.04em;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    /* 提供者（by 青青）跟標題一起出來，但更晚一點點 */
+    .story-overlay.open .story-card-provider {
+      animation: storyTitleEmerge 1s cubic-bezier(0.25, 0.8, 0.25, 1) 0.45s both;
+    }
+
+    /* 使用者關閉動態時，直接顯示（不跑動畫）*/
+    @media (prefers-reduced-motion: reduce) {
+      .story-overlay.open .story-card-title,
+      .story-overlay.open .story-card-provider {
+        animation: none;
+      }
+    }
+
     /* ── 提供者 ── */
     .story-card-provider {
       text-align: center;
@@ -2399,69 +2596,102 @@
       opacity: 0.4;
     }
 
-    /* ─── 關於我 — 啞光象牙粉 ─── */
+    /* ═══════════════════════════════════════════════
+     *  書籤：玻璃燈光感（透明底 + 中心透光 + 柔邊光暈）
+     * ═══════════════════════════════════════════════ */
+
+    /* ─── 關於我 — 象牙光（ivory lantern） ─── */
     .story-tab[data-tab="bio"] {
-      background: linear-gradient(180deg, #D5BC94 0%, #C3A87D 100%);
-      border: 1px solid rgba(130,95,50,0.22);
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(245,230,195,0.42) 0%, transparent 70%),
+        rgba(235,215,175,0.22);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(140,105,55,0.28);
       border-bottom: none;
-      color: #3D2610;
-      box-shadow: inset 0 0 0 1px rgba(255,245,215,0.08);
+      color: rgba(90,60,25,0.85);
+      box-shadow:
+        inset 0 1px 0 rgba(255,248,220,0.35),
+        0 0 14px rgba(235,215,175,0.25);
     }
     .story-tab[data-tab="bio"].active {
-      background: linear-gradient(180deg, #D8BF98 0%, #C2A67C 100%);
-      border: 1px solid rgba(120,85,42,0.32);
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(252,240,215,0.65) 0%, transparent 70%),
+        rgba(245,225,185,0.35);
+      border: 1px solid rgba(130,95,45,0.42);
       border-bottom: none;
-      color: #2B1807;
+      color: rgba(55,35,12,0.95);
       font-weight: 800;
       transform: translateY(-3px);
       z-index: 3;
       box-shadow:
-        inset 0 0 0 1px rgba(255,245,215,0.12),
-        0 -2px 10px rgba(143,106,46,0.18);
+        inset 0 1px 0 rgba(255,250,225,0.55),
+        0 0 18px rgba(235,215,175,0.45),
+        0 -2px 12px rgba(143,106,46,0.2);
     }
 
-    /* ─── 服務介紹 — 啞光古銅 ─── */
+    /* ─── 服務介紹 — 金光（gold lantern）— 淺底配深色字 ─── */
     .story-tab[data-tab="desc"] {
-      background: linear-gradient(180deg, #8E7648 0%, #6F5A34 100%);
-      border: 1px solid rgba(80,55,22,0.3);
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(196,147,63,0.4) 0%, transparent 70%),
+        rgba(110,85,45,0.28);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(110,80,40,0.32);
       border-bottom: none;
-      color: #F0DAAB;
-      box-shadow: inset 0 0 0 1px rgba(255,225,170,0.05);
+      color: rgba(55,35,10,0.82);
+      text-shadow: 0 1px 0 rgba(255,240,200,0.3);
+      box-shadow:
+        inset 0 1px 0 rgba(255,230,170,0.15),
+        0 0 14px rgba(196,147,63,0.22);
     }
     .story-tab[data-tab="desc"].active {
-      background: linear-gradient(180deg, #94794B 0%, #745E36 100%);
-      border: 1px solid rgba(70,48,18,0.4);
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(232,181,77,0.5) 0%, transparent 72%),
+        rgba(130,100,55,0.38);
+      border: 1px solid rgba(100,72,30,0.45);
       border-bottom: none;
-      color: #F8E5BA;
+      color: rgba(40,24,6,0.95);
       font-weight: 800;
       transform: translateY(-3px);
       z-index: 3;
+      text-shadow: 0 1px 0 rgba(255,245,210,0.4);
       box-shadow:
-        inset 0 0 0 1px rgba(255,225,170,0.08),
-        0 -2px 10px rgba(120,98,55,0.25);
-      text-shadow: 0 1px 1.5px rgba(0,0,0,0.18);
+        inset 0 1px 0 rgba(255,235,180,0.22),
+        0 0 20px rgba(196,147,63,0.42),
+        0 -2px 14px rgba(143,106,46,0.25);
     }
 
-    /* ─── 我想換 — 啞光墨綠（elegant ink green） ─── */
+    /* ─── 我想換 — 墨綠光（ink green lantern）— 淺底配深色字 ─── */
     .story-tab[data-tab="wants"] {
-      background: linear-gradient(180deg, #566D4E 0%, #3F4F38 100%);
-      border: 1px solid rgba(40,55,30,0.3);
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(100,140,90,0.35) 0%, transparent 70%),
+        rgba(60,88,55,0.26);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(50,75,40,0.32);
       border-bottom: none;
-      color: #DCE8D4;
-      box-shadow: inset 0 0 0 1px rgba(220,232,212,0.05);
+      color: rgba(25,50,20,0.82);
+      text-shadow: 0 1px 0 rgba(240,250,230,0.28);
+      box-shadow:
+        inset 0 1px 0 rgba(220,240,210,0.12),
+        0 0 14px rgba(100,140,90,0.22);
     }
     .story-tab[data-tab="wants"].active {
-      background: linear-gradient(180deg, #5D7655 0%, #445840 100%);
-      border: 1px solid rgba(30,45,22,0.38);
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(130,175,115,0.45) 0%, transparent 72%),
+        rgba(75,105,65,0.36);
+      border: 1px solid rgba(40,65,30,0.44);
       border-bottom: none;
-      color: #E8F2DE;
+      color: rgba(15,35,10,0.95);
       font-weight: 800;
       transform: translateY(-3px);
       z-index: 3;
+      text-shadow: 0 1px 0 rgba(240,250,230,0.4);
       box-shadow:
-        inset 0 0 0 1px rgba(220,232,212,0.07),
-        0 -2px 10px rgba(60,85,50,0.28);
-      text-shadow: 0 1px 1.5px rgba(0,0,0,0.2);
+        inset 0 1px 0 rgba(220,240,210,0.2),
+        0 0 20px rgba(110,155,95,0.4),
+        0 -2px 14px rgba(55,85,45,0.25);
     }
 
     /* Hover：三色共用優雅金色光暈 */
@@ -3400,7 +3630,13 @@
       .about-link,
       .example-card,
       .skills-search,
-      .skill-filter-btn {
+      .skill-filter-btn,
+      .story-tab,
+      .home-share-btn,
+      .story-share,
+      .story-action-btn-hero,
+      .story-action-btn-ghost,
+      .share-toast {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
       }
@@ -3607,6 +3843,21 @@
 
 <!-- 金色滾動進度條（右側極細、優雅） -->
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- 首頁分享按鈕（右下角浮動，優雅金圈） -->
+<button class="home-share-btn" id="homeShareBtn" type="button" aria-label="分享公會">
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/>
+    <circle cx="6" cy="12" r="3"/>
+    <circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </svg>
+  <span class="home-share-label">分享公會</span>
+</button>
+
+<!-- 複製成功的優雅提示 toast -->
+<div class="share-toast" id="shareToast" role="status" aria-live="polite"></div>
 
 <!-- Floating Orbs -->
 <div class="orb orb-1"></div>
@@ -4086,6 +4337,15 @@
 <!-- ══════════════ STORY CARD MODAL ══════════════ -->
 <div class="story-overlay" id="storyOverlay">
   <div class="story-wrapper">
+    <button class="story-share" id="storyShare" type="button" aria-label="分享這個服務">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5" r="3"/>
+        <circle cx="6" cy="12" r="3"/>
+        <circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    </button>
     <button class="story-close" id="storyClose" aria-label="關閉">&times;</button>
     <div class="story-card" id="storyCard">
       <!-- 頂部品牌條 -->
@@ -4982,6 +5242,64 @@
   // ESC to close
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && storyOverlay.classList.contains('open')) closeStory();
+  });
+
+  /* ══════════ 分享功能：Web Share API + 剪貼簿 fallback ══════════ */
+  const shareToast = document.getElementById('shareToast');
+  let shareToastTimer = null;
+  function showShareToast(msg) {
+    if (!shareToast) return;
+    shareToast.textContent = msg;
+    shareToast.classList.add('show');
+    clearTimeout(shareToastTimer);
+    shareToastTimer = setTimeout(() => shareToast.classList.remove('show'), 2400);
+  }
+  async function doShare(payload) {
+    // payload: { url, title, text }
+    try {
+      if (navigator.share) {
+        await navigator.share(payload);
+        return;
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(payload.url);
+        showShareToast('✨ 連結已複製，可以分享給朋友了');
+        return;
+      }
+      // 舊瀏覽器 fallback
+      const input = document.createElement('input');
+      input.value = payload.url;
+      document.body.appendChild(input);
+      input.select();
+      try { document.execCommand('copy'); showShareToast('✨ 連結已複製'); } catch(e) { prompt('複製這個連結：', payload.url); }
+      document.body.removeChild(input);
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        // 使用者取消不顯示錯誤；其他錯誤才警告
+        showShareToast('分享失敗，請手動複製網址');
+      }
+    }
+  }
+
+  // 首頁分享：分享公會本站
+  document.getElementById('homeShareBtn')?.addEventListener('click', () => {
+    doShare({
+      title: '初星群 ✨ 技能交換公會',
+      text: '用你會的換你想學的——初星群 500 價值流動計劃，來看看有哪些技能可以交換 🌿',
+      url: 'https://hannahchen6134.github.io/skillmarket/'
+    });
+  });
+
+  // Modal 分享：分享特定技能卡片
+  document.getElementById('storyShare')?.addEventListener('click', () => {
+    const title = (currentStorySkill?.title || '').trim();
+    const provider = (currentStorySkill?.provider || '').trim();
+    const serviceLine = title ? `【${title}】${provider ? 'by ' + provider : ''}` : '一個有趣的技能';
+    doShare({
+      title: '初星群 ✨ ' + (title || '技能交換公會'),
+      text: `我在初星群發現 ${serviceLine}——你也可以去看看還有哪些技能可以交換 🌿`,
+      url: 'https://hannahchen6134.github.io/skillmarket/'
+    });
   });
 
   /* ── Card click → open story ── */
