@@ -452,6 +452,12 @@
         btnShimmer 5s ease-in-out 2.65s infinite;
     }
 
+    .hero-cta-group .btn-hero-text {
+      opacity: 0;
+      will-change: opacity;
+      animation: heroFade 1s var(--ease) 1.85s forwards;
+    }
+
     /* 底部 note：加粗字重 + 加強陰影，字浮出來 */
     .hero-cta-note {
       font-family: 'Noto Serif TC', serif;
@@ -845,8 +851,8 @@
     /* ═══ Modal 右上角分享 icon（跟 × 關閉並排在 wrapper 頂部） ═══ */
     .story-share {
       position: absolute;
-      top: 4px;
-      right: 50px;
+      top: max(14px, env(safe-area-inset-top));
+      right: 64px;
       z-index: 12;
       width: 40px;
       height: 40px;
@@ -887,8 +893,8 @@
     /* 手機版 Modal 分享 icon 位置微調（對齊小一號的 close）*/
     @media (max-width: 420px) {
       .story-share {
-        top: 4px;
-        right: 46px;
+        top: max(10px, env(safe-area-inset-top));
+        right: 58px;
         width: 36px;
         height: 36px;
       }
@@ -1191,10 +1197,28 @@
     }
 
     .flow-content h4 {
-      font-size: 0.92rem;
+      font-size: 0.96rem;
       color: var(--text);
       margin-bottom: 6px;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .flow-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--gold-bright);
+      opacity: 0.9;
+    }
+
+    .flow-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .flow-content p {
@@ -1297,10 +1321,11 @@
 
     .skill-filter-btn:hover {
       background: rgba(80,58,28,0.7);
-      border-color: rgba(232,181,77,0.55);
+      border-color: rgba(232,181,77,0.7);
       color: var(--gold-bright);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(196,147,63,0.18);
+      box-shadow:
+        0 0 18px rgba(232,181,77,0.35),
+        0 0 36px rgba(196,147,63,0.22);
     }
 
     .skill-filter-btn.active {
@@ -1359,6 +1384,60 @@
       color: var(--text-mid);
       font-size: 0.88rem;
       line-height: 1.85;
+    }
+
+    /* 載入失敗友善提示條（古銅琥珀風格，不中斷瀏覽） */
+    .skills-notice {
+      display: none;
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto 24px;
+      padding: 14px 20px;
+      border: 1px solid rgba(196,147,63,0.4);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(58,42,20,0.6), rgba(72,52,28,0.45));
+      color: #f0d9a6;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      text-align: center;
+      letter-spacing: 0.03em;
+      box-shadow: inset 0 1px 0 rgba(255,230,180,0.08);
+    }
+
+    .skills-notice.show { display: block; }
+
+    .skills-notice strong {
+      color: #f5d98a;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .skills-notice-retry {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 4px 12px;
+      background: rgba(184,144,74,0.15);
+      border: 1px solid rgba(232,181,77,0.5);
+      border-radius: 999px;
+      color: #f5d98a;
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease);
+    }
+
+    .skills-notice-retry:hover,
+    .skills-notice-retry:focus-visible {
+      background: rgba(184,144,74,0.28);
+      color: #fff;
+      outline: none;
+    }
+
+    @media (max-width: 480px) {
+      .skills-notice { font-size: 0.8rem; padding: 12px 16px; }
+      .skills-notice-retry { display: block; margin: 8px auto 0; width: fit-content; }
     }
 
     .example-card {
@@ -2242,10 +2321,12 @@
       max-width: 375px;
       max-height: calc(100svh - 40px);
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 52px;
+      padding-top: 60px;
       transform: translateY(20px) scale(0.96);
       transition: transform 0.45s var(--ease);
       scrollbar-width: thin;
@@ -2977,12 +3058,20 @@
       margin: 0 14px;
     }
 
-    /* Action bar below card */
+    /* Action bar below card — sticky 讓 CTA 在長文內容也永遠看得到 */
     .story-actions {
+      position: sticky;
+      bottom: 0;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 10px;
       margin-top: 14px;
+      padding: 14px 10px calc(14px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, rgba(6,4,2,0.92) 55%, rgba(6,4,2,0.55) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(184,144,74,0.18);
       z-index: 10;
     }
 
@@ -3189,20 +3278,24 @@
 
     .story-close {
       position: absolute;
-      top: 4px;
-      right: 0;
-      background: rgba(58,42,20,0.6);
-      border: 1px solid rgba(196,147,63,0.3);
+      top: max(14px, env(safe-area-inset-top));
+      right: 14px;
+      background: rgba(32,22,12,0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(196,147,63,0.42);
       border-radius: 50%;
       width: 40px; height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-mid);
+      color: rgba(240,205,130,0.95);
       font-size: 1.3rem;
+      line-height: 1;
       cursor: pointer;
       transition: all 0.3s var(--ease);
-      z-index: 10;
+      z-index: 12;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
     }
 
     .story-close:hover {
@@ -3217,11 +3310,16 @@
     }
 
     @media (max-width: 420px) {
-      .story-wrapper { max-width: 100%; }
+      .story-wrapper { max-width: 100%; padding-top: 56px; }
       .story-card { padding: 24px 20px; border-radius: 16px; }
       .story-actions { gap: 10px; }
       .story-action-btn { padding: 10px 16px; font-size: 0.75rem; }
-      .story-close { top: 4px; width: 36px; height: 36px; }
+      .story-close {
+        top: max(10px, env(safe-area-inset-top));
+        right: 10px;
+        width: 36px;
+        height: 36px;
+      }
     }
 
     /* ── Footer ── */
@@ -3367,22 +3465,9 @@
       box-shadow: 0 14px 40px rgba(0,0,0,0.45), 0 0 32px rgba(232,181,77,0.18);
     }
 
-    /* Filter buttons — click shimmer */
+    /* Filter buttons — 溫暖金色光暈（移除光澤掃過動畫） */
     .skill-filter-btn {
       position: relative;
-      overflow: hidden;
-    }
-    .skill-filter-btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 30%, rgba(255,240,210,0.22) 50%, transparent 70%);
-      transform: translateX(-100%);
-      transition: transform 0.6s var(--ease);
-      pointer-events: none;
-    }
-    .skill-filter-btn:hover::after {
-      transform: translateX(100%);
     }
 
     /* Flow step — gold border pulse on hover */
@@ -3664,18 +3749,70 @@
     }
 
     @media (max-width: 420px) {
-      .hero-line-1 { font-size: clamp(0.85rem, 3.5vw, 1.1rem); }
-      .hero-line-2 { font-size: clamp(1.4rem, 7vw, 1.9rem); }
+      .hero-line-1 {
+        font-size: clamp(0.85rem, 3.5vw, 1.1rem);
+        letter-spacing: 0.12em;
+      }
+      .hero-line-2 {
+        font-size: clamp(1.35rem, 6.6vw, 1.85rem);
+        letter-spacing: 0.02em;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+        line-break: strict;
+      }
 
       .hero-desc {
         font-size: 0.78rem;
       }
 
+      .hero-campaign {
+        letter-spacing: 0.18em;
+        padding-left: 0;
+      }
+
+      .hero-content { padding: 40px 16px; }
+
       .section-title {
         font-size: clamp(1.2rem, 5vw, 1.5rem);
+        word-break: keep-all;
+        overflow-wrap: break-word;
       }
 
       .rules-scroll { padding: 36px 20px 40px; }
+    }
+
+    /* 極窄手機（320–360px）：再縮字級、收緊字距，確保標題不被裁切 */
+    @media (max-width: 360px) {
+      nav { padding: 0 14px; }
+      .container { padding: 0 16px; }
+
+      .hero-content { padding: 36px 12px; }
+
+      .hero-line-1 {
+        font-size: 0.88rem;
+        letter-spacing: 0.08em;
+      }
+      .hero-line-2 {
+        font-size: 1.55rem;
+        letter-spacing: 0;
+      }
+      .hero-campaign {
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+      }
+      .hero-tagline {
+        font-size: 0.96rem;
+        letter-spacing: 0.04em;
+      }
+      .hero-cta-note {
+        font-size: 0.78rem;
+        padding: 0 10px;
+      }
+      .btn-hero-primary {
+        padding: 13px 28px;
+        font-size: 0.84rem;
+        letter-spacing: 0.08em;
+      }
     }
 
     /* ── Search & Controls ── */
@@ -3887,7 +4024,7 @@
     <li><a href="#about">初星群在做什麼？</a></li>
     <li><a href="#faq">常見疑問</a></li>
   </ul>
-  <button class="nav-hamburger" id="hamburger" aria-label="選單">
+  <button class="nav-hamburger" id="hamburger" aria-label="選單" aria-expanded="false" aria-controls="navDrawer">
     <span></span>
     <span></span>
     <span></span>
@@ -3895,7 +4032,7 @@
 </nav>
 
 <div class="nav-overlay" id="navOverlay"></div>
-<div class="nav-drawer" id="navDrawer">
+<div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="站內導覽" aria-hidden="true">
   <div class="nav-drawer-label">NAVIGATION</div>
   <ul>
     <li><a href="#hero">首頁</a></li>
@@ -3924,7 +4061,8 @@
       <span class="hero-tagline-line">分享越多、得到更多</span>
     </p>
     <div class="hero-cta-group">
-      <a class="btn-hero btn-hero-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">我也想要分享技能</a>
+      <a class="btn-hero btn-hero-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">我想分享技能</a>
+      <a class="btn-hero-text" href="#skills">看看有哪些技能<span class="btn-hero-text-arrow" aria-hidden="true">→</span></a>
       <p class="hero-cta-note">還沒有適合的技能想互換？<wbr>可以請對方喝咖啡、<wbr>吃一頓飯作為交換</p>
     </div>
   </div>
@@ -4093,6 +4231,11 @@
         <span class="example-tap-hint">點擊卡片看技能詳情</span>
       </div>
 
+      <div class="skills-notice" id="skillsNotice" role="status" aria-live="polite">
+        <strong>技能清單暫時讀不到</strong>，請稍後再試。以下為示意卡片。
+        <button type="button" class="skills-notice-retry" id="skillsNoticeRetry">重新載入</button>
+      </div>
+
       <div class="skills-empty" id="skillsEmpty">
         <div class="skills-empty-icon"></div>
         <p>這個分類還沒有人分享技能，<br>要不要當第一個？</p>
@@ -4126,33 +4269,52 @@
       <div class="flow-step reveal reveal-delay-1">
         <div class="flow-number">1</div>
         <div class="flow-content">
-          <h4>填寫你想分享也想換的技能</h4>
-          <p>可以是設計諮詢、語言教學、瑜伽課、塔羅解讀……任何你想教或想學的。填表時簡單說明時間、適合誰、預期學到什麼，也寫下你想換到什麼。</p>
-          <p class="flow-hint">填表後青青會在 48 小時內審核，確認後你的技能會出現在這個頁面。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+            </span>
+            填表上架
+          </h4>
+          <p>填寫你想分享與想換的技能，青青 48 小時內審核並上架。</p>
         </div>
       </div>
 
       <div class="flow-step reveal reveal-delay-2">
         <div class="flow-number">2</div>
         <div class="flow-content">
-          <h4>配對、預約時間</h4>
-          <p>有人對你的技能感興趣？加入 LINE 公會群後，在群組裡 tag @對方 直接聯繫，約定時間和方式（線上 / 線下）。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </span>
+            在 LINE 群媒合
+          </h4>
+          <p>加入 LINE 公會群，或點卡片上的社群按鈕，直接聯繫技能提供者。</p>
         </div>
       </div>
 
       <div class="flow-step reveal reveal-delay-3">
         <div class="flow-number">3</div>
         <div class="flow-content">
-          <h4>進行交換</h4>
-          <p>一對一陪伴、分享知識、傳授技能。可以是 30 分鐘的快速諮詢，也可以是多次的系統課程。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            雙方約時間
+          </h4>
+          <p>確認時間與形式（線上／線下），就能開始交換。</p>
         </div>
       </div>
 
       <div class="flow-step reveal reveal-delay-4">
         <div class="flow-number">4</div>
         <div class="flow-content">
-          <h4>雙方確認完成</h4>
-          <p>交換結束後，雙方填寫【技能交換回饋單】，青青村長會記錄彼此的交換次數，幫我們維繫公會的信任度、累積你的陪伴紀錄。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8.5 12.5 11 15 16 9.5"/></svg>
+            </span>
+            完成交換
+          </h4>
+          <p>雙方填寫回饋單，青青會記錄彼此的陪伴與信任。</p>
           <p class="flow-hint">想修改時長、暫停上架或有任何疑問？可隨時私訊<a class="flow-hint-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a>。</p>
         </div>
       </div>
@@ -4190,12 +4352,28 @@
         <p>完全免費。技能交換的精神是「用技能換技能」，沒有金錢買賣。如果你沒有技能想分享，也可以用一杯咖啡、一頓餐點跟對方交換。</p>
       </details>
       <details class="faq-item">
-        <summary>我是新手，技能沒有很專業，可以參加嗎？</summary>
-        <p>可以。這裡不看「專業級別」，只看「你願意分享」。你的生活經驗、你研究過的小事，對別人可能就是寶貴的入門。</p>
+        <summary>我不是專家也可以分享嗎？</summary>
+        <p>可以，而且非常歡迎。這裡不看「專業級別」，只看「你是否願意陪對方走一段路」。你研究過的生活小技巧、你喜歡做的事，對別人都可能是很珍貴的入門。</p>
       </details>
       <details class="faq-item">
-        <summary>填表後多久會出現在網站上？</summary>
-        <p>青青會在 48 小時內審核你的技能資訊，確認後就會上架到「可以交換的技能」列表。</p>
+        <summary>一定要用技能換技能嗎？</summary>
+        <p>不一定。如果你暫時沒有技能想分享，也可以用一杯咖啡、一頓餐點、或其他對方願意接受的方式作為交換。重點是雙方都覺得這場交換值得。</p>
+      </details>
+      <details class="faq-item">
+        <summary>可以只先看看不參加嗎？</summary>
+        <p>當然可以。你可以先瀏覽「可以交換的技能」看看有沒有感興趣的，不用立刻填表、也不用加 LINE 群，等你準備好再加入就好。</p>
+      </details>
+      <details class="faq-item">
+        <summary>我填表後多久會上架？</summary>
+        <p>青青會在 48 小時內審核，確認後就會出現在「可以交換的技能」列表。若超過 48 小時還沒上架，可能需要補充說明，青青會主動私訊你。</p>
+      </details>
+      <details class="faq-item">
+        <summary>可以線上交換嗎？</summary>
+        <p>可以。每個技能上架時會標示「線上」、「實體」或「線上／線下」，你可以依照自己方便的形式挑選。線上常見使用 Google Meet、Zoom、LINE 視訊等。</p>
+      </details>
+      <details class="faq-item">
+        <summary>交換失敗或約不到時間怎麼辦？</summary>
+        <p>這很正常，不用有壓力。可以和對方另約時間，或在 LINE 群裡找其他人交換。若遇到爭議或長時間沒有回應，可以私訊 <a class="faq-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a> 協助處理。</p>
       </details>
       <details class="faq-item">
         <summary>怎麼跟技能提供者聯繫？</summary>
@@ -4206,10 +4384,6 @@
         <p>隨時私訊 <a class="faq-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a>，可以幫你修改、暫停或下架技能。</p>
       </details>
       <details class="faq-item">
-        <summary>線上線下都可以嗎？</summary>
-        <p>都可以。你上架時會指定「線上 / 實體」，雙方確認後再約定細節（視訊軟體、見面地點等）。</p>
-      </details>
-      <details class="faq-item">
         <summary>有人想跟我換，但我不想，可以拒絕嗎？</summary>
         <p>當然可以。技能交換是雙方都願意才成立的，沒有必須接受每一個邀約的義務。只要禮貌地說明不方便（例如「這段時間比較忙」「跟我想學的方向不太一樣」），對方大多能理解。尊重自己的感受最重要——你在這裡是自由的。</p>
       </details>
@@ -4217,21 +4391,17 @@
         <summary>交換品質怎麼保證？</summary>
         <p>公會有六條守則（誠心相待、說到做到、隱私保護……），並且交換後雙方會填寫回饋單。信任是這個公會最重要的基礎。</p>
       </details>
-      <details class="faq-item">
-        <summary>如果對方沒有如期出現怎麼辦？</summary>
-        <p>先在 LINE 群直接溝通確認。若遇到重大爭議，可以私訊 <a class="faq-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a> 協助處理。</p>
-      </details>
     </div>
   </div>
 </section>
 
 <!-- ══════════════ VALUES MODAL ══════════════ -->
-<div class="modal-overlay" id="valuesModal">
-  <div class="modal-content">
+<div class="modal-overlay" id="valuesModal" role="dialog" aria-modal="true" aria-labelledby="valuesModalTitle" aria-hidden="true">
+  <div class="modal-content" tabindex="-1">
     <button class="modal-close" id="closeValues" aria-label="關閉">&times;</button>
     <div class="modal-header">
       <div class="section-eyebrow">CORE VALUES</div>
-      <h2 class="modal-title">公會的核心精神</h2>
+      <h2 class="modal-title" id="valuesModalTitle">公會的核心精神</h2>
       <p class="modal-subtitle">我們相信技能交換不只是學習，而是相互照亮</p>
     </div>
 
@@ -4272,12 +4442,12 @@
 </div>
 
 <!-- ══════════════ RULES MODAL ══════════════ -->
-<div class="modal-overlay" id="rulesModal">
-  <div class="modal-content modal-content-parchment">
+<div class="modal-overlay" id="rulesModal" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle" aria-hidden="true">
+  <div class="modal-content modal-content-parchment" tabindex="-1">
     <button class="modal-close modal-close-dark" id="closeRules" aria-label="關閉">&times;</button>
     <div class="rules-scroll">
       <div class="rules-scroll-header">
-        <h3>公會守則</h3>
+        <h3 id="rulesModalTitle">公會守則</h3>
         <div class="sub">Guild Rules</div>
         <div class="rules-scroll-divider"></div>
       </div>
@@ -4350,18 +4520,18 @@
 </section>
 
 <!-- ══════════════ STORY CARD MODAL ══════════════ -->
-<div class="story-overlay" id="storyOverlay">
+<div class="story-overlay" id="storyOverlay" role="dialog" aria-modal="true" aria-labelledby="storyTitle" aria-hidden="true">
+  <button class="story-share" id="storyShare" type="button" aria-label="分享這個服務">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"/>
+      <circle cx="6" cy="12" r="3"/>
+      <circle cx="18" cy="19" r="3"/>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </svg>
+  </button>
+  <button class="story-close" id="storyClose" aria-label="關閉">&times;</button>
   <div class="story-wrapper">
-    <button class="story-share" id="storyShare" type="button" aria-label="分享這個服務">
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="18" cy="5" r="3"/>
-        <circle cx="6" cy="12" r="3"/>
-        <circle cx="18" cy="19" r="3"/>
-        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-      </svg>
-    </button>
-    <button class="story-close" id="storyClose" aria-label="關閉">&times;</button>
     <div class="story-card" id="storyCard">
       <!-- 頂部品牌條 -->
       <div class="story-card-brand">
@@ -4551,6 +4721,8 @@
   const skillsGrid = document.querySelector('.skills-grid');
   const skillsEmpty = document.getElementById('skillsEmpty');
   const skillsLoading = document.getElementById('skillsLoading');
+  const skillsNotice = document.getElementById('skillsNotice');
+  const skillsNoticeRetry = document.getElementById('skillsNoticeRetry');
   const skillsCount = document.getElementById('skillsCount');
   const loadMoreWrap = document.getElementById('loadMoreWrap');
   const btnLoadMore = document.getElementById('btnLoadMore');
@@ -4565,10 +4737,22 @@
   function closeDrawer() {
     navDrawer.classList.remove('open');
     navOverlay.classList.remove('open');
+    navDrawer.setAttribute('aria-hidden', 'true');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  function openDrawer() {
+    navDrawer.classList.add('open');
+    navOverlay.classList.add('open');
+    navDrawer.setAttribute('aria-hidden', 'false');
+    hamburger.setAttribute('aria-expanded', 'true');
+    // 開啟後把焦點移到第一個可聚焦項目
+    const firstLink = navDrawer.querySelector('a, button');
+    if (firstLink) setTimeout(() => firstLink.focus(), 320);
   }
 
   hamburger.addEventListener('click', () => {
-    navDrawer.classList.contains('open') ? closeDrawer() : (navDrawer.classList.add('open'), navOverlay.classList.add('open'));
+    navDrawer.classList.contains('open') ? closeDrawer() : openDrawer();
   });
 
   navOverlay.addEventListener('click', closeDrawer);
@@ -4599,14 +4783,28 @@
   const valuesModal = document.getElementById('valuesModal');
   const rulesModal = document.getElementById('rulesModal');
 
+  // 記住開 modal 前的焦點，關閉後還原
+  let lastFocusedBeforeModal = null;
+
   function openModal(modal) {
+    lastFocusedBeforeModal = document.activeElement;
     modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    // 把焦點移進 modal，讓鍵盤/螢幕閱讀器使用者看得到
+    const focusTarget = modal.querySelector('.modal-close') || modal.querySelector('[tabindex]');
+    if (focusTarget) setTimeout(() => focusTarget.focus(), 60);
   }
 
   function closeModal(modal) {
     modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    // 把焦點還給觸發 modal 的元素
+    if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+      lastFocusedBeforeModal.focus();
+    }
+    lastFocusedBeforeModal = null;
   }
 
   document.getElementById('closeValues').addEventListener('click', () => closeModal(valuesModal));
@@ -4614,6 +4812,14 @@
 
   document.getElementById('closeRules').addEventListener('click', () => closeModal(rulesModal));
   rulesModal.addEventListener('click', (e) => { if (e.target === rulesModal) closeModal(rulesModal); });
+
+  // ESC 關閉所有 modal/drawer（story-overlay 有自己的處理在後面）
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (valuesModal.classList.contains('open')) { closeModal(valuesModal); return; }
+    if (rulesModal.classList.contains('open')) { closeModal(rulesModal); return; }
+    if (navDrawer.classList.contains('open')) { closeDrawer(); hamburger.focus(); return; }
+  });
 
   const drawerValues = document.getElementById('drawerOpenValues');
   const drawerRules = document.getElementById('drawerOpenRules');
@@ -4974,33 +5180,53 @@
   }
 
   /* ── Init: Load Data ── */
-  (async function initSkills() {
-    if (GUILD_CONFIG.SHEET_ID) {
-      // 有設定 Sheet → 從 Google Sheets 載入
-      if (skillsLoading) skillsLoading.classList.add('show');
-
-      // 先隱藏範例卡
-      skillsGrid.querySelectorAll('.example-card').forEach(c => c.style.display = 'none');
-
-      try {
-        allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
-        dataLoaded = true;
-        // 移除範例卡
-        skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
-      } catch (err) {
-        console.warn('Google Sheet \u8f09\u5165\u5931\u6557\uff0c\u986f\u793a\u7bc4\u4f8b\u5361\u7247', err);
-        allSkills = collectExampleCards();
-        // 恢復顯示範例卡
-        skillsGrid.querySelectorAll('.example-card').forEach(c => { c.style.display = ''; c.remove(); });
-      }
-
-      if (skillsLoading) skillsLoading.classList.remove('show');
-    } else {
+  async function loadSkillsData() {
+    if (!GUILD_CONFIG.SHEET_ID) {
       // 沒有 Sheet → 收集頁面上的範例卡當資料
       allSkills = collectExampleCards();
-      // 移除原始 DOM 卡片，改用動態渲染
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
+      if (skillsNotice) skillsNotice.classList.remove('show');
+      return;
     }
+
+    // 有設定 Sheet → 從 Google Sheets 載入
+    if (skillsLoading) skillsLoading.classList.add('show');
+    if (skillsNotice) skillsNotice.classList.remove('show');
+
+    // 先隱藏範例卡（避免閃爍）
+    skillsGrid.querySelectorAll('.example-card').forEach(c => c.style.display = 'none');
+
+    try {
+      allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
+      dataLoaded = true;
+      skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
+      if (skillsNotice) skillsNotice.classList.remove('show');
+    } catch (err) {
+      // 本機直開通常是 CORS／網路問題；正式 GitHub Pages 應可正常讀取
+      console.warn('Google Sheet \u8f09\u5165\u5931\u6557\uff0c\u6539\u986f\u793a\u7bc4\u4f8b\u5361\u7247', err);
+      allSkills = collectExampleCards();
+      skillsGrid.querySelectorAll('.example-card').forEach(c => { c.style.display = ''; c.remove(); });
+      if (skillsNotice) skillsNotice.classList.add('show');
+    }
+
+    if (skillsLoading) skillsLoading.classList.remove('show');
+  }
+
+  if (skillsNoticeRetry) {
+    skillsNoticeRetry.addEventListener('click', async () => {
+      skillsNoticeRetry.disabled = true;
+      const originalText = skillsNoticeRetry.textContent;
+      skillsNoticeRetry.textContent = '重新載入中…';
+      await loadSkillsData();
+      shuffleSkills(allSkills);
+      applyFilterAndSearch();
+      skillsNoticeRetry.disabled = false;
+      skillsNoticeRetry.textContent = originalText;
+    });
+  }
+
+  (async function initSkills() {
+    await loadSkillsData();
 
     // 每次載入隨機洗牌，讓不同使用者/不同時間看到不同的「首頁曝光組合」
     shuffleSkills(allSkills);
@@ -5038,9 +5264,7 @@
     } else {
       // hash 被清掉 → 如果 modal 還開著就關掉
       if (storyOverlay.classList.contains('open')) {
-        storyOverlay.classList.remove('open');
-        document.body.style.overflow = '';
-        currentStorySkill = null;
+        closeStory();
       }
     }
   });
@@ -5254,8 +5478,11 @@
     tabDesc.setAttribute('aria-selected', 'true');
     panelDesc.classList.add('active');
 
+    lastFocusedBeforeModal = document.activeElement;
     storyOverlay.classList.add('open');
+    storyOverlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    setTimeout(() => { if (storyClose) storyClose.focus(); }, 60);
 
     // 同步網址列 hash → 方便直接從網址列複製專屬連結
     // 用 replaceState 避免在歷史紀錄裡塞一堆入口
@@ -5289,6 +5516,7 @@
 
   function closeStory() {
     storyOverlay.classList.remove('open');
+    storyOverlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     currentStorySkill = null;
 
@@ -5298,6 +5526,12 @@
         history.replaceState(null, '', location.pathname + location.search);
       } catch (e) { /* 略過 */ }
     }
+
+    // 把焦點還給觸發 modal 的元素（通常是卡片）
+    if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+      lastFocusedBeforeModal.focus();
+    }
+    lastFocusedBeforeModal = null;
   }
 
   storyClose.addEventListener('click', closeStory);
