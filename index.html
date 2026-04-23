@@ -5006,7 +5006,44 @@
     shuffleSkills(allSkills);
 
     applyFilterAndSearch();
+
+    // 深層連結：如果網址帶 #s/<服務名稱>，資料就緒後自動打開對應服務的 modal
+    // 例：https://hannahchen6134.github.io/skillmarket/#s/%E8%89%B2%E5%BD%A9%E5%B0%8D%E8%A9%B1
+    const hash = location.hash || '';
+    if (hash.startsWith('#s/') && allSkills.length) {
+      let targetTitle = '';
+      try { targetTitle = decodeURIComponent(hash.substring(3)); } catch (e) { targetTitle = hash.substring(3); }
+      if (targetTitle) {
+        const matched = allSkills.find(s => (s.title || '').trim() === targetTitle.trim());
+        if (matched) {
+          // 先捲到「探索技能」區段再打開 modal，體驗比較順
+          const skillsSection = document.querySelector('.section-skills');
+          if (skillsSection) skillsSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+          // 稍等一下讓畫面穩定再彈 modal
+          setTimeout(() => openStory(matched), 200);
+        }
+      }
+    }
   })();
+
+  // 使用者用瀏覽器「上一頁/下一頁」切換 hash → 同步開關 modal
+  window.addEventListener('hashchange', () => {
+    const hash = location.hash || '';
+    if (hash.startsWith('#s/')) {
+      if (!allSkills.length) return;
+      let targetTitle = '';
+      try { targetTitle = decodeURIComponent(hash.substring(3)); } catch (e) { targetTitle = hash.substring(3); }
+      const matched = allSkills.find(s => (s.title || '').trim() === targetTitle.trim());
+      if (matched && matched !== currentStorySkill) openStory(matched);
+    } else {
+      // hash 被清掉 → 如果 modal 還開著就關掉
+      if (storyOverlay.classList.contains('open')) {
+        storyOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+        currentStorySkill = null;
+      }
+    }
+  });
 
   /* ── Scroll Reveal ── */
   const reveals = document.querySelectorAll('.reveal');
@@ -5219,6 +5256,14 @@
 
     storyOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+
+    // 同步網址列 hash → 方便直接從網址列複製專屬連結
+    // 用 replaceState 避免在歷史紀錄裡塞一堆入口
+    if (skill.title && history.replaceState) {
+      try {
+        history.replaceState(null, '', '#s/' + encodeURIComponent(skill.title));
+      } catch (e) { /* 某些老瀏覽器可能失敗，略過 */ }
+    }
   }
 
   /* 書籤分頁點擊切換 */
@@ -5246,6 +5291,13 @@
     storyOverlay.classList.remove('open');
     document.body.style.overflow = '';
     currentStorySkill = null;
+
+    // 清除網址列 hash，還原成乾淨的網址
+    if (location.hash.startsWith('#s/') && history.replaceState) {
+      try {
+        history.replaceState(null, '', location.pathname + location.search);
+      } catch (e) { /* 略過 */ }
+    }
   }
 
   storyClose.addEventListener('click', closeStory);
@@ -5314,17 +5366,24 @@
     });
   });
 
-  // Modal 分享：分享特定技能卡片
+  // Modal 分享：分享「特定服務本身」（深層連結 #s/<服務名稱>）
   document.getElementById('storyShare')?.addEventListener('click', () => {
     const title = (currentStorySkill?.title || '').trim();
     const provider = (currentStorySkill?.provider || '').trim();
     const serviceLine = title
       ? `【${title}】${provider ? ' · by ' + provider : ''}`
       : '一個有趣的技能';
+    // 連結帶上 #s/<服務名稱>：別人點這個連結進網站會直接打開該服務卡片
+    const siteBase = 'https://hannahchen6134.github.io/skillmarket/';
+    const shareUrl = title
+      ? siteBase + '#s/' + encodeURIComponent(title)
+      : siteBase;
     doShare({
       title: '初星群｜' + (title || '技能交換公會'),
-      text: `我在初星群看到 ${serviceLine}\n以技能換技能，分享越多、得到更多——來看看還有哪些技能可以交換`,
-      url: 'https://hannahchen6134.github.io/skillmarket/'
+      text: title
+        ? `我在初星群看到 ${serviceLine}\n以技能換技能，分享越多、得到更多——來看看這個服務`
+        : `我在初星群看到 ${serviceLine}\n以技能換技能，分享越多、得到更多——來看看有哪些技能可以交換`,
+      url: shareUrl
     });
   });
 
