@@ -5,20 +5,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>技能交換公會 / 500價值流動計劃｜初星群 Starry Dawn Circle</title>
-  <meta name="description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。初星群 500 價值流動計劃——相互學習、共同成長。" />
+  <!-- Open Graph（Facebook、Instagram、LINE、Messenger 抓預覽用）-->
   <meta property="og:title" content="技能交換公會｜初星群 500 價值流動計劃" />
-  <meta property="og:description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。" />
+  <meta property="og:description" content="以技能換技能，分享越多、得到更多——初星群 500 價值流動計劃。來看看有哪些技能可以交換。" />
   <meta property="og:image" content="https://hannahchen6134.github.io/skillmarket/starry-hall.jpg" />
+  <meta property="og:image:secure_url" content="https://hannahchen6134.github.io/skillmarket/starry-hall.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="初星群 · 技能交換公會 — 用你會的換你想學的" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:url" content="https://hannahchen6134.github.io/skillmarket/" />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="初星群 Starry Dawn Circle" />
   <meta property="og:locale" content="zh_TW" />
+
+  <!-- Twitter / X Cards -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="技能交換公會｜初星群" />
-  <meta name="twitter:description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。" />
+  <meta name="twitter:description" content="以技能換技能，分享越多、得到更多——初星群 500 價值流動計劃。" />
   <meta name="twitter:image" content="https://hannahchen6134.github.io/skillmarket/starry-hall.jpg" />
+  <meta name="twitter:image:alt" content="初星群 · 技能交換公會" />
+
+  <!-- 一般 meta -->
+  <meta name="description" content="以技能換技能，把你會的教給別人，把你想學的讓別人教你。初星群 500 價值流動計劃——相互學習、共同成長。" />
+  <meta name="theme-color" content="#B8904A" />
+  <meta name="apple-mobile-web-app-title" content="初星群" />
+  <meta name="application-name" content="初星群" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Preload：讓 hero 背景圖在頁面最早就開始下載，避免動畫進場時圖還沒好 -->
+  <link rel="preload" as="image" href="https://hannahchen6134.github.io/skillmarket/village.jpg" fetchpriority="high" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,6 +51,12 @@
       --gold-pale:    #f0d890;
       --gold-dim:     rgba(196,147,63,0.12);
       --gold-glow:    rgba(196,147,63,0.25);
+      /* 暖銅色系：用於「我想換」標示，與金色區別但同屬暖色家族 */
+      --copper:       #b85e3a;
+      --copper-bright:#d67a4f;
+      --copper-pale:  #e8a082;
+      --copper-dim:   rgba(184,94,58,0.14);
+      --copper-glow:  rgba(184,94,58,0.28);
       --crystal-blue: #7b9fce;
       --crystal-purple: #9b7bd4;
       --crystal-pink: #d4618c;
@@ -53,7 +77,7 @@
     body {
       background:
         linear-gradient(180deg, rgba(10,6,3,0.82) 0%, rgba(20,14,8,0.62) 50%, rgba(10,6,3,0.88) 100%),
-        url('starry-hall.jpg') center/cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/starry-hall.jpg') center/cover no-repeat fixed;
       background-color: var(--bg-deep);
       color: var(--text);
       font-family: 'Noto Serif TC', serif;
@@ -78,6 +102,18 @@
       justify-content: space-between;
       align-items: center;
       transition: background 0.4s var(--ease);
+      /* GPU 合成層：讓 nav 獨立渲染，不拖累 hero 動畫 */
+      transform: translateZ(0);
+      will-change: background;
+    }
+
+    /* 手機：大幅降低 backdrop blur 強度，避免首頁進場動畫卡頓 */
+    @media (max-width: 768px) {
+      nav {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        background: rgba(26,18,8,0.82);
+      }
     }
 
     nav.scrolled {
@@ -154,6 +190,7 @@
       max-width: 85vw;
       height: 100vh;
       height: 100svh;
+      height: 100svh;
       background: linear-gradient(180deg, #2a1e10 0%, #1a1208 100%);
       z-index: 195;
       padding: 100px 36px 48px;
@@ -221,21 +258,24 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: url('village.jpg') center 15% / cover no-repeat;
+      background: url('https://hannahchen6134.github.io/skillmarket/village.jpg') center 15% / cover no-repeat;
       z-index: 0;
+      /* 獨立 GPU 合成層，避免進場動畫 repaint 整個 hero */
+      transform: translateZ(0);
     }
 
     .hero-bg::after {
       content: '';
       position: absolute;
       inset: 0;
+      /* 輕中度暗化：城堡色彩保留，但文字清楚 */
       background:
         linear-gradient(180deg,
-          rgba(20,14,8,0.25) 0%,
-          rgba(20,14,8,0.10) 30%,
-          rgba(20,14,8,0.15) 65%,
-          rgba(20,14,8,0.30) 82%,
-          rgba(26,18,8,0.70) 92%,
+          rgba(12,8,5,0.45) 0%,
+          rgba(12,8,5,0.32) 30%,
+          rgba(12,8,5,0.34) 60%,
+          rgba(12,8,5,0.45) 82%,
+          rgba(12,8,5,0.75) 92%,
           rgba(26,18,8,1) 100%
         );
     }
@@ -285,6 +325,8 @@
         0 0 14px rgba(0,0,0,0.85),
         0 2px 18px rgba(0,0,0,0.8),
         0 0 40px rgba(0,0,0,0.5);
+      opacity: 0;
+      will-change: opacity, transform;
       animation: heroLineUp 1s var(--ease) 0.4s forwards;
     }
 
@@ -298,36 +340,29 @@
         0 3px 16px rgba(0,0,0,0.85),
         0 0 50px rgba(0,0,0,0.4),
         0 0 80px rgba(232,181,77,0.12);
+      opacity: 0;
+      will-change: opacity, transform;
       animation: heroTitlePop 1.2s var(--ease) 0.7s forwards;
     }
 
     /* 活動 eyebrow：小字金色，主標上方 */
-    /* 500 價值流動計畫：淺金 eyebrow + 霧化底 */
+    /* 500 價值流動計畫：改用較清晰的中文襯線字，加強陰影 */
     .hero-campaign {
       display: inline-block;
-      font-family: 'Cinzel', 'Noto Serif TC', serif;
-      font-size: clamp(0.72rem, 2.2vw, 0.84rem);
-      letter-spacing: 0.38em;
-      color: #e8c47a;
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(0.78rem, 2.4vw, 0.92rem);
+      letter-spacing: 0.28em;
+      color: #f5d98a;
       font-weight: 600;
       margin-bottom: 16px;
-      padding: 8px 32px 8px calc(32px + 0.38em);
-      /* B: 局部霧化底（radial 漸層邊緣全透明、無方框感） */
-      background: radial-gradient(
-        ellipse at center,
-        rgba(8,5,3,0.7) 0%,
-        rgba(8,5,3,0.45) 55%,
-        rgba(8,5,3,0.12) 85%,
-        transparent 100%
-      );
-      /* A: 更重的黑色光暈 */
+      padding-left: 0.28em;
       text-shadow:
-        0 0 2px rgba(0,0,0,1),
-        0 0 6px rgba(0,0,0,1),
-        0 0 14px rgba(0,0,0,0.95),
-        0 0 26px rgba(0,0,0,0.8),
-        0 2px 8px rgba(0,0,0,1);
+        0 0 3px rgba(0,0,0,0.95),
+        0 0 10px rgba(0,0,0,0.8),
+        0 0 22px rgba(0,0,0,0.55),
+        0 2px 6px rgba(0,0,0,0.9);
       opacity: 0;
+      will-change: opacity, transform;
       animation: heroFade 1s var(--ease) 0.2s forwards;
     }
 
@@ -337,6 +372,20 @@
         heroTitlePop 1.2s var(--ease) 0.7s forwards,
         heroGlow 5s ease-in-out 2.5s infinite,
         heroTitleBreath 6s ease-in-out 3s infinite;
+    }
+
+    /* 手機效能：text-shadow 動畫很吃 GPU，把無限迴圈的裝飾動畫關掉 */
+    @media (max-width: 768px) {
+      .hero-line-2 {
+        animation: heroTitlePop 1.2s var(--ease) 0.7s forwards;
+      }
+    }
+
+    /* 使用者開啟「減少動態效果」設定時，一律只保留進場 */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-line-2 {
+        animation: heroTitlePop 1.2s var(--ease) 0.7s forwards;
+      }
     }
 
     @keyframes heroTitleBreath {
@@ -381,6 +430,7 @@
       margin-right: auto;
       text-shadow: 0 1px 8px rgba(0,0,0,0.6), 0 0 20px rgba(0,0,0,0.3);
       opacity: 0;
+      will-change: opacity, transform;
       animation: heroFade 1.2s var(--ease) 1.5s forwards;
     }
 
@@ -396,37 +446,35 @@
 
     .hero-cta-group .btn-hero-primary {
       opacity: 0;
+      will-change: opacity, transform;
       animation:
         heroFade 1s var(--ease) 1.65s forwards,
         btnShimmer 5s ease-in-out 2.65s infinite;
     }
 
-    /* 底部 note：柔霧底（看不見邊）+ 字體有深色光暈 */
+    .hero-cta-group .btn-hero-text {
+      opacity: 0;
+      will-change: opacity;
+      animation: heroFade 1s var(--ease) 1.85s forwards;
+    }
+
+    /* 底部 note：加粗字重 + 加強陰影，字浮出來 */
     .hero-cta-note {
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.84rem;
+      font-size: 0.88rem;
       font-weight: 500;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
       color: #f0e0c0;
       line-height: 1.95;
       text-shadow:
-        0 0 2px rgba(0,0,0,1),
-        0 0 6px rgba(0,0,0,1),
-        0 0 14px rgba(0,0,0,0.9),
-        0 0 24px rgba(0,0,0,0.65),
-        0 2px 6px rgba(0,0,0,1);
-      /* 柔霧：極淡 + 邊緣早早透明，完全看不出形狀 */
-      background: radial-gradient(
-        ellipse 90% 120% at center,
-        rgba(8,5,3,0.28) 0%,
-        rgba(8,5,3,0.18) 30%,
-        rgba(8,5,3,0.08) 60%,
-        transparent 85%
-      );
-      margin-top: 16px;
+        0 0 3px rgba(0,0,0,0.95),
+        0 0 10px rgba(0,0,0,0.8),
+        0 0 22px rgba(0,0,0,0.55),
+        0 2px 6px rgba(0,0,0,0.9);
+      margin-top: 20px;
       max-width: 440px;
       width: 100%;
-      padding: 22px 32px;
+      padding: 0 16px;
       text-align: center;
       word-break: keep-all;
       overflow-wrap: break-word;
@@ -461,6 +509,7 @@
     .hero-tagline-line {
       display: block;
       opacity: 0;
+      will-change: opacity, transform;
       text-shadow:
         0 0 2px rgba(0,0,0,1),
         0 0 4px rgba(0,0,0,0.95),
@@ -672,8 +721,215 @@
     /* ── Section Common ── */
     .section {
       position: relative;
-      padding: clamp(80px, 12vw, 140px) 0;
+      /* 更呼吸的上下留白：桌機最多 160px，手機也有 88px */
+      padding: clamp(88px, 14vw, 160px) 0;
       overflow: hidden;
+    }
+
+    /* ═══ 右側金色滾動進度條 ═══ */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 0;
+      z-index: 250;
+      background: linear-gradient(180deg,
+        rgba(232,181,77,0.85) 0%,
+        rgba(196,147,63,0.95) 50%,
+        rgba(143,106,46,0.85) 100%);
+      box-shadow:
+        0 0 8px rgba(232,181,77,0.4),
+        0 0 16px rgba(196,147,63,0.2);
+      transition: height 0.08s ease-out;
+      pointer-events: none;
+      border-radius: 0 0 0 2px;
+    }
+
+    /* 捲動條容器底（幾乎透明的軌道） */
+    .scroll-progress::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 100vh;
+      height: 100svh;
+      background: rgba(196,147,63,0.06);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* 手機版更細，不搶戲 */
+    @media (max-width: 768px) {
+      .scroll-progress {
+        width: 1.5px;
+      }
+      .scroll-progress::before {
+        width: 1.5px;
+      }
+    }
+
+    /* 使用者關閉動態時不顯示 */
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-progress { display: none; }
+    }
+
+    /* ═══════════════════════════════════════════
+     *  首頁分享按鈕（右下角浮動圓鈕，展開有文字）
+     * ═══════════════════════════════════════════ */
+    .home-share-btn {
+      position: fixed;
+      bottom: 26px;
+      right: 22px;
+      z-index: 180;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 16px 0 14px;
+      border-radius: 999px;
+      /* 夜色玻璃底 + 中心金光 + 柔邊光暈 */
+      background:
+        radial-gradient(ellipse 100% 80% at 50% 50%, rgba(232,181,77,0.18) 0%, transparent 70%),
+        rgba(32,22,12,0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212,168,96,0.42);
+      color: rgba(240,205,130,0.95);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow:
+        0 0 12px rgba(232,181,77,0.22),
+        0 0 28px rgba(196,147,63,0.14),
+        0 4px 14px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,240,200,0.2);
+      text-shadow: 0 0 8px rgba(232,181,77,0.3);
+    }
+    .home-share-btn svg {
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 4px rgba(232,181,77,0.4));
+    }
+    .home-share-btn .home-share-label {
+      display: inline-block;
+    }
+    .home-share-btn:hover {
+      color: rgba(250,220,150,1);
+      border-color: rgba(232,181,77,0.72);
+      box-shadow:
+        0 0 16px rgba(232,181,77,0.4),
+        0 0 40px rgba(196,147,63,0.28),
+        0 6px 18px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,245,215,0.28);
+      transform: translateY(-1px);
+    }
+    .home-share-btn:focus { outline: none; }
+    .home-share-btn:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 2px rgba(255,235,180,0.55),
+        0 0 14px rgba(232,181,77,0.3),
+        0 4px 14px rgba(0,0,0,0.35);
+    }
+
+    /* 手機：收成純圓形 icon，文字隱藏（節省空間）*/
+    @media (max-width: 560px) {
+      .home-share-btn {
+        padding: 0;
+        width: 44px;
+        justify-content: center;
+        bottom: 22px;
+        right: 14px;
+      }
+      .home-share-btn .home-share-label { display: none; }
+    }
+
+    /* ═══ Modal 右上角分享 icon（跟 × 關閉並排在 wrapper 頂部） ═══ */
+    .story-share {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      right: 64px;
+      z-index: 12;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(32,22,12,0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(212,168,96,0.42);
+      color: rgba(240,205,130,0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.35s var(--ease);
+      box-shadow:
+        0 0 10px rgba(232,181,77,0.2),
+        inset 0 1px 0 rgba(255,240,200,0.18);
+    }
+    .story-share svg {
+      width: 15px; height: 15px;
+      filter: drop-shadow(0 0 3px rgba(232,181,77,0.35));
+    }
+    .story-share:hover {
+      color: rgba(250,220,150,1);
+      border-color: rgba(232,181,77,0.72);
+      box-shadow:
+        0 0 14px rgba(232,181,77,0.42),
+        0 0 28px rgba(196,147,63,0.22),
+        inset 0 1px 0 rgba(255,245,215,0.28);
+      transform: scale(1.05);
+    }
+    .story-share:focus { outline: none; }
+    .story-share:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255,235,180,0.55);
+    }
+
+    /* 手機版 Modal 分享 icon 位置微調（對齊小一號的 close）*/
+    @media (max-width: 420px) {
+      .story-share {
+        top: max(10px, env(safe-area-inset-top));
+        right: 58px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    /* ═══ 複製成功 toast（浮現在底部中央的優雅提示）═══ */
+    .share-toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      z-index: 300;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: rgba(32,22,12,0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(212,168,96,0.55);
+      color: rgba(250,225,170,1);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      box-shadow:
+        0 0 18px rgba(232,181,77,0.32),
+        0 0 40px rgba(196,147,63,0.2),
+        0 8px 28px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,240,200,0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      white-space: nowrap;
+    }
+    .share-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     .container {
@@ -686,7 +942,8 @@
 
     .section-header {
       text-align: center;
-      margin-bottom: 56px;
+      /* 標題與內容之間也拉開，更從容的閱讀節奏 */
+      margin-bottom: clamp(56px, 7vw, 80px);
     }
 
     .section-eyebrow {
@@ -821,7 +1078,7 @@
           rgba(26,18,8,0.88) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .why-grid {
@@ -896,7 +1153,7 @@
           rgba(26,18,8,0.88) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .flow-container {
@@ -940,10 +1197,28 @@
     }
 
     .flow-content h4 {
-      font-size: 0.92rem;
+      font-size: 0.96rem;
       color: var(--text);
       margin-bottom: 6px;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .flow-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--gold-bright);
+      opacity: 0.9;
+    }
+
+    .flow-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .flow-content p {
@@ -999,7 +1274,7 @@
           rgba(26,18,8,0.88) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .skill-filters {
@@ -1046,10 +1321,11 @@
 
     .skill-filter-btn:hover {
       background: rgba(80,58,28,0.7);
-      border-color: rgba(232,181,77,0.55);
+      border-color: rgba(232,181,77,0.7);
       color: var(--gold-bright);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(196,147,63,0.18);
+      box-shadow:
+        0 0 18px rgba(232,181,77,0.35),
+        0 0 36px rgba(196,147,63,0.22);
     }
 
     .skill-filter-btn.active {
@@ -1110,16 +1386,73 @@
       line-height: 1.85;
     }
 
+    /* 載入失敗友善提示條（古銅琥珀風格，不中斷瀏覽） */
+    .skills-notice {
+      display: none;
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto 24px;
+      padding: 14px 20px;
+      border: 1px solid rgba(196,147,63,0.4);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(58,42,20,0.6), rgba(72,52,28,0.45));
+      color: #f0d9a6;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      text-align: center;
+      letter-spacing: 0.03em;
+      box-shadow: inset 0 1px 0 rgba(255,230,180,0.08);
+    }
+
+    .skills-notice.show { display: block; }
+
+    .skills-notice strong {
+      color: #f5d98a;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .skills-notice-retry {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 4px 12px;
+      background: rgba(184,144,74,0.15);
+      border: 1px solid rgba(232,181,77,0.5);
+      border-radius: 999px;
+      color: #f5d98a;
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease);
+    }
+
+    .skills-notice-retry:hover,
+    .skills-notice-retry:focus-visible {
+      background: rgba(184,144,74,0.28);
+      color: #fff;
+      outline: none;
+    }
+
+    @media (max-width: 480px) {
+      .skills-notice { font-size: 0.8rem; padding: 12px 16px; }
+      .skills-notice-retry { display: block; margin: 8px auto 0; width: fit-content; }
+    }
+
     .example-card {
       padding: 32px 30px 30px;
-      background: linear-gradient(160deg, rgba(72,52,28,0.55), rgba(48,34,18,0.48));
-      border: 1px solid rgba(196,147,63,0.32);
+      background: linear-gradient(160deg, rgba(42,28,14,0.52), rgba(28,18,10,0.58));
+      border: 1px solid rgba(196,147,63,0.4);
       border-radius: var(--radius);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.5s var(--ease);
       position: relative;
       overflow: hidden;
+      box-shadow:
+        0 8px 24px rgba(0,0,0,0.38),
+        inset 0 1px 0 rgba(232,181,77,0.08);
     }
 
     .example-card::before {
@@ -1255,6 +1588,31 @@
       letter-spacing: 0.01em;
       word-break: keep-all;
       text-wrap: balance;
+      display: inline-block;
+      /* 由左到右揭露 mask：黑色段 → 漸透明，sweep 進場 */
+      -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 55%, transparent 100%);
+              mask-image: linear-gradient(90deg, #000 0%, #000 55%, transparent 100%);
+      -webkit-mask-size: 220% 100%;
+              mask-size: 220% 100%;
+      -webkit-mask-repeat: no-repeat;
+              mask-repeat: no-repeat;
+      -webkit-mask-position: 100% 0;
+              mask-position: 100% 0;
+      animation: titleSweepLeftRight 1.3s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+
+    @keyframes titleSweepLeftRight {
+      from { -webkit-mask-position: 100% 0;   mask-position: 100% 0; }
+      to   { -webkit-mask-position: 0% 0;     mask-position: 0% 0; }
+    }
+
+    /* 使用者關閉動態時尊重設定 */
+    @media (prefers-reduced-motion: reduce) {
+      .example-title {
+        -webkit-mask-image: none;
+                mask-image: none;
+        animation: none;
+      }
     }
 
     .example-meta {
@@ -1280,16 +1638,71 @@
     }
 
     .example-points {
-      display: inline-block;
-      padding: 5px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin-top: 16px;
+      margin-right: 8px;
+      padding: 9px 18px;
+      min-height: 36px;
+      line-height: 1.3;
       background: linear-gradient(135deg, rgba(196,147,63,0.15), rgba(196,147,63,0.05));
       border: 1px solid rgba(196,147,63,0.25);
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 0.78rem;
       color: var(--gold-bright);
       font-weight: 600;
       letter-spacing: 0.08em;
       font-family: 'Cinzel', 'Noto Sans TC', sans-serif;
+      white-space: nowrap;
+    }
+
+    /* ── 卡片「我想換」標示（暖銅色，與金色的「我提供」區隔） ── */
+    /* 「想換」墨綠配色（優雅邀請感，取代原暖銅） */
+    .example-wants {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      margin-bottom: 2px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, rgba(74,101,72,0.18), rgba(74,101,72,0.06));
+      border: 1px solid rgba(74,101,72,0.30);
+      border-left: 3px solid #4A6548;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: #B8CFB0;
+      line-height: 1.55;
+      font-family: 'Noto Serif TC', serif;
+    }
+
+    .example-wants-label {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #A8C39A;
+      font-family: 'Cinzel', 'Noto Sans TC', sans-serif;
+      white-space: nowrap;
+    }
+
+    .example-wants-label::before {
+      content: '';
+      width: 12px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #A8C39A);
+      display: inline-block;
+    }
+
+    .example-wants-text {
+      color: var(--text-mid);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      word-break: break-word;
     }
 
     .example-tap-hint {
@@ -1332,6 +1745,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      vertical-align: middle;
       gap: 7px;
       margin-top: 16px;
       padding: 9px 18px;
@@ -1349,7 +1763,6 @@
       line-height: 1.3;
       cursor: pointer;
       white-space: nowrap;
-      align-self: flex-start;
       box-shadow:
         inset 0 1px 0 rgba(212,168,96,0.14),
         0 2px 8px rgba(0,0,0,0.3);
@@ -1495,8 +1908,8 @@
           rgba(26,18,8,0.78) 80%,
           rgba(26,18,8,0.92) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
-      padding: 100px 20px;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
+      padding: clamp(96px, 13vw, 140px) 20px;
       position: relative;
     }
 
@@ -1578,8 +1991,8 @@
           rgba(36,24,12,0.78) 80%,
           rgba(26,18,8,0.92) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
-      padding: 100px 20px;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
+      padding: clamp(96px, 13vw, 140px) 20px;
       position: relative;
     }
 
@@ -1672,7 +2085,7 @@
           rgba(26,18,8,0.92) 92%,
           rgba(26,18,8,1) 100%
         ),
-        url('guild-hall.jpg') center center / cover no-repeat fixed;
+        url('https://hannahchen6134.github.io/skillmarket/guild-hall.jpg') center center / cover no-repeat fixed;
     }
 
     .cta-card {
@@ -1887,7 +2300,7 @@
       z-index: 400;
       background:
         linear-gradient(180deg, rgba(6,4,2,0.96) 0%, rgba(12,8,4,0.92) 50%, rgba(6,4,2,0.98) 100%),
-        url('starry-hall.jpg') center/cover no-repeat;
+        url('https://hannahchen6134.github.io/skillmarket/starry-hall.jpg') center/cover no-repeat;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       display: flex;
@@ -1911,10 +2324,12 @@
       max-width: 375px;
       max-height: calc(100svh - 40px);
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 52px;
+      padding-top: 60px;
       transform: translateY(20px) scale(0.96);
       transition: transform 0.45s var(--ease);
       scrollbar-width: thin;
@@ -1949,13 +2364,15 @@
       margin: 0 auto;
       border-radius: 14px;
       overflow: hidden;
+      /* 紙感：SVG 纖維顆粒 + 中央暖色變化（邊緣乾淨，不會出現奇怪色塊）+ 原 parchment 漸層 */
       background:
-        radial-gradient(ellipse 80% 40% at 80% 5%, rgba(255,220,150,0.55) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 35% at 15% 92%, rgba(200,150,70,0.35) 0%, transparent 50%),
-        radial-gradient(ellipse 30% 18% at 20% 38%, rgba(139,90,40,0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 25% 15% at 75% 52%, rgba(139,90,40,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 15% 10% at 40% 78%, rgba(139,90,40,0.04) 0%, transparent 70%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.12 0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse 45% 30% at 50% 35%, rgba(255,235,195,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 32% at 45% 65%, rgba(215,175,110,0.16) 0%, transparent 75%),
+        radial-gradient(ellipse 70% 50% at 50% 50%, rgba(247,230,195,0.12) 0%, transparent 70%),
         linear-gradient(165deg, var(--sc-bg-1) 0%, var(--sc-bg-2) 50%, var(--sc-bg-3) 100%);
+      background-size: 260px 260px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      background-blend-mode: multiply, normal, normal, normal, normal;
       display: flex;
       flex-direction: column;
       padding: 22px 24px 18px;
@@ -2049,6 +2466,44 @@
       text-align: center;
       word-break: keep-all;
       text-wrap: balance;
+    }
+
+    /* Modal 打開時：標題淡入 + 字距從散開收緊，像浮雕被刻出來 */
+    .story-overlay.open .story-card-title {
+      animation: storyTitleEmerge 1.1s cubic-bezier(0.25, 0.8, 0.25, 1) 0.15s both;
+    }
+
+    @keyframes storyTitleEmerge {
+      0% {
+        opacity: 0;
+        letter-spacing: 0.5em;
+        transform: translateY(4px);
+        filter: blur(3px);
+      }
+      60% {
+        opacity: 0.9;
+        letter-spacing: 0.08em;
+        filter: blur(0.5px);
+      }
+      100% {
+        opacity: 1;
+        letter-spacing: 0.04em;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    /* 提供者（by 青青）跟標題一起出來，但更晚一點點 */
+    .story-overlay.open .story-card-provider {
+      animation: storyTitleEmerge 1s cubic-bezier(0.25, 0.8, 0.25, 1) 0.45s both;
+    }
+
+    /* 使用者關閉動態時，直接顯示（不跑動畫）*/
+    @media (prefers-reduced-motion: reduce) {
+      .story-overlay.open .story-card-title,
+      .story-overlay.open .story-card-provider {
+        animation: none;
+      }
     }
 
     /* ── 提供者 ── */
@@ -2184,25 +2639,363 @@
       border: 1px solid rgba(184,144,74,0.45);
     }
 
-    /* ── 介紹文（給最多空間；最長 150 字也不溢出） ── */
-    .story-card-body {
-      padding: 14px 4px;
-      border-top: 1px solid var(--sc-border-soft);
-      border-bottom: 1px solid var(--sc-border-soft);
-      margin-bottom: 10px;
-      flex-shrink: 0;
+    /* ══════════════════════════════════════════════════════════
+     *  書籤分頁：關於我 / 服務介紹 / 我想換（啞光古典 + 金光暈）
+     * ══════════════════════════════════════════════════════════ */
+    .story-tabs-wrap {
+      margin-top: 8px;
+      margin-bottom: 14px;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    .story-card-desc {
+    .story-tabs-header {
+      display: flex;
+      gap: 4px;
+      padding: 0 2px;
+      align-items: flex-end;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 共用：書籤通用結構 */
+    .story-tab {
+      flex: 1;
+      padding: 12px 8px 11px;
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      font-family: 'Cinzel', 'Noto Serif TC', serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.24em;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition:
+        background 0.45s cubic-bezier(0.25,0.8,0.25,1),
+        box-shadow 0.5s cubic-bezier(0.25,0.8,0.25,1),
+        transform 0.4s cubic-bezier(0.25,0.8,0.25,1),
+        color 0.45s ease;
+      position: relative;
+      margin-bottom: -1px;
+      white-space: nowrap;
+      text-shadow: 0 1px 1.5px rgba(0,0,0,0.12);
+    }
+
+    /* 啞光紙粉顆粒（共用） */
+    .story-tab::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='mn'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.2' numOctaves='1' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23mn)' opacity='0.55'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+      opacity: 0.4;
+    }
+
+    /* ═══════════════════════════════════════════════
+     *  書籤：玻璃燈光感（透明底 + 中心透光 + 柔邊光暈）
+     * ═══════════════════════════════════════════════ */
+
+    /* ─── 關於我 — 象牙光（ivory lantern） ─── */
+    .story-tab[data-tab="bio"] {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(245,230,195,0.42) 0%, transparent 70%),
+        rgba(235,215,175,0.22);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(140,105,55,0.28);
+      border-bottom: none;
+      color: rgba(90,60,25,0.85);
+      box-shadow:
+        inset 0 1px 0 rgba(255,248,220,0.35),
+        0 0 14px rgba(235,215,175,0.25);
+    }
+    .story-tab[data-tab="bio"].active {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(252,240,215,0.65) 0%, transparent 70%),
+        rgba(245,225,185,0.35);
+      border: 1px solid rgba(130,95,45,0.42);
+      border-bottom: none;
+      color: rgba(55,35,12,0.95);
+      font-weight: 800;
+      transform: translateY(-3px);
+      z-index: 3;
+      box-shadow:
+        inset 0 1px 0 rgba(255,250,225,0.55),
+        0 0 18px rgba(235,215,175,0.45),
+        0 -2px 12px rgba(143,106,46,0.2);
+    }
+
+    /* ─── 服務介紹 — 金光（gold lantern）— 淺底配深色字 ─── */
+    .story-tab[data-tab="desc"] {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(196,147,63,0.4) 0%, transparent 70%),
+        rgba(110,85,45,0.28);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(110,80,40,0.32);
+      border-bottom: none;
+      color: rgba(55,35,10,0.82);
+      text-shadow: 0 1px 0 rgba(255,240,200,0.3);
+      box-shadow:
+        inset 0 1px 0 rgba(255,230,170,0.15),
+        0 0 14px rgba(196,147,63,0.22);
+    }
+    .story-tab[data-tab="desc"].active {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(232,181,77,0.5) 0%, transparent 72%),
+        rgba(130,100,55,0.38);
+      border: 1px solid rgba(100,72,30,0.45);
+      border-bottom: none;
+      color: rgba(40,24,6,0.95);
+      font-weight: 800;
+      transform: translateY(-3px);
+      z-index: 3;
+      text-shadow: 0 1px 0 rgba(255,245,210,0.4);
+      box-shadow:
+        inset 0 1px 0 rgba(255,235,180,0.22),
+        0 0 20px rgba(196,147,63,0.42),
+        0 -2px 14px rgba(143,106,46,0.25);
+    }
+
+    /* ─── 我想換 — 墨綠光（ink green lantern）— 淺底配深色字 ─── */
+    .story-tab[data-tab="wants"] {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(100,140,90,0.35) 0%, transparent 70%),
+        rgba(60,88,55,0.26);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(50,75,40,0.32);
+      border-bottom: none;
+      color: rgba(25,50,20,0.82);
+      text-shadow: 0 1px 0 rgba(240,250,230,0.28);
+      box-shadow:
+        inset 0 1px 0 rgba(220,240,210,0.12),
+        0 0 14px rgba(100,140,90,0.22);
+    }
+    .story-tab[data-tab="wants"].active {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 55%, rgba(130,175,115,0.45) 0%, transparent 72%),
+        rgba(75,105,65,0.36);
+      border: 1px solid rgba(40,65,30,0.44);
+      border-bottom: none;
+      color: rgba(15,35,10,0.95);
+      font-weight: 800;
+      transform: translateY(-3px);
+      z-index: 3;
+      text-shadow: 0 1px 0 rgba(240,250,230,0.4);
+      box-shadow:
+        inset 0 1px 0 rgba(220,240,210,0.2),
+        0 0 20px rgba(110,155,95,0.4),
+        0 -2px 14px rgba(55,85,45,0.25);
+    }
+
+    /* Hover：三色共用優雅金色光暈 */
+    .story-tab:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,245,215,0.1),
+        0 0 0 1px rgba(224,180,104,0.35),
+        0 0 10px rgba(212,168,96,0.45),
+        0 0 22px rgba(196,147,63,0.38),
+        0 0 42px rgba(184,144,74,0.22),
+        0 5px 20px rgba(143,106,46,0.22);
+    }
+    .story-tab.active:hover {
+      box-shadow:
+        inset 0 0 0 1px rgba(255,245,215,0.12),
+        0 0 0 1px rgba(232,188,112,0.42),
+        0 0 12px rgba(220,176,100,0.5),
+        0 0 26px rgba(200,152,68,0.42),
+        0 0 48px rgba(184,144,74,0.25),
+        0 5px 22px rgba(143,106,46,0.28),
+        0 -2px 10px rgba(143,106,46,0.2);
+    }
+
+    /* Active 頂端飾線 */
+    .story-tab.active::before {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 0.5px;
+      background: linear-gradient(90deg, transparent, rgba(255,245,215,0.45), transparent);
+      z-index: 2;
+    }
+
+    /* Focus 修正（移除瀏覽器黑色 outline） */
+    .story-tab:focus { outline: none; }
+    .story-tab:focus:not(:focus-visible) { outline: none; }
+    .story-tab:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 2px rgba(255,235,180,0.5),
+        0 -3px 14px rgba(110,80,45,0.22),
+        inset 0 1px 0 rgba(255,250,235,0.65);
+    }
+
+    /* 空值分頁：完全隱藏 */
+    .story-tab.hidden { display: none; }
+
+    /* 分頁內容區 */
+    .story-tabs-content {
+      padding: 18px 6px 10px;
+      border-top: 1.5px solid rgba(110,75,30,0.55);
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='1' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0 0.15 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n2)' opacity='0.35'/%3E%3C/svg%3E") 0 0 / 200px 200px,
+        transparent;
+      margin-bottom: 10px;
+      flex: 1;
+      min-height: 120px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* 個別分頁面板 */
+    .story-tab-panel { display: none; }
+    .story-tab-panel.active {
+      display: block;
+      animation: tabFadeIn 0.45s cubic-bezier(0.25,0.8,0.25,1);
+    }
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 共用文字樣式（三個面板共用） */
+    .story-card-desc,
+    .story-card-bio-text,
+    .story-card-wants-text {
       font-family: 'Noto Serif TC', serif;
       font-size: 0.84rem;
       color: var(--sc-ink);
-      line-height: 1.75;
+      line-height: 1.85;
       letter-spacing: 0.02em;
       white-space: pre-line;
       text-align: left;
       word-break: break-word;
       overflow-wrap: anywhere;
+    }
+    .story-card-bio-text { color: var(--sc-ink-mid); }
+
+    /* 「我想換」下方的補充小字（「以上為參考方向，其他也歡迎一起聊聊」） */
+    .story-card-wants-note {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(143,106,46,0.22);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.74rem;
+      font-style: italic;
+      color: var(--sc-ink-soft);
+      letter-spacing: 0.04em;
+      line-height: 1.65;
+      opacity: 0.82;
+    }
+    .story-card-wants-note::before {
+      content: '— ';
+      font-style: normal;
+      color: rgba(143,106,46,0.5);
+    }
+
+    /* 手機版：字級壓緊，確保 150 字可一次截完 */
+    @media (max-width: 420px) {
+      .story-tab {
+        font-size: 0.66rem;
+        letter-spacing: 0.14em;
+        padding: 9px 4px;
+      }
+      .story-card-desc, .story-card-bio-text, .story-card-wants-text {
+        font-size: 0.80rem;
+        line-height: 1.7;
+      }
+      .story-tabs-content { padding: 14px 4px 6px; min-height: 130px; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+     *  手機 / 觸控裝置效能優化（保留美感，拿掉吃 GPU 的重特效）
+     *  判斷條件：小螢幕 OR 無 hover 能力的觸控裝置
+     * ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+      /* ── 書籤：去掉 SVG 顆粒 overlay（手機看不太出來、但每幀都要合成） ── */
+      .story-tab::after { display: none; }
+
+      /* ── 觸控裝置沒有 hover，禁用高成本的 hover 金光暈 ── */
+      .story-tab:hover {
+        transform: none;
+      }
+      .story-tab:hover,
+      .story-tab.active:hover {
+        box-shadow: inherit;
+      }
+      /* 但保留 active 狀態的微陰影讓「選中」仍清楚 */
+      .story-tab.active {
+        box-shadow:
+          inset 0 0 0 1px rgba(255,245,215,0.1),
+          0 -2px 8px rgba(143,106,46,0.2) !important;
+      }
+
+      /* ── 去掉 text-shadow 雙向壓印，改用單純顏色對比 ── */
+      .story-tab {
+        text-shadow: none;
+      }
+
+      /* ── 標題左→右 mask-image 動畫對手機較吃，改用簡單 fade ── */
+      .skills-grid .example-card .example-title {
+        -webkit-mask-image: none;
+                mask-image: none;
+        animation: cardTitleSimpleFade 0.6s ease-out both;
+      }
+      @keyframes cardTitleSimpleFade {
+        from { opacity: 0; transform: translateY(4px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── Modal 外投影簡化（filter: drop-shadow 在手機較耗） ── */
+      .story-wrapper {
+        filter: none;
+      }
+      .story-card {
+        box-shadow:
+          0 12px 28px rgba(40, 25, 10, 0.48),
+          inset 0 1px 0 rgba(255, 240, 210, 0.7),
+          inset 0 0 0 4px var(--sc-bg-1),
+          inset 0 0 0 5px var(--sc-border-mid) !important;
+      }
+
+      /* ── 紙紋 SVG 降解析度 + 降透明度（維持質感但省記憶體） ── */
+      .story-tabs-content {
+        background:
+          linear-gradient(180deg, rgba(247,234,208,0.25), transparent 55%) !important;
+      }
+    }
+
+    /* ═══════ 舊裝置 / 低效能裝置：進一步降階 ═══════ */
+    @media (max-width: 420px) {
+      /* 最小螢幕完全拿掉 story-card 的 SVG noise（直接用純漸層） */
+      .story-card {
+        background:
+          radial-gradient(ellipse 50% 35% at 50% 50%, rgba(247,230,195,0.25) 0%, transparent 70%),
+          linear-gradient(165deg, var(--sc-bg-1) 0%, var(--sc-bg-2) 50%, var(--sc-bg-3) 100%) !important;
+        background-size: 100% 100%, 100% 100% !important;
+        background-blend-mode: normal, normal !important;
+      }
+    }
+
+    /* 尊重使用者「減少動態效果」設定 */
+    @media (prefers-reduced-motion: reduce) {
+      .story-tab, .story-tab-panel, .example-card, .example-title {
+        animation: none !important;
+        transition: opacity 0.2s ease !important;
+      }
+      .example-title {
+        -webkit-mask-image: none !important;
+                mask-image: none !important;
+      }
     }
 
 
@@ -2268,12 +3061,20 @@
       margin: 0 14px;
     }
 
-    /* Action bar below card */
+    /* Action bar below card — sticky 讓 CTA 在長文內容也永遠看得到 */
     .story-actions {
+      position: sticky;
+      bottom: 0;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 10px;
       margin-top: 14px;
+      padding: 14px 10px calc(14px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, rgba(6,4,2,0.92) 55%, rgba(6,4,2,0.55) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(184,144,74,0.18);
       z-index: 10;
     }
 
@@ -2352,6 +3153,100 @@
       opacity: 0.85;
     }
 
+    /* ═══ 新版主次分明按鈕 ═══ */
+
+    /* 主按鈕：直接預約交換（透明夜色底 + 金光暈，像燈籠透光）*/
+    .story-action-btn.story-action-btn-hero {
+      flex: 1.4 1 auto;
+      padding: 13px 22px;
+      /* 底色：半透明深夜暖咖啡，帶極淺的金色中心漸層（像燈暖透出來）*/
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 40%, rgba(232,181,77,0.16) 0%, transparent 65%),
+        linear-gradient(135deg, rgba(50,32,14,0.55) 0%, rgba(35,22,10,0.62) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      /* 細金邊 + 外光暈 */
+      border: 1px solid rgba(212,168,96,0.48);
+      color: rgba(240,205,130,0.95);
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      min-height: 44px;
+      text-shadow: 0 0 12px rgba(232,181,77,0.35);
+      box-shadow:
+        /* 內頂高光（像金屬反光但很淡）*/
+        inset 0 1px 0 rgba(255,240,200,0.2),
+        /* 內底微影 */
+        inset 0 -1px 0 rgba(30,20,8,0.3),
+        /* 外圈柔金光暈（近）*/
+        0 0 12px rgba(232,181,77,0.25),
+        /* 外圈柔金光暈（遠，像燭光散射）*/
+        0 0 28px rgba(196,147,63,0.18),
+        /* 底下墊陰影讓按鈕浮起來 */
+        0 3px 14px rgba(0,0,0,0.35);
+    }
+    .story-action-btn.story-action-btn-hero:hover {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 40%, rgba(232,181,77,0.28) 0%, transparent 65%),
+        linear-gradient(135deg, rgba(60,40,18,0.62) 0%, rgba(42,28,14,0.68) 100%);
+      color: rgba(250,220,150,1);
+      border-color: rgba(232,181,77,0.7);
+      text-shadow: 0 0 16px rgba(232,181,77,0.55);
+      box-shadow:
+        inset 0 1px 0 rgba(255,245,215,0.28),
+        inset 0 -1px 0 rgba(30,20,8,0.3),
+        /* hover 時光暈加強 */
+        0 0 18px rgba(232,181,77,0.42),
+        0 0 42px rgba(196,147,63,0.32),
+        0 0 60px rgba(184,144,74,0.18),
+        0 4px 18px rgba(0,0,0,0.4);
+      transform: translateY(-1px);
+    }
+    .story-action-btn.story-action-btn-hero svg {
+      opacity: 0.9;
+      width: 16px; height: 16px;
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 4px rgba(232,181,77,0.4));
+    }
+
+    /* 次按鈕：去 LINE 群討論（淡色描邊，不搶焦點）*/
+    .story-action-btn.story-action-btn-ghost {
+      flex: 1 1 auto;
+      padding: 12px 16px;
+      background: transparent;
+      border: 1px solid rgba(184,144,74,0.35);
+      color: rgba(212,168,96,0.78);
+      font-weight: 400;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      min-height: 44px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: none;
+    }
+    .story-action-btn.story-action-btn-ghost:hover {
+      background: rgba(60,42,20,0.42);
+      border-color: rgba(212,168,96,0.55);
+      color: #e8c47a;
+      box-shadow: 0 2px 10px rgba(60,42,20,0.4);
+    }
+    .story-action-btn.story-action-btn-ghost svg {
+      opacity: 0.72;
+    }
+
+    /* 手機版按鈕：垂直堆疊，主按鈕在上 */
+    @media (max-width: 480px) {
+      .story-actions {
+        flex-direction: column;
+      }
+      .story-action-btn.story-action-btn-hero,
+      .story-action-btn.story-action-btn-ghost {
+        width: 100%;
+        flex: none;
+        justify-content: center;
+      }
+    }
+
     /* 手機版（含偏中寬的螢幕）—— 按鈕縮小、允許換行 */
     @media (max-width: 560px) {
       .story-actions {
@@ -2386,20 +3281,24 @@
 
     .story-close {
       position: absolute;
-      top: 4px;
-      right: 0;
-      background: rgba(58,42,20,0.6);
-      border: 1px solid rgba(196,147,63,0.3);
+      top: max(14px, env(safe-area-inset-top));
+      right: 14px;
+      background: rgba(32,22,12,0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(196,147,63,0.42);
       border-radius: 50%;
       width: 40px; height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-mid);
+      color: rgba(240,205,130,0.95);
       font-size: 1.3rem;
+      line-height: 1;
       cursor: pointer;
       transition: all 0.3s var(--ease);
-      z-index: 10;
+      z-index: 12;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
     }
 
     .story-close:hover {
@@ -2414,11 +3313,16 @@
     }
 
     @media (max-width: 420px) {
-      .story-wrapper { max-width: 100%; }
+      .story-wrapper { max-width: 100%; padding-top: 56px; }
       .story-card { padding: 24px 20px; border-radius: 16px; }
       .story-actions { gap: 10px; }
       .story-action-btn { padding: 10px 16px; font-size: 0.75rem; }
-      .story-close { top: 4px; width: 36px; height: 36px; }
+      .story-close {
+        top: max(10px, env(safe-area-inset-top));
+        right: 10px;
+        width: 36px;
+        height: 36px;
+      }
     }
 
     /* ── Footer ── */
@@ -2457,9 +3361,12 @@
 
     .footer-columns {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 36px;
       margin-bottom: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .footer-col h5 {
@@ -2500,11 +3407,12 @@
     }
 
     @media (max-width: 720px) {
+      /* 手機 3 欄 → 單欄置中，排版更穩 */
       .footer-columns {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 28px;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        max-width: 420px;
       }
-      /* 手機 2 欄：置中讓排版更平衡 */
       .footer-col {
         text-align: center;
       }
@@ -2516,7 +3424,6 @@
 
     @media (max-width: 420px) {
       .site-footer { padding: 44px 20px 24px; }
-      .footer-columns { grid-template-columns: 1fr; gap: 24px; }
       .footer-brand { font-size: 1rem; }
     }
 
@@ -2561,22 +3468,9 @@
       box-shadow: 0 14px 40px rgba(0,0,0,0.45), 0 0 32px rgba(232,181,77,0.18);
     }
 
-    /* Filter buttons — click shimmer */
+    /* Filter buttons — 溫暖金色光暈（移除光澤掃過動畫） */
     .skill-filter-btn {
       position: relative;
-      overflow: hidden;
-    }
-    .skill-filter-btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 30%, rgba(255,240,210,0.22) 50%, transparent 70%);
-      transform: translateX(-100%);
-      transition: transform 0.6s var(--ease);
-      pointer-events: none;
-    }
-    .skill-filter-btn:hover::after {
-      transform: translateX(100%);
     }
 
     /* Flow step — gold border pulse on hover */
@@ -2836,25 +3730,92 @@
       .faq-item,
       .cta-card,
       .btn-hero,
-      .about-link {
+      .about-link,
+      .example-card,
+      .skills-search,
+      .skill-filter-btn,
+      .story-tab,
+      .home-share-btn,
+      .story-share,
+      .story-action-btn-hero,
+      .story-action-btn-ghost,
+      .share-toast {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
+      }
+
+      /* 手機卡片動畫減量：縮短 stagger + 去掉過度的 transform */
+      .skills-grid .example-card {
+        animation-duration: 0.45s !important;
+        will-change: auto !important;
       }
     }
 
     @media (max-width: 420px) {
-      .hero-line-1 { font-size: clamp(0.85rem, 3.5vw, 1.1rem); }
-      .hero-line-2 { font-size: clamp(1.4rem, 7vw, 1.9rem); }
+      .hero-line-1 {
+        font-size: clamp(0.85rem, 3.5vw, 1.1rem);
+        letter-spacing: 0.12em;
+      }
+      .hero-line-2 {
+        font-size: clamp(1.35rem, 6.6vw, 1.85rem);
+        letter-spacing: 0.02em;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+        line-break: strict;
+      }
 
       .hero-desc {
         font-size: 0.78rem;
       }
 
+      .hero-campaign {
+        letter-spacing: 0.18em;
+        padding-left: 0;
+      }
+
+      .hero-content { padding: 40px 16px; }
+
       .section-title {
         font-size: clamp(1.2rem, 5vw, 1.5rem);
+        word-break: keep-all;
+        overflow-wrap: break-word;
       }
 
       .rules-scroll { padding: 36px 20px 40px; }
+    }
+
+    /* 極窄手機（320–360px）：再縮字級、收緊字距，確保標題不被裁切 */
+    @media (max-width: 360px) {
+      nav { padding: 0 14px; }
+      .container { padding: 0 16px; }
+
+      .hero-content { padding: 36px 12px; }
+
+      .hero-line-1 {
+        font-size: 0.88rem;
+        letter-spacing: 0.08em;
+      }
+      .hero-line-2 {
+        font-size: 1.55rem;
+        letter-spacing: 0;
+      }
+      .hero-campaign {
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+      }
+      .hero-tagline {
+        font-size: 0.96rem;
+        letter-spacing: 0.04em;
+      }
+      .hero-cta-note {
+        font-size: 0.78rem;
+        padding: 0 10px;
+      }
+      .btn-hero-primary {
+        padding: 13px 28px;
+        font-size: 0.84rem;
+        letter-spacing: 0.08em;
+      }
     }
 
     /* ── Search & Controls ── */
@@ -3035,6 +3996,24 @@
 </head>
 <body>
 
+<!-- 金色滾動進度條（右側極細、優雅） -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- 首頁分享按鈕（右下角浮動，優雅金圈） -->
+<button class="home-share-btn" id="homeShareBtn" type="button" aria-label="分享公會">
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/>
+    <circle cx="6" cy="12" r="3"/>
+    <circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </svg>
+  <span class="home-share-label">分享公會</span>
+</button>
+
+<!-- 複製成功的優雅提示 toast -->
+<div class="share-toast" id="shareToast" role="status" aria-live="polite"></div>
+
 <!-- Floating Orbs -->
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
@@ -3048,7 +4027,7 @@
     <li><a href="#about">初星群在做什麼？</a></li>
     <li><a href="#faq">常見疑問</a></li>
   </ul>
-  <button class="nav-hamburger" id="hamburger" aria-label="選單">
+  <button class="nav-hamburger" id="hamburger" aria-label="選單" aria-expanded="false" aria-controls="navDrawer">
     <span></span>
     <span></span>
     <span></span>
@@ -3056,7 +4035,7 @@
 </nav>
 
 <div class="nav-overlay" id="navOverlay"></div>
-<div class="nav-drawer" id="navDrawer">
+<div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="站內導覽" aria-hidden="true">
   <div class="nav-drawer-label">NAVIGATION</div>
   <ul>
     <li><a href="#hero">首頁</a></li>
@@ -3085,7 +4064,8 @@
       <span class="hero-tagline-line">分享越多、得到更多</span>
     </p>
     <div class="hero-cta-group">
-      <a class="btn-hero btn-hero-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">我也想要分享技能</a>
+      <a class="btn-hero btn-hero-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">我想分享技能</a>
+      <a class="btn-hero-text" href="#skills">看看有哪些技能<span class="btn-hero-text-arrow" aria-hidden="true">→</span></a>
       <p class="hero-cta-note">還沒有適合的技能想互換？<wbr>可以請對方喝咖啡、<wbr>吃一頓飯作為交換</p>
     </div>
   </div>
@@ -3254,6 +4234,11 @@
         <span class="example-tap-hint">點擊卡片看技能詳情</span>
       </div>
 
+      <div class="skills-notice" id="skillsNotice" role="status" aria-live="polite">
+        <strong>技能清單暫時讀不到</strong>，請稍後再試。以下為示意卡片。
+        <button type="button" class="skills-notice-retry" id="skillsNoticeRetry">重新載入</button>
+      </div>
+
       <div class="skills-empty" id="skillsEmpty">
         <div class="skills-empty-icon"></div>
         <p>這個分類還沒有人分享技能，<br>要不要當第一個？</p>
@@ -3287,33 +4272,52 @@
       <div class="flow-step reveal reveal-delay-1">
         <div class="flow-number">1</div>
         <div class="flow-content">
-          <h4>填寫你想分享的技能</h4>
-          <p>可以是設計諮詢、語言教學、瑜伽課、塔羅解讀……任何你想教的。填表時簡單說明時間、適合誰、預期學到什麼。</p>
-          <p class="flow-hint">填表後青青會在 48 小時內審核，確認後你的技能會出現在這個頁面。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+            </span>
+            填表上架
+          </h4>
+          <p>填寫你想分享與想換的技能，青青 48 小時內審核並上架。</p>
         </div>
       </div>
 
       <div class="flow-step reveal reveal-delay-2">
         <div class="flow-number">2</div>
         <div class="flow-content">
-          <h4>配對、預約時間</h4>
-          <p>有人對你的技能感興趣？加入 LINE 公會群後，在群組裡 tag @對方 直接聯繫，約定時間和方式（線上 / 線下）。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </span>
+            在 LINE 群媒合
+          </h4>
+          <p>加入 LINE 公會群，或點卡片上的社群按鈕，直接聯繫技能提供者。</p>
         </div>
       </div>
 
       <div class="flow-step reveal reveal-delay-3">
         <div class="flow-number">3</div>
         <div class="flow-content">
-          <h4>進行交換</h4>
-          <p>一對一陪伴、分享知識、傳授技能。可以是 30 分鐘的快速諮詢，也可以是多次的系統課程。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            雙方約時間
+          </h4>
+          <p>確認時間與形式（線上／線下），就能開始交換。</p>
         </div>
       </div>
 
       <div class="flow-step reveal reveal-delay-4">
         <div class="flow-number">4</div>
         <div class="flow-content">
-          <h4>雙方確認完成</h4>
-          <p>交換結束後，雙方填寫【技能交換回饋單】，青青村長會記錄彼此的交換次數，幫我們維繫公會的信任度、累積你的陪伴紀錄。</p>
+          <h4>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8.5 12.5 11 15 16 9.5"/></svg>
+            </span>
+            完成交換
+          </h4>
+          <p>雙方填寫回饋單，青青會記錄彼此的陪伴與信任。</p>
           <p class="flow-hint">想修改時長、暫停上架或有任何疑問？可隨時私訊<a class="flow-hint-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a>。</p>
         </div>
       </div>
@@ -3343,7 +4347,6 @@
     <div class="section-header reveal">
       <div class="section-eyebrow">FAQ</div>
       <h2 class="section-title">常見疑問</h2>
-      <div class="simple-divider"></div>
     </div>
 
     <div class="faq-list reveal">
@@ -3352,44 +4355,56 @@
         <p>完全免費。技能交換的精神是「用技能換技能」，沒有金錢買賣。如果你沒有技能想分享，也可以用一杯咖啡、一頓餐點跟對方交換。</p>
       </details>
       <details class="faq-item">
-        <summary>我是新手，技能沒有很專業，可以參加嗎？</summary>
-        <p>可以。這裡不看「專業級別」，只看「你願意分享」。你的生活經驗、你研究過的小事，對別人可能就是寶貴的入門。</p>
+        <summary>我不是專家也可以分享嗎？</summary>
+        <p>可以，而且非常歡迎。這裡不看「專業級別」，只看「你是否願意陪對方走一段路」。你研究過的生活小技巧、你喜歡做的事，對別人都可能是很珍貴的入門。</p>
       </details>
       <details class="faq-item">
-        <summary>填表後多久會出現在網站上？</summary>
-        <p>青青會在 48 小時內審核你的技能資訊，確認後就會上架到「可以交換的技能」列表。</p>
+        <summary>一定要用技能換技能嗎？</summary>
+        <p>不一定。如果你暫時沒有技能想分享，也可以用一杯咖啡、一頓餐點、或其他對方願意接受的方式作為交換。重點是雙方都覺得這場交換值得。</p>
+      </details>
+      <details class="faq-item">
+        <summary>可以只先看看不參加嗎？</summary>
+        <p>當然可以。你可以先瀏覽「可以交換的技能」看看有沒有感興趣的，不用立刻填表、也不用加 LINE 群，等你準備好再加入就好。</p>
+      </details>
+      <details class="faq-item">
+        <summary>我填表後多久會上架？</summary>
+        <p>青青會在 48 小時內審核，確認後就會出現在「可以交換的技能」列表。若超過 48 小時還沒上架，可能需要補充說明，青青會主動私訊你。</p>
+      </details>
+      <details class="faq-item">
+        <summary>可以線上交換嗎？</summary>
+        <p>可以。每個技能上架時會標示「線上」、「實體」或「線上／線下」，你可以依照自己方便的形式挑選。線上常見使用 Google Meet、Zoom、LINE 視訊等。</p>
+      </details>
+      <details class="faq-item">
+        <summary>交換失敗或約不到時間怎麼辦？</summary>
+        <p>這很正常，不用有壓力。可以和對方另約時間，或在 LINE 群裡找其他人交換。若遇到爭議或長時間沒有回應，可以私訊 <a class="faq-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a> 協助處理。</p>
       </details>
       <details class="faq-item">
         <summary>怎麼跟技能提供者聯繫？</summary>
-        <p>加入 LINE 公會群後，在群組裡 tag @對方 直接私訊預約時間。所有聯繫都在 LINE 群內進行。</p>
+        <p>每張技能卡片下方都有「直接聯繫他」按鈕，點擊即可直達提供者的社群媒體（IG／FB／Threads／LINE 等），直接私訊預約；若提供者沒留社群連結，按鈕會自動帶你到初星群官方 LINE，加入群組後在群內 tag @對方 也能直接聯繫。</p>
       </details>
       <details class="faq-item">
         <summary>我上架後想修改時長、或暫時不想接單怎麼辦？</summary>
         <p>隨時私訊 <a class="faq-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a>，可以幫你修改、暫停或下架技能。</p>
       </details>
       <details class="faq-item">
-        <summary>線上線下都可以嗎？</summary>
-        <p>都可以。你上架時會指定「線上 / 實體」，雙方確認後再約定細節（視訊軟體、見面地點等）。</p>
+        <summary>有人想跟我換，但我不想，可以拒絕嗎？</summary>
+        <p>當然可以。技能交換是雙方都願意才成立的，沒有必須接受每一個邀約的義務。只要禮貌地說明不方便（例如「這段時間比較忙」「跟我想學的方向不太一樣」），對方大多能理解。尊重自己的感受最重要——你在這裡是自由的。</p>
       </details>
       <details class="faq-item">
         <summary>交換品質怎麼保證？</summary>
         <p>公會有六條守則（誠心相待、說到做到、隱私保護……），並且交換後雙方會填寫回饋單。信任是這個公會最重要的基礎。</p>
-      </details>
-      <details class="faq-item">
-        <summary>如果對方沒有如期出現怎麼辦？</summary>
-        <p>先在 LINE 群直接溝通確認。若遇到重大爭議，可以私訊 <a class="faq-link" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">初星群官方 LINE</a> 協助處理。</p>
       </details>
     </div>
   </div>
 </section>
 
 <!-- ══════════════ VALUES MODAL ══════════════ -->
-<div class="modal-overlay" id="valuesModal">
-  <div class="modal-content">
+<div class="modal-overlay" id="valuesModal" role="dialog" aria-modal="true" aria-labelledby="valuesModalTitle" aria-hidden="true">
+  <div class="modal-content" tabindex="-1">
     <button class="modal-close" id="closeValues" aria-label="關閉">&times;</button>
     <div class="modal-header">
       <div class="section-eyebrow">CORE VALUES</div>
-      <h2 class="modal-title">公會的核心精神</h2>
+      <h2 class="modal-title" id="valuesModalTitle">公會的核心精神</h2>
       <p class="modal-subtitle">我們相信技能交換不只是學習，而是相互照亮</p>
     </div>
 
@@ -3430,12 +4445,12 @@
 </div>
 
 <!-- ══════════════ RULES MODAL ══════════════ -->
-<div class="modal-overlay" id="rulesModal">
-  <div class="modal-content modal-content-parchment">
+<div class="modal-overlay" id="rulesModal" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle" aria-hidden="true">
+  <div class="modal-content modal-content-parchment" tabindex="-1">
     <button class="modal-close modal-close-dark" id="closeRules" aria-label="關閉">&times;</button>
     <div class="rules-scroll">
       <div class="rules-scroll-header">
-        <h3>公會守則</h3>
+        <h3 id="rulesModalTitle">公會守則</h3>
         <div class="sub">Guild Rules</div>
         <div class="rules-scroll-divider"></div>
       </div>
@@ -3508,9 +4523,18 @@
 </section>
 
 <!-- ══════════════ STORY CARD MODAL ══════════════ -->
-<div class="story-overlay" id="storyOverlay">
+<div class="story-overlay" id="storyOverlay" role="dialog" aria-modal="true" aria-labelledby="storyTitle" aria-hidden="true">
+  <button class="story-share" id="storyShare" type="button" aria-label="分享這個服務">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"/>
+      <circle cx="6" cy="12" r="3"/>
+      <circle cx="18" cy="19" r="3"/>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </svg>
+  </button>
+  <button class="story-close" id="storyClose" aria-label="關閉">&times;</button>
   <div class="story-wrapper">
-    <button class="story-close" id="storyClose" aria-label="關閉">&times;</button>
     <div class="story-card" id="storyCard">
       <!-- 頂部品牌條 -->
       <div class="story-card-brand">
@@ -3537,9 +4561,25 @@
       <!-- Meta 清單 -->
       <div class="story-card-meta-list" id="storyMeta"></div>
 
-      <!-- 介紹文（可捲動） -->
-      <div class="story-card-body">
-        <p class="story-card-desc" id="storyDesc"></p>
+      <!-- 書籤分頁：關於我 / 服務介紹 / 我想換 -->
+      <div class="story-tabs-wrap" id="storyTabsWrap">
+        <div class="story-tabs-header" role="tablist" id="storyTabsHeader">
+          <button class="story-tab" data-tab="bio" id="storyTabBio" type="button" role="tab" aria-selected="false">關於我</button>
+          <button class="story-tab active" data-tab="desc" id="storyTabDesc" type="button" role="tab" aria-selected="true">服務介紹</button>
+          <button class="story-tab" data-tab="wants" id="storyTabWants" type="button" role="tab" aria-selected="false">我想換</button>
+        </div>
+        <div class="story-tabs-content">
+          <div class="story-tab-panel" data-panel="bio" id="storyPanelBio" role="tabpanel">
+            <p class="story-card-bio-text" id="storyBio"></p>
+          </div>
+          <div class="story-tab-panel active" data-panel="desc" id="storyPanelDesc" role="tabpanel">
+            <p class="story-card-desc" id="storyDesc"></p>
+          </div>
+          <div class="story-tab-panel" data-panel="wants" id="storyPanelWants" role="tabpanel">
+            <p class="story-card-wants-text" id="storyWants"></p>
+            <p class="story-card-wants-note">以上為參考方向，其他也歡迎一起聊聊</p>
+          </div>
+        </div>
       </div>
 
       <!-- 底部 -->
@@ -3553,18 +4593,16 @@
     </div>
     <p class="story-share-hint">歡迎截圖分享</p>
     <div class="story-actions">
-      <a class="story-action-btn story-action-btn-primary" id="storyContact" href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        去 LINE 群分享
+      <!-- 主按鈕：直接聯繫他（滿版金光暈，連到提供者的社群 / LINE） -->
+      <a class="story-action-btn story-action-btn-hero" id="storyContactMe" href="#" target="_blank" rel="noopener noreferrer">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        直接聯繫他
       </a>
-      <a class="story-action-btn story-action-btn-contact" id="storyContactMe" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        直接聯繫我
+      <!-- 次按鈕：去 LINE 群聯繫他 -->
+      <a class="story-action-btn story-action-btn-ghost" id="storyContact" href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        去 LINE 群聯繫他
       </a>
-      <button class="story-action-btn" id="storyCloseBtn">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        關閉
-      </button>
     </div>
   </div>
 </div>
@@ -3595,11 +4633,6 @@
         <a href="https://line.me/ti/g2/UXf1SNnqH2nc1IUndtjv7KcZ2rp2JfYXhshR1g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">加入 LINE 公會群</a>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSeXw2g1y7qg_1Yk7BJmVbZ6tUZpJwc45rk-xMefVkvuYZ8tfA/viewform?usp=dialog" target="_blank" rel="noopener">我也想要分享技能</a>
         <a href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener">私訊初星群官方 LINE</a>
-      </div>
-      <div class="footer-col">
-        <h5>相關連結</h5>
-        <a href="https://hannahchen6134.github.io/about-qingqing/" target="_blank" rel="noopener">認識青青</a>
-        <a href="https://hannahchen6134.github.io/initial-star-spectrum/" target="_blank" rel="noopener">初心色譜</a>
       </div>
     </div>
 
@@ -3691,6 +4724,8 @@
   const skillsGrid = document.querySelector('.skills-grid');
   const skillsEmpty = document.getElementById('skillsEmpty');
   const skillsLoading = document.getElementById('skillsLoading');
+  const skillsNotice = document.getElementById('skillsNotice');
+  const skillsNoticeRetry = document.getElementById('skillsNoticeRetry');
   const skillsCount = document.getElementById('skillsCount');
   const loadMoreWrap = document.getElementById('loadMoreWrap');
   const btnLoadMore = document.getElementById('btnLoadMore');
@@ -3705,10 +4740,22 @@
   function closeDrawer() {
     navDrawer.classList.remove('open');
     navOverlay.classList.remove('open');
+    navDrawer.setAttribute('aria-hidden', 'true');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  function openDrawer() {
+    navDrawer.classList.add('open');
+    navOverlay.classList.add('open');
+    navDrawer.setAttribute('aria-hidden', 'false');
+    hamburger.setAttribute('aria-expanded', 'true');
+    // 開啟後把焦點移到第一個可聚焦項目
+    const firstLink = navDrawer.querySelector('a, button');
+    if (firstLink) setTimeout(() => firstLink.focus(), 320);
   }
 
   hamburger.addEventListener('click', () => {
-    navDrawer.classList.contains('open') ? closeDrawer() : (navDrawer.classList.add('open'), navOverlay.classList.add('open'));
+    navDrawer.classList.contains('open') ? closeDrawer() : openDrawer();
   });
 
   navOverlay.addEventListener('click', closeDrawer);
@@ -3717,22 +4764,50 @@
     a.addEventListener('click', closeDrawer);
   });
 
+  /* 右側金色滾動進度條 */
+  const scrollProgress = document.getElementById('scrollProgress');
+  function updateScrollProgress() {
+    const doc = document.documentElement;
+    const total = doc.scrollHeight - doc.clientHeight;
+    const progress = total > 0 ? (doc.scrollTop / total) * 100 : 0;
+    if (scrollProgress) scrollProgress.style.height = progress + 'vh';
+  }
+
   window.addEventListener('scroll', () => {
     mainNav.classList.toggle('scrolled', window.scrollY > 60);
+    updateScrollProgress();
   }, { passive: true });
+
+  /* 初始化 + resize 時重算（視窗變化會影響文件高度） */
+  updateScrollProgress();
+  window.addEventListener('resize', updateScrollProgress, { passive: true });
 
   /* ── Modals ── */
   const valuesModal = document.getElementById('valuesModal');
   const rulesModal = document.getElementById('rulesModal');
 
+  // 記住開 modal 前的焦點，關閉後還原
+  let lastFocusedBeforeModal = null;
+
   function openModal(modal) {
+    lastFocusedBeforeModal = document.activeElement;
     modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    // 把焦點移進 modal，讓鍵盤/螢幕閱讀器使用者看得到
+    const focusTarget = modal.querySelector('.modal-close') || modal.querySelector('[tabindex]');
+    if (focusTarget) setTimeout(() => focusTarget.focus(), 60);
   }
 
   function closeModal(modal) {
     modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    // 把焦點還給觸發 modal 的元素
+    if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+      lastFocusedBeforeModal.focus();
+    }
+    lastFocusedBeforeModal = null;
   }
 
   document.getElementById('closeValues').addEventListener('click', () => closeModal(valuesModal));
@@ -3740,6 +4815,14 @@
 
   document.getElementById('closeRules').addEventListener('click', () => closeModal(rulesModal));
   rulesModal.addEventListener('click', (e) => { if (e.target === rulesModal) closeModal(rulesModal); });
+
+  // ESC 關閉所有 modal/drawer（story-overlay 有自己的處理在後面）
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (valuesModal.classList.contains('open')) { closeModal(valuesModal); return; }
+    if (rulesModal.classList.contains('open')) { closeModal(rulesModal); return; }
+    if (navDrawer.classList.contains('open')) { closeDrawer(); hamburger.focus(); return; }
+  });
 
   const drawerValues = document.getElementById('drawerOpenValues');
   const drawerRules = document.getElementById('drawerOpenRules');
@@ -3794,8 +4877,10 @@
           duration:     get(4),              // E: 時長
           mode:         mode,
           capacity:     get(6),              // G: 人數上限
-          availability: get(7),              // H: 方便時間 ⭐ 新增
-          desc:         get(8),              // I: 介紹
+          availability: get(7),              // H: 方便時間
+          desc:         get(8),              // I: 服務介紹
+          bio:          get(9),              // J: 自我介紹 ⭐ 新增
+          wants:        get(10),             // K: 想交換的 ⭐ 新增
           isExample:    false
         };
       });
@@ -3817,6 +4902,8 @@
         mode:         card.querySelector('.example-mode') ? (card.querySelector('.example-mode-online') ? '線上' : '實體') : '',
         availability: '',
         desc:         card.querySelector('.example-desc')?.textContent || '',
+        bio:          '',
+        wants:        '',
         isExample:    true
       });
 
@@ -3956,13 +5043,25 @@
     const modeLabel = esc(skill.mode);
     const demoBadge = skill.isExample ? '<span class="example-demo-badge">範例</span>' : '';
 
-    // 卡片上的「直接聯繫我」按鈕：只要客人填了網址就顯示，連到第一個解析結果
+    // 卡片上的「直接聯繫我」按鈕：永遠顯示。
+    // 若客人填了網址 → 連到第一個解析結果；沒填 → fallback 到初星群官方 LINE
     const cardSocials = parseSocialLinks(skill.social);
-    const contactBtn = (cardSocials.length && cardSocials[0].url)
-      ? '<a class="example-contact-btn" href="' + esc(cardSocials[0].url) + '" target="_blank" rel="noopener noreferrer" aria-label="直接聯繫我">'
-        + '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
-        + '<span>直接聯繫我</span>'
-        + '</a>'
+    const contactUrl = (cardSocials.length && cardSocials[0].url)
+      ? cardSocials[0].url
+      : 'https://line.me/R/ti/p/@455ojikt';
+    const contactBtn = '<a class="example-contact-btn" href="' + esc(contactUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="直接聯繫他">'
+      + '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
+      + '<span>直接聯繫他</span>'
+      + '</a>';
+
+    // 「想換」標示：暖銅色，只有填寫時才顯示（空值 = 不佔版面）
+    const wantsText = (skill.wants || '').trim();
+    const shortWants = esc(truncateDesc(wantsText, 60));
+    const wantsBlock = shortWants
+      ? '<div class="example-wants">'
+        + '<span class="example-wants-label">想換</span>'
+        + '<span class="example-wants-text">' + shortWants + '</span>'
+        + '</div>'
       : '';
 
     return '<div class="example-card" data-category="' + catKey + '">'
@@ -3972,10 +5071,11 @@
       + (provider ? '<div class="example-provider">by <strong>' + provider + '</strong></div>' : '')
       + '<div class="example-meta">'
       + (duration ? '<span>' + duration + '</span>' : '')
-      + (capacity ? '<span>' + capacity + '</span>' : '')
+      /* capacity 人數限額暫時不顯示（由 Hannah 決定下架） */
       + (mode ? '<span class="example-mode ' + modeClass + '">' + modeLabel + '</span>' : '')
       + '</div>'
       + (shortDesc ? '<p class="example-desc">' + shortDesc + '</p>' : '')
+      + wantsBlock
       + '<span class="example-points">\u53ef\u9810\u7d04\u6280\u80fd\u4ea4\u63db</span>'
       + contactBtn
       + '<span class="example-tap-hint">\u9ede\u64ca\u5361\u7247\u770b\u6280\u80fd\u8a73\u60c5</span>'
@@ -3992,10 +5092,18 @@
     // Build HTML fragment
     const fragment = document.createDocumentFragment();
     const temp = document.createElement('div');
-    toShow.forEach(skill => {
+    toShow.forEach((skill, idx) => {
       temp.innerHTML = buildCardHTML(skill);
       const card = temp.firstChild;
-      card.style.animation = 'cardFadeIn 0.5s var(--ease) both';
+      // 重要：把 skill 物件直接綁在卡片 DOM 上，避免靠索引查找造成對應錯人
+      card._skill = skill;
+      // Stagger 進場：每張卡片錯開 80ms 漸顯，標題再多延遲 200ms 後由左到右揭露
+      const stepMs = idx * 80;
+      card.style.animation = 'cardFadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) ' + stepMs + 'ms both';
+      const titleEl = card.querySelector('.example-title');
+      if (titleEl) {
+        titleEl.style.animationDelay = (stepMs + 200) + 'ms';
+      }
       fragment.appendChild(card);
     });
 
@@ -4065,37 +5173,104 @@
     });
   }
 
+  /* ── Fisher-Yates 洗牌：每次載入打亂 allSkills 順序，讓每位報名者有公平的首頁曝光 ── */
+  function shuffleSkills(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
   /* ── Init: Load Data ── */
-  (async function initSkills() {
-    if (GUILD_CONFIG.SHEET_ID) {
-      // 有設定 Sheet → 從 Google Sheets 載入
-      if (skillsLoading) skillsLoading.classList.add('show');
-
-      // 先隱藏範例卡
-      skillsGrid.querySelectorAll('.example-card').forEach(c => c.style.display = 'none');
-
-      try {
-        allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
-        dataLoaded = true;
-        // 移除範例卡
-        skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
-      } catch (err) {
-        console.warn('Google Sheet \u8f09\u5165\u5931\u6557\uff0c\u986f\u793a\u7bc4\u4f8b\u5361\u7247', err);
-        allSkills = collectExampleCards();
-        // 恢復顯示範例卡
-        skillsGrid.querySelectorAll('.example-card').forEach(c => { c.style.display = ''; c.remove(); });
-      }
-
-      if (skillsLoading) skillsLoading.classList.remove('show');
-    } else {
+  async function loadSkillsData() {
+    if (!GUILD_CONFIG.SHEET_ID) {
       // 沒有 Sheet → 收集頁面上的範例卡當資料
       allSkills = collectExampleCards();
-      // 移除原始 DOM 卡片，改用動態渲染
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
+      if (skillsNotice) skillsNotice.classList.remove('show');
+      return;
     }
 
+    // 有設定 Sheet → 從 Google Sheets 載入
+    if (skillsLoading) skillsLoading.classList.add('show');
+    if (skillsNotice) skillsNotice.classList.remove('show');
+
+    // 先隱藏範例卡（避免閃爍）
+    skillsGrid.querySelectorAll('.example-card').forEach(c => c.style.display = 'none');
+
+    try {
+      allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
+      dataLoaded = true;
+      skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
+      if (skillsNotice) skillsNotice.classList.remove('show');
+    } catch (err) {
+      // 本機直開通常是 CORS／網路問題；正式 GitHub Pages 應可正常讀取
+      console.warn('Google Sheet \u8f09\u5165\u5931\u6557\uff0c\u6539\u986f\u793a\u7bc4\u4f8b\u5361\u7247', err);
+      allSkills = collectExampleCards();
+      skillsGrid.querySelectorAll('.example-card').forEach(c => { c.style.display = ''; c.remove(); });
+      if (skillsNotice) skillsNotice.classList.add('show');
+    }
+
+    if (skillsLoading) skillsLoading.classList.remove('show');
+  }
+
+  if (skillsNoticeRetry) {
+    skillsNoticeRetry.addEventListener('click', async () => {
+      skillsNoticeRetry.disabled = true;
+      const originalText = skillsNoticeRetry.textContent;
+      skillsNoticeRetry.textContent = '重新載入中…';
+      await loadSkillsData();
+      shuffleSkills(allSkills);
+      applyFilterAndSearch();
+      skillsNoticeRetry.disabled = false;
+      skillsNoticeRetry.textContent = originalText;
+    });
+  }
+
+  (async function initSkills() {
+    await loadSkillsData();
+
+    // 每次載入隨機洗牌，讓不同使用者/不同時間看到不同的「首頁曝光組合」
+    shuffleSkills(allSkills);
+
     applyFilterAndSearch();
+
+    // 深層連結：如果網址帶 #s/<服務名稱>，資料就緒後自動打開對應服務的 modal
+    // 例：https://hannahchen6134.github.io/skillmarket/#s/%E8%89%B2%E5%BD%A9%E5%B0%8D%E8%A9%B1
+    const hash = location.hash || '';
+    if (hash.startsWith('#s/') && allSkills.length) {
+      let targetTitle = '';
+      try { targetTitle = decodeURIComponent(hash.substring(3)); } catch (e) { targetTitle = hash.substring(3); }
+      if (targetTitle) {
+        const matched = allSkills.find(s => (s.title || '').trim() === targetTitle.trim());
+        if (matched) {
+          // 先捲到「探索技能」區段再打開 modal，體驗比較順
+          const skillsSection = document.querySelector('.section-skills');
+          if (skillsSection) skillsSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+          // 稍等一下讓畫面穩定再彈 modal
+          setTimeout(() => openStory(matched), 200);
+        }
+      }
+    }
   })();
+
+  // 使用者用瀏覽器「上一頁/下一頁」切換 hash → 同步開關 modal
+  window.addEventListener('hashchange', () => {
+    const hash = location.hash || '';
+    if (hash.startsWith('#s/')) {
+      if (!allSkills.length) return;
+      let targetTitle = '';
+      try { targetTitle = decodeURIComponent(hash.substring(3)); } catch (e) { targetTitle = hash.substring(3); }
+      const matched = allSkills.find(s => (s.title || '').trim() === targetTitle.trim());
+      if (matched && matched !== currentStorySkill) openStory(matched);
+    } else {
+      // hash 被清掉 → 如果 modal 還開著就關掉
+      if (storyOverlay.classList.contains('open')) {
+        closeStory();
+      }
+    }
+  });
 
   /* ── Scroll Reveal ── */
   const reveals = document.querySelectorAll('.reveal');
@@ -4126,19 +5301,40 @@
     window.addEventListener('resize', resize);
 
     const particles = [];
-    const count = Math.min(50, Math.floor(window.innerWidth / 20));
+    /* 密度：手機約 26 顆、桌面上限 80 顆 */
+    const count = Math.min(80, Math.max(26, Math.floor(window.innerWidth / 18)));
 
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * (canvas.width || 800),
-        y: Math.random() * (canvas.height || 600),
-        size: Math.random() * 2.2 + 0.4,
-        speedY: -(Math.random() * 0.25 + 0.05),
-        speedX: (Math.random() - 0.5) * 0.15,
-        opacity: Math.random() * 0.5 + 0.1,
-        pulse: Math.random() * Math.PI * 2,
-        hue: 38
-      });
+    /* 三種色溫混合（回到較柔和的版本） */
+    const palettes = [
+      [255, 236, 180],   // 暖白
+      [232, 181,  90],   // 金
+      [196, 147,  63]    // 琥珀
+    ];
+
+    /* 分欄均勻播散：解決左右分佈不一致 */
+    const W = canvas.width || 1200;
+    const H = canvas.height || 800;
+    const cols = Math.max(4, Math.floor(W / 180));
+    const perCol = Math.ceil(count / cols);
+
+    for (let c = 0; c < cols; c++) {
+      for (let k = 0; k < perCol; k++) {
+        if (particles.length >= count) break;
+        const colStart = (W / cols) * c;
+        const colEnd   = (W / cols) * (c + 1);
+        particles.push({
+          x: colStart + Math.random() * (colEnd - colStart),
+          y: Math.random() * H,
+          size: Math.random() * 1.6 + 0.9,          // 0.9 ~ 2.5 px 核心（原版）
+          glow: Math.random() * 3 + 4,              // 4 ~ 7 倍柔光外圈（原版）
+          speedY: -(Math.random() * 0.22 + 0.04),
+          speedX: (Math.random() - 0.5) * 0.18,
+          baseOpacity: Math.random() * 0.5 + 0.22,  // 0.22 ~ 0.72（原版亮度）
+          pulse: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.008 + Math.random() * 0.012,
+          color: palettes[Math.floor(Math.random() * palettes.length)]
+        });
+      }
     }
 
     function draw() {
@@ -4147,17 +5343,36 @@
       particles.forEach(p => {
         p.y += p.speedY;
         p.x += p.speedX;
-        p.pulse += 0.012;
-        const currentOpacity = p.opacity * (0.5 + 0.5 * Math.sin(p.pulse));
+        p.pulse += p.pulseSpeed;
+        const op = p.baseOpacity * (0.45 + 0.55 * Math.sin(p.pulse));
 
+        /* 重生：飄到頂端就從底部回來 */
         if (p.y < -10) {
           p.y = canvas.height + 10;
           p.x = Math.random() * canvas.width;
         }
+        if (p.x < -10) p.x = canvas.width + 10;
+        if (p.x > canvas.width + 10) p.x = -10;
 
+        const r = p.color[0], g = p.color[1], b = p.color[2];
+
+        /* 外圈柔光：徑向漸層從亮色淡到透明 */
+        const gradient = ctx.createRadialGradient(
+          p.x, p.y, 0,
+          p.x, p.y, p.size * p.glow
+        );
+        gradient.addColorStop(0,    'rgba(' + r + ',' + g + ',' + b + ',' + (op * 0.7) + ')');
+        gradient.addColorStop(0.4,  'rgba(' + r + ',' + g + ',' + b + ',' + (op * 0.25) + ')');
+        gradient.addColorStop(1,    'rgba(' + r + ',' + g + ',' + b + ',0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * p.glow, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* 核心亮點：細而密 */
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(196,147,63,' + currentOpacity + ')';
+        ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + Math.min(1, op * 1.4) + ')';
         ctx.fill();
       });
 
@@ -4173,7 +5388,7 @@
   const storyOverlay = document.getElementById('storyOverlay');
   const storyCard    = document.getElementById('storyCard');
   const storyClose   = document.getElementById('storyClose');
-  const storyCloseBtn= document.getElementById('storyCloseBtn');
+  const storyCloseBtn= document.getElementById('storyCloseBtn'); // 已移除，保留為 null 安全存取
 
   let currentStorySkill = null;
 
@@ -4201,16 +5416,14 @@
     if (socialWrap) socialWrap.innerHTML = '';
     const parsedSocials = parseSocialLinks(skill.social);
 
-    // 「直接聯繫我」按鈕：帶入客人第一個社群連結
+    // 「直接聯繫我」按鈕：永遠顯示。
+    // 有填社群連結 → 帶入第一個；沒填 → fallback 到初星群官方 LINE
     const contactMeBtn = document.getElementById('storyContactMe');
     if (contactMeBtn) {
-      if (parsedSocials.length && parsedSocials[0].url) {
-        contactMeBtn.href = parsedSocials[0].url;
-        contactMeBtn.style.display = '';
-      } else {
-        contactMeBtn.removeAttribute('href');
-        contactMeBtn.style.display = 'none';
-      }
+      contactMeBtn.href = (parsedSocials.length && parsedSocials[0].url)
+        ? parsedSocials[0].url
+        : 'https://line.me/R/ti/p/@455ojikt';
+      contactMeBtn.style.display = '';
     }
 
     // Meta 清單（Label ─ 點點 ─ Value 古書目錄風）
@@ -4224,7 +5437,8 @@
       + '</div>';
 
     if (skill.duration) metaHTML += rowTpl('時長', esc(skill.duration));
-    if (skill.capacity) metaHTML += rowTpl('名額', esc(skill.capacity));
+    /* 名額（人數限額）暫時下架，不顯示在 Modal — 由 Hannah 決定 */
+    /* if (skill.capacity) metaHTML += rowTpl('名額', esc(skill.capacity)); */
     if (skill.availability) metaHTML += rowTpl('時間', esc(skill.availability));
     if (skill.mode) {
       const isOnline = skill.mode === '線上' || skill.mode === '線上／線下';
@@ -4233,21 +5447,98 @@
     }
     metaEl.innerHTML = metaHTML;
 
-    // 介紹（完整內容，可捲動）
-    document.getElementById('storyDesc').textContent = skill.desc || '這位村民還沒有寫詳細介紹，但他的技能一定很棒！';
+    // 三個分頁內容
+    const descText = (skill.desc || '').trim();
+    const bioText  = (skill.bio  || '').trim();
+    const wantsText= (skill.wants|| '').trim();
 
+    // 服務介紹（永遠顯示，沒寫給預設文案）
+    document.getElementById('storyDesc').textContent = descText || '這位村民還沒有寫詳細介紹，但他的技能一定很棒！';
+    // 關於我 / 我想換：只塞文字，後面再決定分頁要不要隱藏
+    document.getElementById('storyBio').textContent   = bioText;
+    document.getElementById('storyWants').textContent = wantsText;
+
+    // 書籤分頁：空值隱藏該分頁
+    const tabBio   = document.getElementById('storyTabBio');
+    const tabDesc  = document.getElementById('storyTabDesc');
+    const tabWants = document.getElementById('storyTabWants');
+    const panelBio   = document.getElementById('storyPanelBio');
+    const panelDesc  = document.getElementById('storyPanelDesc');
+    const panelWants = document.getElementById('storyPanelWants');
+
+    // 依內容決定各分頁是否顯示
+    tabBio.classList.toggle('hidden', !bioText);
+    tabWants.classList.toggle('hidden', !wantsText);
+    // 服務介紹預設都會有文字（空的話帶預設文案），所以不隱藏
+
+    // 每次打開 modal 都重設到預設分頁「服務介紹」
+    [tabBio, tabDesc, tabWants].forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    [panelBio, panelDesc, panelWants].forEach(p => p.classList.remove('active'));
+    tabDesc.classList.add('active');
+    tabDesc.setAttribute('aria-selected', 'true');
+    panelDesc.classList.add('active');
+
+    lastFocusedBeforeModal = document.activeElement;
     storyOverlay.classList.add('open');
+    storyOverlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    setTimeout(() => { if (storyClose) storyClose.focus(); }, 60);
+
+    // 同步網址列 hash → 方便直接從網址列複製專屬連結
+    // 用 replaceState 避免在歷史紀錄裡塞一堆入口
+    if (skill.title && history.replaceState) {
+      try {
+        history.replaceState(null, '', '#s/' + encodeURIComponent(skill.title));
+      } catch (e) { /* 某些老瀏覽器可能失敗，略過 */ }
+    }
   }
+
+  /* 書籤分頁點擊切換 */
+  document.querySelectorAll('.story-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      // 不處理被隱藏的分頁
+      if (tab.classList.contains('hidden')) return;
+      const tabName = tab.dataset.tab;
+
+      // 切換所有分頁的 active 狀態
+      document.querySelectorAll('.story-tab').forEach(t => {
+        const isActive = (t === tab);
+        t.classList.toggle('active', isActive);
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      // 切換面板顯示
+      document.querySelectorAll('.story-tab-panel').forEach(p => {
+        p.classList.toggle('active', p.dataset.panel === tabName);
+      });
+    });
+  });
 
   function closeStory() {
     storyOverlay.classList.remove('open');
+    storyOverlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     currentStorySkill = null;
+
+    // 清除網址列 hash，還原成乾淨的網址
+    if (location.hash.startsWith('#s/') && history.replaceState) {
+      try {
+        history.replaceState(null, '', location.pathname + location.search);
+      } catch (e) { /* 略過 */ }
+    }
+
+    // 把焦點還給觸發 modal 的元素（通常是卡片）
+    if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+      lastFocusedBeforeModal.focus();
+    }
+    lastFocusedBeforeModal = null;
   }
 
   storyClose.addEventListener('click', closeStory);
-  storyCloseBtn.addEventListener('click', closeStory);
+  storyCloseBtn?.addEventListener('click', closeStory);
   storyOverlay.addEventListener('click', (e) => {
     if (e.target === storyOverlay) closeStory();
   });
@@ -4255,6 +5546,80 @@
   // ESC to close
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && storyOverlay.classList.contains('open')) closeStory();
+  });
+
+  /* ══════════ 分享功能：Web Share API + 剪貼簿 fallback ══════════ */
+  const shareToast = document.getElementById('shareToast');
+  let shareToastTimer = null;
+  function showShareToast(msg) {
+    if (!shareToast) return;
+    shareToast.textContent = msg;
+    shareToast.classList.add('show');
+    clearTimeout(shareToastTimer);
+    shareToastTimer = setTimeout(() => shareToast.classList.remove('show'), 2400);
+  }
+  async function doShare(payload) {
+    // payload: { url, title, text }
+    // 行動裝置偵測：IG 限動分享需透過原生 Share Sheet
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    try {
+      if (navigator.share) {
+        // 行動裝置：系統分享選單（會有 Instagram / IG 限動、LINE、訊息 等選項）
+        // 桌機 Chrome/Edge 也支援，但選項較少
+        await navigator.share(payload);
+        return;
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        // 桌機 fallback：複製 URL + 文字，用戶可自己貼到 IG 限動的「連結貼圖」
+        const shareBlock = `${payload.text}\n${payload.url}`;
+        await navigator.clipboard.writeText(shareBlock);
+        showShareToast(isMobile
+          ? '連結已複製，在 IG 限動貼「連結貼圖」貼上即可'
+          : '連結+文案已複製，可貼到 IG 限動、LINE、FB...');
+        return;
+      }
+      // 極舊瀏覽器：execCommand
+      const input = document.createElement('textarea');
+      input.value = `${payload.text}\n${payload.url}`;
+      document.body.appendChild(input);
+      input.select();
+      try { document.execCommand('copy'); showShareToast('連結已複製'); }
+      catch(e) { prompt('複製這個連結：', payload.url); }
+      document.body.removeChild(input);
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        showShareToast('分享失敗，請手動複製網址');
+      }
+    }
+  }
+
+  // 首頁分享：分享公會本站
+  document.getElementById('homeShareBtn')?.addEventListener('click', () => {
+    doShare({
+      title: '初星群｜技能交換公會',
+      text: '以技能換技能，分享越多、得到更多——初星群 500 價值流動計劃\n來看看有哪些技能可以交換',
+      url: 'https://hannahchen6134.github.io/skillmarket/'
+    });
+  });
+
+  // Modal 分享：分享「特定服務本身」（深層連結 #s/<服務名稱>）
+  document.getElementById('storyShare')?.addEventListener('click', () => {
+    const title = (currentStorySkill?.title || '').trim();
+    const provider = (currentStorySkill?.provider || '').trim();
+    const serviceLine = title
+      ? `【${title}】${provider ? ' · by ' + provider : ''}`
+      : '一個有趣的技能';
+    // 連結帶上 #s/<服務名稱>：別人點這個連結進網站會直接打開該服務卡片
+    const siteBase = 'https://hannahchen6134.github.io/skillmarket/';
+    const shareUrl = title
+      ? siteBase + '#s/' + encodeURIComponent(title)
+      : siteBase;
+    doShare({
+      title: '初星群｜' + (title || '技能交換公會'),
+      text: `我在初星群 · 技能交換公會看到 ${serviceLine}\n—來看看還有哪些技能可以交換`,
+      url: shareUrl
+    });
   });
 
   /* ── Card click → open story ── */
@@ -4267,14 +5632,10 @@
       const card = e.target.closest('.example-card');
       if (!card) return;
 
-      // Find the matching skill data
-      const cards = Array.from(skillsGrid.querySelectorAll('.example-card'));
-      const idx = cards.indexOf(card);
-
-      // filteredSkills is ordered by currently visible cards
-      const visibleSkills = filteredSkills.slice(0, displayedCount);
-      if (idx >= 0 && idx < visibleSkills.length) {
-        openStory(visibleSkills[idx]);
+      // 直接從卡片 DOM 上取出對應的 skill 物件（renderCards 時已綁定）
+      // 這樣不會因為篩選/重新渲染時的索引錯位而對應到別人的資料
+      if (card._skill) {
+        openStory(card._skill);
       }
     });
   }
