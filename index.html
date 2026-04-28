@@ -1391,53 +1391,112 @@
       display: none;
       width: 100%;
       max-width: 620px;
-      margin: 0 auto 24px;
-      padding: 14px 20px;
-      border: 1px solid rgba(196,147,63,0.4);
-      border-radius: 10px;
-      background: linear-gradient(135deg, rgba(58,42,20,0.6), rgba(72,52,28,0.45));
+      margin: 24px auto 32px;
+      padding: 32px 32px 28px;
+      border: 1px solid rgba(232,181,77,0.45);
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(58,42,20,0.78), rgba(72,52,28,0.6)),
+        radial-gradient(ellipse 120% 80% at 50% 0%, rgba(232,181,77,0.18), transparent 60%);
       color: #f0d9a6;
       font-family: 'Noto Serif TC', serif;
-      font-size: 0.85rem;
-      line-height: 1.7;
       text-align: center;
       letter-spacing: 0.03em;
-      box-shadow: inset 0 1px 0 rgba(255,230,180,0.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,230,180,0.12),
+        0 8px 28px rgba(0,0,0,0.3);
     }
 
     .skills-notice.show { display: block; }
 
-    .skills-notice strong {
+    .skills-notice-icon {
+      display: block;
+      width: 36px;
+      height: 36px;
+      margin: 0 auto 14px;
+      opacity: 0.85;
+    }
+
+    .skills-notice-title {
+      display: block;
       color: #f5d98a;
       font-weight: 600;
-      letter-spacing: 0.05em;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .skills-notice-body {
+      display: block;
+      font-size: 0.88rem;
+      line-height: 1.85;
+      color: #e6ccA0;
+      margin-bottom: 18px;
+      word-break: keep-all;
+      text-wrap: balance;
+    }
+
+    .skills-notice-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .skills-notice-retry,
+    .skills-notice-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
     }
 
     .skills-notice-retry {
-      display: inline-block;
-      margin-left: 10px;
-      padding: 4px 12px;
-      background: rgba(184,144,74,0.15);
+      background: rgba(184,144,74,0.18);
       border: 1px solid rgba(232,181,77,0.5);
-      border-radius: 999px;
       color: #f5d98a;
-      font-size: 0.76rem;
-      letter-spacing: 0.06em;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.25s var(--ease), color 0.25s var(--ease);
     }
 
     .skills-notice-retry:hover,
     .skills-notice-retry:focus-visible {
-      background: rgba(184,144,74,0.28);
+      background: rgba(184,144,74,0.32);
       color: #fff;
       outline: none;
     }
 
+    .skills-notice-cta {
+      background: linear-gradient(135deg, #c4933f 0%, #e8b54d 100%);
+      border: 1px solid rgba(232,181,77,0.7);
+      color: #2a1c0e;
+      font-weight: 500;
+      box-shadow: 0 2px 10px rgba(196,147,63,0.3);
+    }
+
+    .skills-notice-cta:hover,
+    .skills-notice-cta:focus-visible {
+      background: linear-gradient(135deg, #d4a553 0%, #f0c160 100%);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
     @media (max-width: 480px) {
-      .skills-notice { font-size: 0.8rem; padding: 12px 16px; }
-      .skills-notice-retry { display: block; margin: 8px auto 0; width: fit-content; }
+      .skills-notice { padding: 24px 20px 22px; margin: 16px auto 24px; }
+      .skills-notice-title { font-size: 0.95rem; }
+      .skills-notice-body { font-size: 0.83rem; }
+      .skills-notice-retry,
+      .skills-notice-cta {
+        font-size: 0.82rem;
+        padding: 10px 18px;
+      }
+      .skills-notice-actions { flex-direction: column; align-items: stretch; }
     }
 
     .example-card {
@@ -4235,8 +4294,17 @@
       </div>
 
       <div class="skills-notice" id="skillsNotice" role="status" aria-live="polite">
-        <strong>技能清單暫時讀不到</strong>，請稍後再試。以下為示意卡片。
-        <button type="button" class="skills-notice-retry" id="skillsNoticeRetry">重新載入</button>
+        <svg class="skills-notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="13"/>
+          <circle cx="12" cy="16.5" r="0.5" fill="currentColor"/>
+        </svg>
+        <strong class="skills-notice-title">技能清單暫時讀不到</strong>
+        <span class="skills-notice-body">目前無法連線到後台資料，可能是網路問題或資料正在更新。請稍等片刻再試，或直接加入初星群 LINE 詢問。</span>
+        <div class="skills-notice-actions">
+          <button type="button" class="skills-notice-retry" id="skillsNoticeRetry">重新載入</button>
+          <a class="skills-notice-cta" href="https://line.me/R/ti/p/@455ojikt" target="_blank" rel="noopener noreferrer">加入初星群 LINE</a>
+        </div>
       </div>
 
       <div class="skills-empty" id="skillsEmpty">
@@ -4726,7 +4794,6 @@
   let currentFilter = 'all';
   let currentSearch = '';
   let displayedCount = 0;
-  let dataLoaded = false;
 
   /* ── DOM refs ── */
   const skillsGrid = document.querySelector('.skills-grid');
@@ -5010,7 +5077,10 @@
     return parts.map(parseSinglePlatform).filter(p => p && p.url);
   }
 
-  /* 平台對應 SVG icon（金色單色，呼應品牌） */
+  /* 平台對應 SVG icon（金色單色，呼應品牌）
+   * 註：目前卡片簡化版未使用，但保留作為 icon 資產庫，
+   * 未來若 modal 或其他地方要顯示社群圖示可直接呼叫 */
+  // eslint-disable-next-line no-unused-vars
   function getPlatformIcon(platform) {
     const icons = {
       instagram: '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
@@ -5024,25 +5094,6 @@
       website: '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg>'
     };
     return icons[platform] || icons.website;
-  }
-
-  /* Build 社群按鈕 HTML（卡片 or modal 共用） */
-  function buildSocialButtons(rawSocial, btnClass) {
-    const links = parseSocialLinks(rawSocial);
-    if (!links.length) return '';
-    const cls = btnClass || 'example-social-btn';
-    return links.map(link =>
-      '<a href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" class="' + cls + '" aria-label="' + esc(link.label) + '">'
-      + getPlatformIcon(link.platform)
-      + '<span>' + esc(link.label) + '</span>'
-      + '</a>'
-    ).join('');
-  }
-
-  /* 相容舊呼叫 */
-  function parseSocialLink(social) {
-    const arr = parseSocialLinks(social);
-    return arr.length ? arr[0] : null;
   }
 
   /* ── 自動截短 desc 為卡片摘要 ── */
@@ -5061,7 +5112,7 @@
     const title = esc(skill.title);
     const provider = esc(skill.provider);
     const duration = esc(skill.duration);
-    const capacity = esc(skill.capacity);
+    /* capacity 人數限額暫時不顯示（由 Hannah 決定下架） */
     const mode = esc(skill.mode);
     // 卡片上只顯示截斷後的摘要；完整 desc 留給詳細 modal
     const shortDesc = esc(truncateDesc(skill.desc, GUILD_CONFIG.SHORT_DESC_LENGTH || 50));
@@ -5228,14 +5279,14 @@
 
     try {
       allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
-      dataLoaded = true;
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
       if (skillsNotice) skillsNotice.classList.remove('show');
     } catch (err) {
-      // 本機直開通常是 CORS／網路問題；正式 GitHub Pages 應可正常讀取
-      console.warn('Google Sheet \u8f09\u5165\u5931\u6557\uff0c\u6539\u986f\u793a\u7bc4\u4f8b\u5361\u7247', err);
-      allSkills = collectExampleCards();
-      skillsGrid.querySelectorAll('.example-card').forEach(c => { c.style.display = ''; c.remove(); });
+      // 載入失敗 → 不顯示任何技能卡（避免訪客誤以為範例卡是真實服務）
+      // 改為顯示明顯的 notice，並提供「加入 LINE 詢問」這條備援路徑
+      console.warn('Google Sheet \u8f09\u5165\u5931\u6557', err);
+      allSkills = [];
+      skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
       if (skillsNotice) skillsNotice.classList.add('show');
     }
 
@@ -5413,7 +5464,6 @@
    *  Story Card (9:16 IG Story)
    * ══════════════════════════════════════ */
   const storyOverlay = document.getElementById('storyOverlay');
-  const storyCard    = document.getElementById('storyCard');
   const storyClose   = document.getElementById('storyClose');
   const storyCloseBtn= document.getElementById('storyCloseBtn'); // 已移除，保留為 null 安全存取
 
