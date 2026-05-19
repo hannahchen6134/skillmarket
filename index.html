@@ -4760,7 +4760,7 @@
    *  5. 複製試算表網址中的 Sheet ID，貼到下方 SHEET_ID
    * ═══════════════════════════════════════════════ */
   const GUILD_CONFIG = {
-    SHEET_ID: '1irnvPG_17amLBX6MjN-sEt9mNW3JFmQtVWXI6XTArD8',  // 青青的試算表
+    SHEET_ID: '1RHTyeA9kfmU7nxQjmnZoDSbNP1eSssYPis2bJm9utrk',  // 公開展示用試算表（不含表單原始回覆）
     TAB_NAME: '上架清單',         // ← 要讀取的分頁名稱
     CARDS_PER_PAGE: 8,           // 每頁顯示幾張卡
     USE_EXAMPLES: true,          // 沒有 SHEET_ID 時顯示範例卡
@@ -5284,7 +5284,7 @@
     } catch (err) {
       // 載入失敗 → 不顯示任何技能卡（避免訪客誤以為範例卡是真實服務）
       // 改為顯示明顯的 notice，並提供「加入 LINE 詢問」這條備援路徑
-      console.warn('Google Sheet \u8f09\u5165\u5931\u6557', err);
+      console.warn('Google Sheet \u8f09\u5165\u5931\u6557: ' + (err && err.message ? err.message : 'Unknown error'));
       allSkills = [];
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
       if (skillsNotice) skillsNotice.classList.add('show');
