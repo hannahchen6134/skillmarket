@@ -5276,6 +5276,19 @@
     return arr;
   }
 
+  /* ══════════════════════════════════════════════════
+   * 從快取 JSON 讀取（GitHub Action 每 5 分鐘生成 /data/skills.json）
+   * 訪客優先讀這個，省下對 Google Sheets gviz API 的請求量
+   * ══════════════════════════════════════════════════ */
+  async function fetchFromCache() {
+    const url = 'data/skills.json?t=' + Math.floor(Date.now() / 60000);
+    const res = await fetch(url, { cache: 'no-cache' });
+    if (!res.ok) throw new Error('cache miss (' + res.status + ')');
+    const json = await res.json();
+    if (!json || !Array.isArray(json.skills)) throw new Error('invalid cache format');
+    return json.skills;
+  }
+
   /* ── Init: Load Data ── */
   async function loadSkillsData() {
     if (!GUILD_CONFIG.SHEET_ID) {
@@ -5286,21 +5299,42 @@
       return;
     }
 
-    // 有設定 Sheet → 從 Google Sheets 載入
+    // 有設定 Sheet → 優先讀快取 JSON，失敗才 fallback 到 gviz
     if (skillsLoading) skillsLoading.classList.add('show');
     if (skillsNotice) skillsNotice.classList.remove('show');
 
     // 先隱藏範例卡（避免閃爍）
     skillsGrid.querySelectorAll('.example-card').forEach(c => c.style.display = 'none');
 
+    let loaded = false;
+    let lastErr = null;
+
+    // 第一順位：data/skills.json（快取，零 gviz 壓力）
     try {
-      allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
+      allSkills = await fetchFromCache();
+      loaded = true;
+      console.log('Skills loaded from cache: ' + allSkills.length);
+    } catch (err) {
+      lastErr = err;
+      console.warn('Cache miss, fallback to gviz: ' + (err && err.message));
+    }
+
+    // 第二順位：gviz fallback（保命，Action 還沒跑、或快取壞掉時用）
+    if (!loaded) {
+      try {
+        allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
+        loaded = true;
+        console.log('Skills loaded from gviz fallback: ' + allSkills.length);
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+
+    if (loaded) {
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
       if (skillsNotice) skillsNotice.classList.remove('show');
-    } catch (err) {
-      // 載入失敗 → 不顯示任何技能卡（避免訪客誤以為範例卡是真實服務）
-      // 改為顯示明顯的 notice，並提供「加入 LINE 詢問」這條備援路徑
-      console.warn('Google Sheet \u8f09\u5165\u5931\u6557: ' + (err && err.message ? err.message : 'Unknown error'));
+    } else {
+      console.warn('All sources failed: ' + (lastErr && lastErr.message ? lastErr.message : 'Unknown'));
       allSkills = [];
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
       if (skillsNotice) skillsNotice.classList.add('show');
