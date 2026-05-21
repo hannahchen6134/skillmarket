@@ -5696,17 +5696,30 @@
     });
   });
 
-  // Modal 分享：分享「特定服務本身」（深層連結 #s/<服務名稱>）
+  /* ══════════════════════════════════════════════════════
+   * Slug 函數 — 須與 generate-skill-pages.py 的 slugify() 完全一致
+   * 把標題轉成檔名安全的字串（保留中文，過濾路徑字元與控制字元）
+   * ══════════════════════════════════════════════════════ */
+  function slugifyTitle(title) {
+    if (!title) return 'untitled';
+    let s = String(title).replace(/[\s\/\\:?*<>|" -]+/g, '-');
+    s = s.replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+    s = s.slice(0, 80);
+    return s || 'untitled';
+  }
+
+  // Modal 分享：分享「特定服務本身」(指向 /skill/<slug>.html，有專屬 OG 預覽)
   document.getElementById('storyShare')?.addEventListener('click', () => {
     const title = (currentStorySkill?.title || '').trim();
     const provider = (currentStorySkill?.provider || '').trim();
     const serviceLine = title
       ? `【${title}】${provider ? ' · by ' + provider : ''}`
       : '一個有趣的技能';
-    // 連結帶上 #s/<服務名稱>：別人點這個連結進網站會直接打開該服務卡片
+    // 連結指向 /skill/<slug>.html — 該頁有專屬 OG meta，被 LINE/FB/IG 抓到時
+    // 顯示「該服務」的預覽；真人點進去會被 JS 自動轉到首頁 #s/<title> 開 modal
     const siteBase = 'https://hannahchen6134.github.io/skillmarket/';
     const shareUrl = title
-      ? siteBase + '#s/' + encodeURIComponent(title)
+      ? siteBase + 'skill/' + encodeURIComponent(slugifyTitle(title)) + '.html'
       : siteBase;
     doShare({
       title: '初星群｜' + (title || '技能交換公會'),

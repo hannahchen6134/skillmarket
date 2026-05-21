@@ -1,0 +1,55 @@
+name: Generate skill share pages
+
+# ════════════════════════════════════════════════════════════════
+# 每 5 分鐘跑一次，從 Google Sheet「上架清單」抓 L 欄已核准的資料，
+# 為每筆服務生成 skill/<slug>.html（含專屬 OG meta），
+# 讓 LINE / FB / IG / Threads 分享時顯示「該服務」的預覽。
+# （Public repo 的 Actions 免費無限額度，5 分鐘間隔不會被收費）
+# ════════════════════════════════════════════════════════════════
+
+on:
+  schedule:
+    # 每 5 分鐘觸發一次
+    # 註：GitHub 對 schedule 排程有「整點附近會延遲」的特性，
+    # 高峰期可能延遲 5-15 分鐘才實際開跑；急用請手動 Run workflow。
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # 在 Actions 頁面手動觸發
+  push:
+    branches: [main]
+    paths:
+      - 'generate-skill-pages.py'
+      - '.github/workflows/generate-pages.yml'
+
+permissions:
+  contents: write  # 允許 commit 回 repo
+
+concurrency:
+  group: generate-pages
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run skill page generator
+        run: python generate-skill-pages.py
+
+      - name: Commit & push changes
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add skill/
+          if git diff --staged --quiet; then
+            echo "→ no changes, skip commit"
+          else
+            git commit -m "🤖 自動更新技能分享頁 [skip ci]"
+            git push
+          fi
