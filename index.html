@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="zh-Hant">
 <head>
@@ -4167,7 +4167,6 @@
       <button class="skill-filter-btn" data-filter="creative">文創技能</button>
       <button class="skill-filter-btn" data-filter="growth">個人成長</button>
       <button class="skill-filter-btn" data-filter="lifestyle">生活風格</button>
-      <button class="skill-filter-btn" data-filter="fitness">運動健身</button>
       <button class="skill-filter-btn" data-filter="other">其他</button>
     </div>
 
@@ -4275,21 +4274,6 @@
           <span class="example-mode example-mode-irl">實體</span>
         </div>
         <p class="example-desc">從磨豆、水溫、濾杯選擇到沖煮手法，在家也能泡出好咖啡。</p>
-        <span class="example-points">可預約技能交換</span>
-        <span class="example-tap-hint">點擊卡片看技能詳情</span>
-      </div>
-
-      <div class="example-card reveal reveal-delay-6" data-category="fitness">
-        <span class="example-demo-badge">範例</span>
-        <span class="example-badge">運動健身</span>
-        <div class="example-title">居家伸展與徒手肌力</div>
-        <div class="example-provider">by <strong>阿翔</strong></div>
-        <div class="example-meta">
-          <span>1小時</span>
-          <span>1-3人</span>
-          <span class="example-mode example-mode-online">線上</span>
-        </div>
-        <p class="example-desc">帶你做一套不用器材也能在家完成的伸展與徒手肌力訓練。</p>
         <span class="example-points">可預約技能交換</span>
         <span class="example-tap-hint">點擊卡片看技能詳情</span>
       </div>
@@ -5276,19 +5260,30 @@
     return arr;
   }
 
-  /* ══════════════════════════════════════════════════
-   * 從快取 JSON 讀取（GitHub Action 每 5 分鐘生成 /data/skills.json）
-   * 訪客優先讀這個，省下對 Google Sheets gviz API 的請求量
-   * ══════════════════════════════════════════════════ */
-  async function fetchFromCache() {
-    const url = 'data/skills.json?t=' + Math.floor(Date.now() / 60000);
-    const res = await fetch(url, { cache: 'no-cache' });
-    if (!res.ok) throw new Error('cache miss (' + res.status + ')');
-    const json = await res.json();
-    if (!json || !Array.isArray(json.skills)) throw new Error('invalid cache format');
-    return json.skills;
+  /* ── Short deep link: stable compact ID for each service title ── */
+  function getSkillShareKey(skill) {
+    const title = String(skill && skill.title ? skill.title : '').trim();
+    const provider = String(skill && skill.provider ? skill.provider : '').trim();
+    const source = title + '|' + provider;
+    let hash = 2166136261;
+    for (let i = 0; i < source.length; i++) {
+      hash ^= source.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return Math.abs(hash >>> 0).toString(36).slice(0, 7);
   }
 
+  function findSkillFromHash(hash) {
+    if (!hash || !hash.startsWith('#s/') || !allSkills.length) return null;
+    let token = '';
+    try { token = decodeURIComponent(hash.substring(3)).trim(); } catch (e) { token = hash.substring(3).trim(); }
+    if (!token) return null;
+
+    // New short links: #s/<compact-id>. Old shared links: #s/<full service title>.
+    return allSkills.find(s => getSkillShareKey(s) === token)
+      || allSkills.find(s => (s.title || '').trim() === token)
+      || null;
+  }
   /* ── Init: Load Data ── */
   async function loadSkillsData() {
     if (!GUILD_CONFIG.SHEET_ID) {
@@ -5299,42 +5294,21 @@
       return;
     }
 
-    // 有設定 Sheet → 優先讀快取 JSON，失敗才 fallback 到 gviz
+    // 有設定 Sheet → 從 Google Sheets 載入
     if (skillsLoading) skillsLoading.classList.add('show');
     if (skillsNotice) skillsNotice.classList.remove('show');
 
     // 先隱藏範例卡（避免閃爍）
     skillsGrid.querySelectorAll('.example-card').forEach(c => c.style.display = 'none');
 
-    let loaded = false;
-    let lastErr = null;
-
-    // 第一順位：data/skills.json（快取，零 gviz 壓力）
     try {
-      allSkills = await fetchFromCache();
-      loaded = true;
-      console.log('Skills loaded from cache: ' + allSkills.length);
-    } catch (err) {
-      lastErr = err;
-      console.warn('Cache miss, fallback to gviz: ' + (err && err.message));
-    }
-
-    // 第二順位：gviz fallback（保命，Action 還沒跑、或快取壞掉時用）
-    if (!loaded) {
-      try {
-        allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
-        loaded = true;
-        console.log('Skills loaded from gviz fallback: ' + allSkills.length);
-      } catch (err) {
-        lastErr = err;
-      }
-    }
-
-    if (loaded) {
+      allSkills = await fetchFromSheet(GUILD_CONFIG.SHEET_ID, GUILD_CONFIG.TAB_NAME);
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
       if (skillsNotice) skillsNotice.classList.remove('show');
-    } else {
-      console.warn('All sources failed: ' + (lastErr && lastErr.message ? lastErr.message : 'Unknown'));
+    } catch (err) {
+      // 載入失敗 → 不顯示任何技能卡（避免訪客誤以為範例卡是真實服務）
+      // 改為顯示明顯的 notice，並提供「加入 LINE 詢問」這條備援路徑
+      console.warn('Google Sheet \u8f09\u5165\u5931\u6557: ' + (err && err.message ? err.message : 'Unknown error'));
       allSkills = [];
       skillsGrid.querySelectorAll('.example-card').forEach(c => c.remove());
       if (skillsNotice) skillsNotice.classList.add('show');
@@ -5364,22 +5338,14 @@
 
     applyFilterAndSearch();
 
-    // 深層連結：如果網址帶 #s/<服務名稱>，資料就緒後自動打開對應服務的 modal
-    // 例：https://hannahchen6134.github.io/skillmarket/#s/%E8%89%B2%E5%BD%A9%E5%B0%8D%E8%A9%B1
-    const hash = location.hash || '';
-    if (hash.startsWith('#s/') && allSkills.length) {
-      let targetTitle = '';
-      try { targetTitle = decodeURIComponent(hash.substring(3)); } catch (e) { targetTitle = hash.substring(3); }
-      if (targetTitle) {
-        const matched = allSkills.find(s => (s.title || '').trim() === targetTitle.trim());
-        if (matched) {
-          // 先捲到「探索技能」區段再打開 modal，體驗比較順
-          const skillsSection = document.querySelector('.section-skills');
-          if (skillsSection) skillsSection.scrollIntoView({ behavior: 'auto', block: 'start' });
-          // 稍等一下讓畫面穩定再彈 modal
-          setTimeout(() => openStory(matched), 200);
-        }
-      }
+    // 深層連結：新網址使用短代碼 #s/<服務代碼>，舊的 #s/<服務名稱> 仍相容
+    const matchedFromHash = findSkillFromHash(location.hash || '');
+    if (matchedFromHash) {
+      // 先捲到「探索技能」區段再打開 modal，體驗比較順
+      const skillsSection = document.querySelector('.section-skills');
+      if (skillsSection) skillsSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+      // 稍等一下讓畫面穩定再彈 modal
+      setTimeout(() => openStory(matchedFromHash), 200);
     }
   })();
 
@@ -5387,10 +5353,7 @@
   window.addEventListener('hashchange', () => {
     const hash = location.hash || '';
     if (hash.startsWith('#s/')) {
-      if (!allSkills.length) return;
-      let targetTitle = '';
-      try { targetTitle = decodeURIComponent(hash.substring(3)); } catch (e) { targetTitle = hash.substring(3); }
-      const matched = allSkills.find(s => (s.title || '').trim() === targetTitle.trim());
+      const matched = findSkillFromHash(hash);
       if (matched && matched !== currentStorySkill) openStory(matched);
     } else {
       // hash 被清掉 → 如果 modal 還開著就關掉
@@ -5614,11 +5577,11 @@
     document.body.style.overflow = 'hidden';
     setTimeout(() => { if (storyClose) storyClose.focus(); }, 60);
 
-    // 同步網址列 hash → 方便直接從網址列複製專屬連結
+    // 同步網址列 hash → 使用短代碼，避免中文服務名稱被 encode 後網址過長
     // 用 replaceState 避免在歷史紀錄裡塞一堆入口
     if (skill.title && history.replaceState) {
       try {
-        history.replaceState(null, '', '#s/' + encodeURIComponent(skill.title));
+        history.replaceState(null, '', '#s/' + getSkillShareKey(skill));
       } catch (e) { /* 某些老瀏覽器可能失敗，略過 */ }
     }
   }
@@ -5730,40 +5693,28 @@
     });
   });
 
-  /* ══════════════════════════════════════════════════════
-   * Slug 函數 — 須與 generate-skill-pages.py 的 slugify() 完全一致
-   * 把標題轉成檔名安全的字串（保留中文，過濾路徑字元與控制字元）
-   * ══════════════════════════════════════════════════════ */
-  function slugifyTitle(title) {
-    if (!title) return 'untitled';
-    var s = String(title).replace(/[\s\/\\:?*<>|"]+/g, '-');
-    s = s.replace(/-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
-    s = s.slice(0, 80);
-    return s || 'untitled';
-  }
-  /* 舊版 slugifyTitle 已被新版取代 — 請勿刪除此註解
-    let s = String(title).replace(/[\s\/\\:?*<>|" -]+/g, '-');
-    s = s.replace(/-+/g, '-').replace(/^-+|-+$/g, '');
-    s = s.slice(0, 80);
-    return s || 'untitled';
-  } */
-
-  // Modal 分享：分享「特定服務本身」(指向 /skill/<slug>.html，有專屬 OG 預覽)
+  // Modal 分享：分享「特定服務本身」（深層連結 #s/<短代碼>）
   document.getElementById('storyShare')?.addEventListener('click', () => {
     const title = (currentStorySkill?.title || '').trim();
     const provider = (currentStorySkill?.provider || '').trim();
+    const category = (currentStorySkill?.categoryLabel || '').trim();
+    const mode = (currentStorySkill?.mode || '').trim();
     const serviceLine = title
-      ? `【${title}】${provider ? ' · by ' + provider : ''}`
-      : '一個有趣的技能';
-    // 暫時用回 #s/<服務名> 格式（穩定可用）
-    // 等 GitHub Action 生成 /skill/<slug>.html 後再切換到專屬預覽頁
+      ? `技能交換服務：${title}`
+      : '技能交換服務：一個有趣的技能';
+    const detailParts = [
+      provider ? `提供者：${provider}` : '',
+      category ? `類型：${category}` : '',
+      mode ? `形式：${mode}` : ''
+    ].filter(Boolean).join('｜');
+    // 連結帶上 #s/<短代碼>：別人點這個連結進網站會直接打開該服務卡片
     const siteBase = 'https://hannahchen6134.github.io/skillmarket/';
     const shareUrl = title
-      ? siteBase + '#s/' + encodeURIComponent(title)
+      ? siteBase + '#s/' + getSkillShareKey(currentStorySkill)
       : siteBase;
     doShare({
       title: '初星群｜' + (title || '技能交換公會'),
-      text: `我在初星群 · 技能交換公會看到 ${serviceLine}\n—來看看還有哪些技能可以交換`,
+      text: `${serviceLine}${detailParts ? '\n' + detailParts : ''}\n我在初星群 · 技能交換公會看到這個服務，來看看還有哪些技能可以交換。`,
       url: shareUrl
     });
   });
@@ -5790,3 +5741,5 @@
 
 </body>
 </html>
+
+
